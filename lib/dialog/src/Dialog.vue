@@ -15,10 +15,7 @@
       <slot name="title" />
     </template>
     <slot />
-    <template
-      v-if="!mergeConfig.hideFooter"
-      #footer
-    >
+    <template v-if="!mergeConfig.hideFooter" #footer>
       <div
         class="aile-dialog__footer"
         :class="[`is-align-${mergeConfig.footerAlign}`]"
@@ -49,7 +46,6 @@
 </template>
 
 <script>
-
 // AileDialog的默认参数，可通过传入props.config进行覆盖
 const DefaultConfig = {
   // 是否显示【确定】按钮
@@ -179,29 +175,30 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.aile-dialog {
-  &::v-deep {
-    .el-dialog__body {
-      padding: 20px 20px 0;
-    }
-    &.is-hide-footer .el-dialog__body {
-      padding: 20px;
-    }
-  }
-
-  &__footer {
-    width: 100%;
-    display: flex;
-    &.is-align-right {
-      justify-content: flex-end;
-    }
-    &.is-align-center {
-      justify-content: center;
-    }
-    &.is-align-left {
-      justify-content: flex-start;
-    }
-  }
+<style scoped>
+.aile-dialog::v-deep .el-dialog__body {
+  padding: 20px 20px 0;
 }
+
+.aile-dialog::v-deep.is-hide-footer .el-dialog__body {
+  padding: 20px;
+}
+
+.aile-dialog__footer {
+  width: 100%;
+  display: flex;
+}
+
+.aile-dialog__footer.is-align-right {
+  justify-content: flex-end;
+}
+
+.aile-dialog__footer.is-align-center {
+  justify-content: center;
+}
+
+.aile-dialog__footer.is-align-left {
+  justify-content: flex-start;
+}
+
 </style>

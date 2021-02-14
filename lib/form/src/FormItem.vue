@@ -13,18 +13,15 @@
       'aile-form-item',
       formClass && formClass + '-item',
       calcLabelPosition && `is-label-${calcLabelPosition}`,
-      column.class
+      column.class,
     ]"
     v-on="$listeners"
   >
-    <template
-      v-if="column.renderLabel"
-      slot="label"
-    >
+    <template v-if="column.renderLabel" slot="label">
       <span
         :class="[
           'aile-form-item__label-wrap',
-          (column.required || isRequired) && 'is-required'
+          (column.required || isRequired) && 'is-required',
         ]"
         :style="labelStyle"
       >
@@ -38,16 +35,21 @@
     </template>
 
     <template
-      v-if="!column.renderLabel && calcLabelWidth && {}.hasOwnProperty.call(column, 'label')"
+      v-if="
+        !column.renderLabel &&
+        calcLabelWidth &&
+        {}.hasOwnProperty.call(column, 'label')
+      "
       slot="label"
     >
       <span
         :class="[
           'aile-form-item__label-wrap',
-          (column.required || isRequired) && 'is-required'
+          (column.required || isRequired) && 'is-required',
         ]"
         :style="labelStyle"
-      >{{ column.label }}</span>
+        >{{ column.label }}</span
+      >
     </template>
 
     <section
@@ -55,17 +57,13 @@
       :class="[
         'aile-form-item__object',
         formClass && formClass + '-item__object',
-        column.children && !column.children.length && 'is-empty'
+        column.children && !column.children.length && 'is-empty',
       ]"
     >
       <template v-if="column.layout">
         <el-row v-bind="column.layout">
           <template v-for="(col, index) in column.children">
-            <el-col
-              :key="index"
-              :span="getColSpan(col)"
-              v-bind="col.layout"
-            >
+            <el-col :key="index" :span="getColSpan(col)" v-bind="col.layout">
               <aile-form-item
                 v-if="!col.show || col.show(form[column.prop], rootForm)"
                 :column="col"
@@ -108,7 +106,7 @@
       v-else-if="column.item"
       :class="[
         'aile-form-item__array',
-        formClass && formClass + '-item__array'
+        formClass && formClass + '-item__array',
       ]"
     >
       <div
@@ -126,7 +124,9 @@
                 v-bind="col.layout"
               >
                 <aile-form-item
-                  v-if="!col.show || col.show(form[column.prop], rootForm, index)"
+                  v-if="
+                    !col.show || col.show(form[column.prop], rootForm, index)
+                  "
                   :key="index + '-' + idx"
                   :column="col"
                   :form="value"
@@ -162,10 +162,7 @@
           </template>
           <i class="array-item__index">{{ index + 1 }}</i>
         </div>
-        <el-tooltip
-          content="删除"
-          :open-delay="1000"
-        >
+        <el-tooltip content="删除" :open-delay="1000">
           <i
             class="array-item__delete el-icon-close"
             :class="[disabled && 'is-disabled']"
@@ -173,10 +170,7 @@
           />
         </el-tooltip>
       </div>
-      <div
-        class="array-add"
-        :class="[disabled && 'is-disabled']"
-      >
+      <div class="array-add" :class="[disabled && 'is-disabled']">
         <el-button
           :icon="
             {}.hasOwnProperty.call(column, 'itemButtonIcon')
@@ -190,7 +184,7 @@
           plain
           @click="handleAddItem"
         >
-          {{ column.itemButtonText || '新增' }}
+          {{ column.itemButtonText || "新增" }}
         </el-button>
       </div>
     </section>
@@ -206,11 +200,7 @@
       </div>
     </template>
 
-    <template
-      v-if="column.renderError"
-      slot="error"
-      slot-scope="scope"
-    >
+    <template v-if="column.renderError" slot="error" slot-scope="scope">
       <render
         :form="form"
         :root-form="rootForm"
@@ -330,7 +320,8 @@ export default {
     getRules() {
       let formRules = this.formRules;
       const selfRules = this.column.rules;
-      const requiredRule = this.column.required !== undefined ? { required: !!this.required } : [];
+      const requiredRule =
+        this.column.required !== undefined ? { required: !!this.required } : [];
 
       const prop = getPropByPath(formRules, this.prop || '');
       formRules = formRules ? prop.o[this.prop || ''] || prop.v : [];
@@ -427,8 +418,46 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@mixin tip-square {
+<style scoped>
+.aile-form-item__object {
+  border: 1px solid #eee;
+  background-color: #f4f4f5;
+  border-radius: 4px;
+  padding: 24px 20px;
+  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.aile-form-item__object > .el-form-item:not(:last-of-type) {
+  margin-bottom: 22px;
+}
+
+.aile-form-item__object.is-empty {
+  padding: 0;
+}
+
+.aile-form-item__array .array-item {
+  display: flex;
+  border: 1px solid #efefef;
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 24px 20px;
+  box-sizing: border-box;
+  position: relative;
+  border-radius: 4px;
+}
+
+.aile-form-item__array .array-item__content {
+  flex: 1;
+}
+
+.aile-form-item__array .array-item__content > .el-form-item:not(:last-of-type) {
+  margin-bottom: 22px;
+}
+
+.aile-form-item__array .array-item__index {
   position: absolute;
   top: 0;
   right: 0;
@@ -438,117 +467,102 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: gray;
+  background: #eee;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: bold;
 }
 
-.aile-form-item {
-  &__object {
-    border: 1px solid #eee;
-    background-color: rgb(244, 244, 245);
-    border-radius: 4px;
-    padding: 24px 20px;
-    box-sizing: border-box;
-    display: inline-block;
-    width: 100%;
-    height: 100%;
+.aile-form-item__array .array-item__delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #f0595a;
+  right: 20px;
+  cursor: pointer;
+}
 
-    > .el-form-item:not(:last-of-type) {
-      margin-bottom: 22px;
-    }
+.aile-form-item__array .array-item__delete.is-disabled {
+  display: none;
+  pointer-events: none;
+}
 
-    &.is-empty {
-      padding: 0;
-    }
-  }
-  &__array {
-    .array-item {
-      display: flex;
-      border: 1px solid #efefef;
-      background-color: #fff;
-      margin-bottom: 10px;
-      padding: 24px 20px;
-      box-sizing: border-box;
-      position: relative;
-      border-radius: 4px;
-      // overflow: hidden;
-      &__content {
-        flex: 1;
-        > .el-form-item:not(:last-of-type) {
-          margin-bottom: 22px;
-        }
-      }
-      &__index {
-        @include tip-square();
-        color: gray;
-        background: #eee;
-        font-size: 12px;
-        font-style: normal;
-        font-weight: bold;
-      }
-      &__delete {
-        @include tip-square();
-        color: #fff;
-        background: #f0595a;
-        right: 20px;
-        cursor: pointer;
-        &.is-disabled {
-          display: none;
-          pointer-events: none;
-        }
-      }
-    }
-    .array-add {
-      width: 100%;
-      display: flex;
-      &.is-disabled {
-        display: none;
-      }
-    }
-  }
+.aile-form-item__array .array-add {
+  width: 100%;
+  display: flex;
+}
 
-  &.is-label {
-    &-right,
-    &-left {
-      display: flex;
-      flex-direction: row;
-      ::v-deep .el-form-item__label {
-        height: 40px;
-        .aile-form-item__label-wrap.is-required::before {
-          content: "*";
-          color: #f56c6c;
-          margin-right: 4px;
-        }
-        &::before {
-          display: none;
-        }
-      }
-      ::v-deep .el-form-item__content {
-        margin-left: 0 !important;
-        flex: 1;
-      }
-    }
+.aile-form-item__array .array-add.is-disabled {
+  display: none;
+}
 
-    &-top {
-      display: flex;
-      flex-direction: column;
-      ::v-deep .el-form-item__content {
-        margin-left: 0 !important;
-      }
-      ::v-deep > .el-form-item__label {
-        height: 40px;
-        width: auto;
-        align-self: baseline;
-      }
-    }
+.aile-form-item.is-label-right,
+.aile-form-item.is-label-left {
+  display: flex;
+  flex-direction: row;
+}
 
-    &-right ::v-deep > .el-form-item__label {
-      text-align: right !important;
-    }
-    &-left ::v-deep > .el-form-item__label {
-      text-align: left !important;
-    }
-  }
-  &__render {
-    width: 100%;
-  }
+.aile-form-item.is-label-right ::v-deep .el-form-item__label,
+.aile-form-item.is-label-left ::v-deep .el-form-item__label {
+  height: 40px;
+}
+
+.aile-form-item.is-label-right
+  ::v-deep
+  .el-form-item__label
+  .aile-form-item__label-wrap.is-required::before,
+.aile-form-item.is-label-left
+  ::v-deep
+  .el-form-item__label
+  .aile-form-item__label-wrap.is-required::before {
+  content: "*";
+  color: #f56c6c;
+  margin-right: 4px;
+}
+
+.aile-form-item.is-label-right ::v-deep .el-form-item__label::before,
+.aile-form-item.is-label-left ::v-deep .el-form-item__label::before {
+  display: none;
+}
+
+.aile-form-item.is-label-right ::v-deep .el-form-item__content,
+.aile-form-item.is-label-left ::v-deep .el-form-item__content {
+  margin-left: 0 !important;
+  flex: 1;
+}
+
+.aile-form-item.is-label-top {
+  display: flex;
+  flex-direction: column;
+}
+
+.aile-form-item.is-label-top ::v-deep .el-form-item__content {
+  margin-left: 0 !important;
+}
+
+.aile-form-item.is-label-top ::v-deep > .el-form-item__label {
+  height: 40px;
+  width: auto;
+  align-self: baseline;
+}
+
+.aile-form-item.is-label-right ::v-deep > .el-form-item__label {
+  text-align: right !important;
+}
+
+.aile-form-item.is-label-left ::v-deep > .el-form-item__label {
+  text-align: left !important;
+}
+
+.aile-form-item__render {
+  width: 100%;
 }
 </style>

@@ -67,21 +67,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .aile-link {
   max-width: var(--maxWidth);
-  &.is-ellipsis {
-    &::v-deep span.el-link--inner {
-      max-width: var(--inputMaxWidth);
-      height: auto;
-      display: inline-block;
-      line-height: 1;
-      padding: 3px 0;
+}
 
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
+.aile-link.is-ellipsis::v-deep span.el-link--inner {
+  max-width: var(--inputMaxWidth);
+  height: auto;
+  display: inline-block;
+  line-height: 1;
+  padding: 3px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

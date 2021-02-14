@@ -59,7 +59,7 @@ npm i aile-ui/autocomplete
 ```js
 import Vue from 'vue'
 import Element from 'element-ui'
-import 'element-ui/libs/theme-chalk/index.css'
+import 'element-ui/lib/theme-chalk/index.css'
 
 // 方式1：引入全部组件包并设置参数
 import AileUI from 'aile-ui'
@@ -73,7 +73,7 @@ Vue.use(AileUI, {
 })
 
 // 方式2：引入单独组件并设置参数
-import AileAutocomplete from 'aile-ui/autocomplete'
+import AileAutocomplete from 'aile-ui/lib/autocomplete'
 Vue.use(AileAutocomplete, {
   clearable: true,
   config: {
@@ -85,7 +85,7 @@ Vue.use(AileAutocomplete, {
 `Demo.vue` 局部引入
 
 ```js
-import AileAutocomplete from 'aile-ui/autocomplete'
+import AileAutocomplete from 'aile-ui/lib/autocomplete'
 export default {
     components: {
         AileAutocomplete

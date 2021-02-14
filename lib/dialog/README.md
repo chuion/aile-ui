@@ -3,7 +3,7 @@
 ### Intro 简介
 
 `aile-ui/dialog` 是一款对话框组件，基于 `vue` 和 `element-ui` 进行的二次封装。
-- 采用 `$attrs` 和 `$listeners` 接收参数和监听事件，无缝对接 `element-ui` 中的 `Avatar` 文档，上手快。
+- 采用 `$attrs` 和 `$listeners` 接收参数和监听事件，无缝对接 `element-ui` 中的 `Dialog` 文档，上手快。
 - 支持安装时个性化配置
 
 ### Install 安装
@@ -12,19 +12,11 @@
 
 注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
 
-- 方式1：全组件安装
-
 ```bash
-npm i aile-ui
+npm i element-ui aile-ui
 
 # 或者
-yarn add aile-ui
-```
-
-- 方式2：按需安装
-
-```bash
-npm i aile-ui/avatar
+yarn add element-ui aile-ui
 ```
 
 ### Options 配置项
@@ -102,7 +94,7 @@ Vue.use(AileUI, {
 })
 
 // or 按需引入
-import AileDialog from 'aile-ui/dialog'
+import AileDialog from 'aile-ui/lib/dialog'
 Vue.use(AileDialog, {
   appendToBody: false,  // Dialog 自身是否插入至 body 元素上
   modalAppendToBody: true,  // 遮罩层是否插入至 body 元素上

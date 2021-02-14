@@ -120,7 +120,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .aile-form.el-form--inline {
   display: flex;
 }

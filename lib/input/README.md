@@ -12,21 +12,12 @@
 
 注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
 
-- 方式1：全组件安装
-
 ```bash
-npm i aile-ui
+npm i element-ui aile-ui
 
 # 或者
-yarn add aile-ui
+yarn add element-ui aile-ui
 ```
-
-- 方式2：按需安装
-
-```bash
-npm i aile-ui/input
-```
-
 ### Options 配置项
 
 #### 全局配置项
@@ -86,7 +77,7 @@ Vue.use(AileUI, {
 })
 
 // or 按需引入
-import AileInput from 'aile-ui/input'
+import AileInput from 'aile-ui/lib/input'
 Vue.use(AileInput, {
     clearable: true,
     config: {
