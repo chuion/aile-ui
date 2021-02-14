@@ -35,19 +35,11 @@
 
 注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
 
-- 方式1：全组件安装
-
 ```bash
-npm i aile-ui
+npm i element-ui aile-ui
 
 # 或者
-yarn add aile-ui
-```
-
-- 方式2：按需安装
-
-```bash
-npm i aile-ui/autocomplete
+yarn add element-ui aile-ui
 ```
 
 ### Quick Start
