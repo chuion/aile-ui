@@ -32,5 +32,3 @@ export default {
   ...AileUI,
   install
 };
-
-// export * from './packages';
