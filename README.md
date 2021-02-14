@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/chuion/aile-ui/blob/main/docs/assets/logo_img_sc.jpg" style="background-color: #fff;border-radius: 1rem;">
+  <img src="https://github.com/chuion/aile-ui/blob/main/docs/assets/aile-ui_logo.png">
 </p>
 
 <p align="center">
@@ -14,9 +14,9 @@
   </a>
 </p>
 
-### Features
+## Features
 
-`AileUI` 是一组基于 `vue 2.x` 和 `element-ui 2.x` 进行二次开发的UI库，包含以下常用组件：
+`AileUI` 是一个基于 `vue 2.x` 和 `element-ui 2.x` 进行二次开发的UI库，包含以下常用组件：
 
 - [Input 输入框](https://github.com/chuion/aile-ui/blob/main/input)
 - [Autocomplete 带输入建议的输入框](https://github.com/chuion/aile-ui/blob/main/autocomplete)
@@ -27,11 +27,11 @@
 - [Link 链接](https://github.com/chuion/aile-ui/blob/main/link)
 - [Select 下拉选择器](https://github.com/chuion/aile-ui/blob/main/select)
 
-每种组件均在原有ElementUI的基础上进行了功能增强，例如 `Form` 和 `Table` 组件实现了配置化开发，可通过书写JSX语法传入 `column` 属性完成配置，而 `Select` 和 `Autocomplete` 组件则实现了无限滚动加载的功能，更多功能可点击上方列表阅读相应 `README.md` 文档
+每种组件均在原有 `ElementUI` 的基础上进行了功能增强，例如 `Form` 和 `Table` 组件实现了配置化开发，可通过书写JSX语法传入 `column` 属性完成配置，而 `Select` 和 `Autocomplete` 组件则实现了无限滚动加载的功能，更多功能可点击上方列表阅读相应 `README.md` 文档
 
-### Install
+## Install
 
-通过 `npm` 或者 `yarn` 安装项目，项目提供全组件安装和按需安装，建议使用全组件安装
+通过 `npm` 或者 `yarn` 安装项目
 
 注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
 
@@ -42,7 +42,7 @@ npm i element-ui aile-ui
 yarn add element-ui aile-ui
 ```
 
-### Quick Start
+## Quick Start
 
 引用组件，根据需要可全局引入或者局部引入
 
@@ -53,7 +53,7 @@ import Vue from 'vue'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-// 方式1：引入全部组件包并设置参数
+// 方式1：引入全部组件包并设置参数，key的名称是组件类别（首字母大写）
 import AileUI from 'aile-ui'
 Vue.use(AileUI, {
   Autocomplete: {

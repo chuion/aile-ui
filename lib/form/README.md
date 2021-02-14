@@ -40,7 +40,7 @@ export default {
 
 ### Install 安装
 
-通过 `npm` 或者 `yarn` 安装项目，项目提供全组件安装和按需安装，建议使用全组件安装
+通过 `npm` 或者 `yarn` 安装项目
 
 注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
 
