@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/chuion/aile-ui/blob/main/docs/assets/aile-ui_logo.png">
+  <img src="./docs/assets/aile-ui_logo.png">
 </p>
 
 <p align="center">
@@ -18,14 +18,14 @@
 
 `AileUI` 是一个基于 `vue 2.x` 和 `element-ui 2.x` 进行二次开发的UI库，包含以下常用组件：
 
-- [Input 输入框](https://github.com/chuion/aile-ui/blob/main/input)
-- [Autocomplete 带输入建议的输入框](https://github.com/chuion/aile-ui/blob/main/autocomplete)
-- [Avatar 头像](https://github.com/chuion/aile-ui/blob/main/avatar)
-- [Dialog 对话框](https://github.com/chuion/aile-ui/blob/main/dialog)
-- [Form 表单](https://github.com/chuion/aile-ui/blob/main/form)
-- [Table 表格](https://github.com/chuion/aile-ui/blob/main/table)
-- [Link 链接](https://github.com/chuion/aile-ui/blob/main/link)
-- [Select 下拉选择器](https://github.com/chuion/aile-ui/blob/main/select)
+- [Input 输入框](./lib/input/README.md)
+- [Autocomplete 带输入建议的输入框](./lib/autocomplete/README.md)
+- [Avatar 头像](./lib/avatar/README.md)
+- [Dialog 对话框](./lib/dialog/README.md)
+- [Form 表单](./lib/form/README.md)
+- [Table 表格](./lib/table/README.md)
+- [Link 链接](./lib/link/README.md)
+- [Select 下拉选择器](./lib/select/README.md)
 
 每种组件均在原有 `ElementUI` 的基础上进行了功能增强，例如 `Form` 和 `Table` 组件实现了配置化开发，可通过书写JSX语法传入 `column` 属性完成配置，而 `Select` 和 `Autocomplete` 组件则实现了无限滚动加载的功能，更多功能可点击上方列表阅读相应 `README.md` 文档
 
