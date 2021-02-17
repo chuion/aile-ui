@@ -11,13 +11,11 @@
 
 通过 `npm` 或者 `yarn` 安装项目
 
-注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
-
 ```bash
-npm i element-ui aile-ui
+npm i aile-ui
 
 # 或者
-yarn add element-ui aile-ui
+yarn add aile-ui
 ```
 
 ### Options 配置项
@@ -87,6 +85,8 @@ yarn add element-ui aile-ui
 |   show    |     Function()/boolean      |    否    |     是否渲染该列，默认渲染     |
 
 ### Quick Start 快速开始
+
+注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
 
 引入模块并初始化配置
 

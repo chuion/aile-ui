@@ -33,18 +33,17 @@
 
 通过 `npm` 或者 `yarn` 安装项目
 
-注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
-
 ```bash
-npm i element-ui aile-ui
+npm i aile-ui
 
 # 或者
-yarn add element-ui aile-ui
+yarn add aile-ui
 ```
 
 ## Quick Start
 
 引用组件，根据需要可全局引入或者局部引入
+注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
 
 `main.js` 全局引入
 
