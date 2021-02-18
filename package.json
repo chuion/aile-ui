@@ -1,6 +1,6 @@
 {
   "name": "aile-ui",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Advance Vue 2.x Components based on ElementUI",
   "main": "index.js",
   "scripts": {
