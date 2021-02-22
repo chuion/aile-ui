@@ -1,12 +1,12 @@
-import AutoComplete from './autocomplete';
-import Avatar from './avatar';
-import Dialog from './dialog';
-import Form from './form';
-import Input from './input';
-import Link from './link';
-import Select from './select';
-import Table from './table';
-import Tooltip from './tooltip';
+import AutoComplete from './lib/autocomplete';
+import Avatar from './lib/avatar';
+import Dialog from './lib/dialog';
+import Form from './lib/form';
+import Input from './lib/input';
+import Link from './lib/link';
+import Select from './lib/select';
+import Table from './lib/table';
+import Tooltip from './lib/tooltip';
 
 const AileUI = {
   AutoComplete,
