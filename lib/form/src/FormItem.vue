@@ -65,7 +65,9 @@
           <template v-for="(col, index) in column.children">
             <el-col :key="index" :span="getColSpan(col)" v-bind="col.layout">
               <aile-form-item
-                v-if="!col.show || col.show(form[column.prop], rootForm)"
+                v-if="
+                  !col.show || col.show(form[column.prop], rootForm, itemIndex)
+                "
                 :column="col"
                 :form="form[column.prop]"
                 :root-form="rootForm"
@@ -77,6 +79,7 @@
                 :item-index="itemIndex"
                 :form-rules="formRules"
                 :disabled="disabled"
+                :merge-config="mergeConfig"
               />
             </el-col>
           </template>
@@ -97,6 +100,7 @@
             :item-index="itemIndex"
             :form-rules="formRules"
             :disabled="disabled"
+            :merge-config="mergeConfig"
           />
         </template>
       </template>
@@ -138,6 +142,7 @@
                   :item-index="index"
                   :form-rules="formRules"
                   :disabled="disabled"
+                  :merge-config="mergeConfig"
                 />
               </el-col>
             </el-row>
@@ -157,6 +162,7 @@
                 :item-index="index"
                 :form-rules="formRules"
                 :disabled="disabled"
+                :merge-config="mergeConfig"
               />
             </template>
           </template>
@@ -180,7 +186,6 @@
           :disabled="disabled"
           size="mini"
           type="primary"
-          round
           plain
           @click="handleAddItem"
         >
@@ -213,83 +218,92 @@
 
 <script>
 /* eslint-disable vue/no-mutating-props */
-import Render from './Render';
-import { getPropByPath } from './utils';
+import Render from "./Render";
+import { getPropByPath } from "./utils";
 
 export default {
-  name: 'AileFormItem',
-
+  name: "AileFormItem",
   components: { Render },
+
+  inheritAttrs: false,
   props: {
+    mergeConfig: {
+      type: Object,
+      default: () => ({}),
+    },
     column: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     form: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     rootForm: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     emptyWords: {
       type: String,
-      default: ''
+      default: "",
     },
     arrayIndex: {
       type: Number,
-      default: null
+      default: null,
     },
     parentFullProp: {
       type: String,
-      default: ''
+      default: "",
     },
     labelPosition: {
       type: String,
-      default: ''
+      default: "",
     },
     labelWidth: {
       type: String,
-      default: ''
+      default: "",
     },
     itemIndex: {
       type: Number,
-      default: -1
+      default: -1,
     },
     formRules: {
       type: [Array, Object],
-      default: () => ({})
+      default: () => ({}),
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     propPath() {
       if (!this.parentFullProp) {
         return this.column.prop;
       }
-      return this.parentFullProp + '.' + this.column.prop;
+      return this.parentFullProp + "." + this.column.prop;
     },
     formClass() {
-      return this.$aileForm ? this.$aileForm.formClass : '';
+      return this.$aileForm ? this.$aileForm.formClass : "";
     },
     calcLabelWidth() {
       return this.column.labelWidth || this.labelWidth;
     },
     calcLabelPosition() {
-      return this.column.labelPosition || this.labelPosition || 'top';
+      return (
+        this.column.labelPosition ||
+        this.labelPosition ||
+        this.mergeConfig.labelPosition
+      );
     },
     labelStyle() {
       return {
-        width: this.calcLabelWidth || 'auto',
-        display: 'inline-block',
+        width: this.calcLabelWidth || "auto",
+        display: "inline-block",
         textAlign:
-          (['left', 'right'].includes(this.calcLabelPosition) &&
+          (["left", "right"].includes(this.calcLabelPosition) &&
             this.calcLabelPosition) ||
-          'left'
+          "left",
       };
     },
     isRequired() {
@@ -297,7 +311,7 @@ export default {
       let isRequired = false;
 
       if (rules && rules.length) {
-        rules.every(rule => {
+        rules.every((rule) => {
           if (rule.required) {
             isRequired = true;
             return false;
@@ -306,15 +320,15 @@ export default {
         });
       }
       return isRequired;
-    }
+    },
   },
   watch: {
     column: {
       handler() {
         this.setColumn();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     getRules() {
@@ -323,8 +337,8 @@ export default {
       const requiredRule =
         this.column.required !== undefined ? { required: !!this.required } : [];
 
-      const prop = getPropByPath(formRules, this.prop || '');
-      formRules = formRules ? prop.o[this.prop || ''] || prop.v : [];
+      const prop = getPropByPath(formRules, this.column.prop || "");
+      formRules = formRules ? prop.o[this.column.prop || ""] || prop.v : [];
 
       return [].concat(selfRules || formRules || []).concat(requiredRule);
     },
@@ -369,14 +383,14 @@ export default {
      * 生成新的数组项
      */
     _getNewArrayItem(obj, column) {
-      column.forEach(it => {
-        if (Object.prototype.hasOwnProperty.call(it, 'children')) {
+      column.forEach((it) => {
+        if (Object.prototype.hasOwnProperty.call(it, "children")) {
           obj[it.prop] = {};
           this._getNewArrayItem(obj[it.prop], it.children);
-        } else if (Object.prototype.hasOwnProperty.call(it, 'item')) {
+        } else if (Object.prototype.hasOwnProperty.call(it, "item")) {
           obj[it.prop] = [];
         } else {
-          obj[it.prop] = {}.hasOwnProperty.call(it, 'value')
+          obj[it.prop] = {}.hasOwnProperty.call(it, "value")
             ? it.value
             : undefined;
         }
@@ -413,8 +427,8 @@ export default {
         return col.layout.span;
       }
       return defaultSpan;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -455,6 +469,10 @@ export default {
 
 .aile-form-item__array .array-item__content > .el-form-item:not(:last-of-type) {
   margin-bottom: 22px;
+}
+
+.aile-form-item__array .array-item__content > .el-form-item:last-of-type {
+  margin-bottom: 0;
 }
 
 .aile-form-item__array .array-item__index {
@@ -510,10 +528,10 @@ export default {
   flex-direction: row;
 }
 
-.aile-form-item.is-label-right ::v-deep .el-form-item__label,
+/* .aile-form-item.is-label-right ::v-deep .el-form-item__label,
 .aile-form-item.is-label-left ::v-deep .el-form-item__label {
-  height: 40px;
-}
+  max-height: 40px;
+} */
 
 .aile-form-item.is-label-right
   ::v-deep
@@ -549,7 +567,6 @@ export default {
 }
 
 .aile-form-item.is-label-top ::v-deep > .el-form-item__label {
-  height: 40px;
   width: auto;
   align-self: baseline;
 }

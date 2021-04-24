@@ -59,17 +59,17 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-mutating-props */
 import AileRender from './Render';
 // import forced from './forced.js';
 export default {
   name: 'AileColumn',
 
   components: { AileRender },
+  inheritAttrs: false,
   props: {
     column: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     colEmptyText: {
       type: String,
@@ -90,16 +90,30 @@ export default {
   },
   computed: {
     calcAlignForCols() {
-      return this.column.align || this.colAlign || this.$aileTable.colAlign || 'center';
+      return (
+        this.column.align ||
+        this.colAlign ||
+        this.$aileTable.colAlign ||
+        'center'
+      );
     },
     calcHeaderAlignForCols() {
-      return this.column.headerAlign || this.colHeaderAlign || this.$aileTable.colHeaderAlign || this.calcAlignForCols;
+      return (
+        this.column.headerAlign ||
+        this.colHeaderAlign ||
+        this.$aileTable.colHeaderAlign ||
+        this.calcAlignForCols
+      );
     },
     calcEmptyTextForCols() {
       return this.colEmptyText || this.$aileTable.colEmptyText;
     },
     calcShowOverflowTooltip() {
-      return this.column.showOverflowTooltip || this.colShowOverflowTooltip || this.$aileTable.colShowOverflowTooltip;
+      return (
+        this.column.showOverflowTooltip ||
+        this.colShowOverflowTooltip ||
+        this.$aileTable.colShowOverflowTooltip
+      );
     }
   },
   watch: {
@@ -113,8 +127,12 @@ export default {
   methods: {
     setColumn() {
       if (this.column.type) {
-        this.column.renderHeader = this.getColumnByType(this.column.type).renderHeader;
-        this.column.render = this.column.render || this.getColumnByType(this.column.type).renderCell;
+        this.column.renderHeader = this.getColumnByType(
+          this.column.type
+        ).renderHeader;
+        this.column.render =
+          this.column.render ||
+          this.getColumnByType(this.column.type).renderCell;
       }
       if (this.column.formatter) {
         this.column.render = (h, scope) => {
@@ -147,7 +165,8 @@ export default {
               <el-checkbox
                 disabled={store.states.data && store.states.data.length === 0}
                 indeterminate={
-                  store.states.selection.length > 0 && !store.states.isAllSelected
+                  store.states.selection.length > 0 &&
+                  !store.states.isAllSelected
                 }
                 nativeOn-click={store.toggleAllSelection}
                 value={store.states.isAllSelected}
@@ -157,8 +176,14 @@ export default {
               <el-checkbox
                 nativeOn-click={event => event.stopPropagation()}
                 value={store.isSelected(row)}
-                disabled={ column.selectable ? !column.selectable.call(null, row, $index) : false }
-                on-input={() => { store.commit('rowSelectedChanged', row); }}
+                disabled={
+                  column.selectable
+                    ? !column.selectable.call(null, row, $index)
+                    : false
+                }
+                on-input={() => {
+                  store.commit('rowSelectedChanged', row);
+                }}
               />
             ),
             sortable: false,
@@ -170,7 +195,8 @@ export default {
               <el-checkbox
                 disabled={store.states.data && store.states.data.length === 0}
                 indeterminate={
-                  store.states.selection.length > 0 && !store.states.isAllSelected
+                  store.states.selection.length > 0 &&
+                  !store.states.isAllSelected
                 }
                 nativeOn-click={store.toggleAllSelection}
                 value={store.states.isAllSelected}
@@ -219,3 +245,13 @@ export default {
   }
 };
 </script>
+
+<style>
+.aile-table .el-table__body-wrapper .cell.el-tooltip span {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  white-space: nowrap;
+}
+</style>

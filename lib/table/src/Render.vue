@@ -5,17 +5,13 @@ export default {
   props: {
     scope: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     render: {
       type: Function,
       default: function() {}
     }
   },
-  render: (h, ctx) => (ctx.props.render
-    ? ctx.props.render(h, ctx.props.scope) || (
-      <span>{ctx.parent.calcEmptyTextForCols}</span>
-    )
-    : '')
+  render: (h, ctx) => (ctx.props.render ? ctx.props.render(h, ctx.props.scope) || (<span>{ctx.parent.calcEmptyTextForCols}</span>) : '')
 };
 </script>

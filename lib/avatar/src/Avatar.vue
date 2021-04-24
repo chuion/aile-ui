@@ -4,11 +4,15 @@
     :fit="calcFit"
     :shape="calcShape"
     :src="mergeConfig.srcFormatter(src)"
+    :style="calcStyle"
     v-bind="$attrs"
     v-on="$listeners"
   >
     <slot>
-      <span class="aile-avatar__label" :style="mergeConfig.labelStyle">
+      <span
+        class="aile-avatar__label"
+        :style="mergeConfig.labelStyle"
+      >
         {{ mergeConfig.labelFormatter(label || mergeConfig.defaultLabel) }}
       </span>
     </slot>
@@ -37,6 +41,7 @@ const DefaultConfig = {
 export default {
   name: 'AileAvatar',
 
+  inheritAttrs: false,
   props: {
     fit: {
       type: String,
@@ -54,6 +59,10 @@ export default {
       type: String,
       default: ''
     },
+    size: {
+      type: String,
+      default: ''
+    },
     config: {
       type: Object,
       default: () => ({})
@@ -64,7 +73,12 @@ export default {
       return {
         ...DefaultConfig,
         ...this.$aileAvatar.config,
-        ...this.config
+        ...this.config,
+        labelStyle: {
+          ...(DefaultConfig.labelStyle || {}),
+          ...(this.$aileAvatar.config.labelStyle || {}),
+          ...(this.config.labelStyle || {})
+        }
       };
     },
     calcFit() {
@@ -78,6 +92,16 @@ export default {
         return this.$aileAvatar.shape;
       }
       return this.shape;
+    },
+    calcStyle() {
+      if (!this.size) {
+        return {};
+      }
+
+      return {
+        width: this.size,
+        height: this.size
+      };
     }
   }
 };

@@ -113,7 +113,9 @@ export default {
     scroll: {
       bind(el, binding) {
         // 获取element-ui定义好的scroll盒子
-        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap');
+        const SELECTWRAP_DOM = el.querySelector(
+          '.el-select-dropdown .el-select-dropdown__wrap'
+        );
         SELECTWRAP_DOM.addEventListener('scroll', function() {
           /**
            * scrollHeight 获取元素内容高度(只读)
@@ -130,6 +132,8 @@ export default {
       }
     }
   },
+
+  inheritAttrs: false,
   props: {
     config: {
       type: Object,
@@ -162,7 +166,8 @@ export default {
       loading: false,
       currentPage: 1,
       total: 0,
-      payload: ''
+      payload: '',
+      selectedOptions: []
     };
   },
   computed: {
@@ -247,6 +252,10 @@ export default {
   },
   mounted() {
     this.init();
+    this.$refs.select.$refs.popper.$el.addEventListener('mousewheel', this.cleanTooltip);
+    this.$once('hook:beforeDestroy', () => {
+      this.$refs.select.$refs.popper.$el.removeEventListener('mousewheel', this.cleanTooltip);
+    });
   },
   methods: {
     /**
@@ -259,6 +268,7 @@ export default {
       if (config.dataSource.length) {
         const list = config.dataSource;
         this._updateOptionList(list, list.length);
+        this.selectedOptions = config.dataSource;
       } else if (config.method) {
         // 执行自定义远程搜索方法
         await this.getRemoteList();
@@ -378,7 +388,7 @@ export default {
 
       // 构造请求参数
       const query = { ...config.requestParams };
-      if (config.queryKey) {
+      if (config.queryKey && this.payload) {
         query[config.queryKey] = this.payload;
       }
 
@@ -411,7 +421,7 @@ export default {
         [config.sizeField]: config.pageSize,
         ...config.requestParams
       };
-      if (config.queryKey) {
+      if (config.queryKey && this.payload) {
         query[config.queryKey] = this.payload;
       }
 
@@ -441,32 +451,16 @@ export default {
     /**
      * 选择下拉项时的操作
      */
-    handleChange(str) {
-      if (Array.isArray(str)) {
-        const array = this.options.filter(it => {
-          if (this.mergeConfig.itemValue) {
-            if (typeof this.mergeConfig.itemValue === 'function') {
-              return str.includes(this.mergeConfig.itemValue(it));
-            } else {
-              return str.includes(it[this.config.itemValue]);
-            }
-          }
-          return str.includes(it);
-        });
-        this.$emit('select', array);
+    handleChange(selected) {
+      if (Array.isArray(selected)) {
+        this.selectedOptions = selected.map(
+          item => this.selectedOptions.find(opt => this.calcValue(opt) === item) || this.options.find(opt => this.calcValue(opt) === item)
+        );
+        this.$emit('select', this.selectedOptions);
       } else {
         this.$emit(
           'select',
-          this.options.find(it => {
-            if (this.mergeConfig.itemValue) {
-              if (typeof this.mergeConfig.itemValue === 'function') {
-                return this.mergeConfig.itemValue(it) === str;
-              } else {
-                return it[this.mergeConfig.itemValue] === str;
-              }
-            }
-            return it === str;
-          })
+          this.options.find(item => selected === this.calcValue(item))
         );
       }
     },
@@ -481,6 +475,15 @@ export default {
     },
     blur() {
       this.$refs.select.blur();
+    },
+    // 清理tooltip Dom元素
+    cleanTooltip() {
+      const body = document.getElementsByTagName('body')[0];
+      const tooltips = document.getElementsByClassName('el-tooltip__popper');
+      const length = tooltips.length;
+      for (let i = length - 1; i >= 0; i--) {
+        body.removeChild(tooltips[i]);
+      }
     }
   }
 };

@@ -1,13 +1,17 @@
 <template>
-  <div ref="aileTableRef" class="aile-table" :class="[calcCustomClassName]">
+  <div
+    ref="aileTableRef"
+    class="aile-table"
+    :class="[calcCustomClassName]"
+  >
     <section
       class="aile-table__main"
       :class="[calcCustomClassName && calcCustomClassName + '__main']"
-      :style="{padding: calcTablePadding + 'px'}"
+      :style="{ padding: calcTablePadding + 'px' }"
     >
       <el-table
         ref="elTable"
-        v-bind="$attrs"
+        v-bind="tableAttrs"
         :height="tableHeight"
         :data="data"
         :span-method="merge ? mergeMethod : spanMethod"
@@ -60,6 +64,7 @@ export default {
   name: 'AileTable',
 
   components: { AileColumn },
+  inheritAttrs: false,
   props: {
     column: {
       type: Array,
@@ -91,11 +96,15 @@ export default {
     },
     tablePadding: {
       type: Number,
-      default: 0
+      default: undefined
     },
     customClassName: {
       type: String,
       default: ''
+    },
+    heightMode: {
+      type: String,
+      default: 'height'
     }
   },
   data() {
@@ -113,13 +122,25 @@ export default {
       return this.pagination ? PAGER_HEIGHT + this.calcPagerOffsetHeight + this.calcTablePadding * 2 : this.calcTablePadding * 2;
     },
     calcTablePadding() {
-      return this.tablePadding || this.$aileTable.tablePadding;
+      if (this.tablePadding === undefined) {
+        return this.$aileTable.tablePadding || 0;
+      }
+      return this.tablePadding || 0;
     },
     calcPagerOffsetHeight() {
       return this.pagerOffset || this.$aileTable.pagerOffset;
     },
     calcCustomClassName() {
       return this.customClassName || this.$aileTable.customClassName;
+    },
+    calcHeightMode() {
+      return this.heightMode || this.$aileTable.heightMode;
+    },
+    tableAttrs() {
+      return {
+        ...this.$attrs,
+        [this.calcHeightMode]: this.tableHeight
+      };
     }
   },
   watch: {
@@ -215,6 +236,7 @@ export default {
       }
     },
     handleCurrentPageChange(page) {
+      this.$refs.elTable.bodyWrapper.scrollTop = 0;
       this.$refs.elTable.setCurrentRow();
       this.$emit('page-change', page);
     },

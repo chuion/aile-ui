@@ -23,7 +23,7 @@
         <slot name="footer">
           <el-button
             v-if="mergeConfig.showConfirm"
-            type="primary"
+            :type="mergeConfig.confirmType"
             size="small"
             :loading="mergeConfig.confirmLoading"
             :disabled="mergeConfig.confirmDisabled"
@@ -33,7 +33,7 @@
           </el-button>
           <el-button
             v-if="mergeConfig.showCancel"
-            type="info"
+            :type="mergeConfig.cancelType"
             size="small"
             @click="handleCancel"
           >
@@ -52,7 +52,7 @@ const DefaultConfig = {
   showConfirm: false,
 
   // 【确定】按钮文字内容
-  confirmText: '确定',
+  confirmText: "确定",
 
   // 【确定】按钮加载状态
   confirmLoading: false,
@@ -64,59 +64,64 @@ const DefaultConfig = {
   showCancel: true,
 
   // 【关闭】按钮文字内容
-  cancelText: '关闭',
+  cancelText: "关闭",
 
   // 是否隐藏底部按钮区域
   hideFooter: false,
 
   // 底部按钮区域对齐方式
-  footerAlign: 'right'
+  footerAlign: "right",
+
+  confirmType: "primary",
+
+  cancelType: "info",
 };
 
 export default {
-  name: 'AileDialog',
+  name: "AileDialog",
 
+  inheritAttrs: false,
   props: {
     visible: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     config: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     appendToBody: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     modalAppendToBody: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     closeOnClickModal: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     closeOnPressEscape: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     width: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     title: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   computed: {
     mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileDialog.config,
-        ...this.config
+        ...this.config,
       };
     },
     showDialog: {
@@ -124,8 +129,8 @@ export default {
         return this.visible;
       },
       set(val) {
-        this.$emit('update:visible', val);
-      }
+        this.$emit("update:visible", val);
+      },
     },
     calcWidth() {
       if (this.width !== undefined) {
@@ -156,7 +161,7 @@ export default {
         return this.modalAppendToBody;
       }
       return this.$aileDialog.modalAppendToBody;
-    }
+    },
   },
   methods: {
     async handleCancel() {
@@ -166,12 +171,12 @@ export default {
          * 如果你在 footer 具名 slot 里添加了用于关闭 Dialog 的按钮，那么可以在按钮的点击回调函数里加入 before-close 的相关逻辑。
          * 所以当存在cancel 逻辑时， 把$emit('update:visible', false）逻辑放到cancel 逻辑执行成功后
          */
-        await this.$emit('cancel');
+        await this.$emit("cancel");
       } else {
-        this.$emit('update:visible', false);
+        this.$emit("update:visible", false);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -200,5 +205,4 @@ export default {
 .aile-dialog__footer.is-align-left {
   justify-content: flex-start;
 }
-
 </style>

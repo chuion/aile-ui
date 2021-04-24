@@ -3,10 +3,13 @@
     ref="input"
     v-bind="$attrs"
     :style="calcStyle"
+    :class="[$attrs['show-word-limit'] && 'show-word-limit']"
     :clearable="shouldClearable"
     :value="value"
     v-on="$listeners"
+    @change="handleChange"
     @keydown.native="handleKeydown"
+    @keyup.native="handleKeyup"
   >
     <template
       v-if="$slots.prepend"
@@ -36,8 +39,15 @@
 </template>
 
 <script>
+const DefaultConfig = {
+  width: undefined,
+  trim: 'none'
+};
+
 export default {
   name: 'AileInput',
+
+  inheritAttrs: false,
   model: {
     prop: 'value',
     event: 'input'
@@ -56,37 +66,29 @@ export default {
       default: () => ({})
     }
   },
-  data() {
-    return {
-      defaultConfig: {
-        width: undefined,
-        trim: undefined
-      }
-    };
-  },
   computed: {
+    mergeConfig() {
+      return {
+        ...DefaultConfig,
+        ...this.$aileInput.config,
+        ...this.config
+      };
+    },
     shouldClearable() {
-      return typeof this.clearable === 'undefined' ? this.$aileInput.clearable : this.clearable;
+      return typeof this.clearable === 'undefined'
+        ? this.$aileInput.clearable
+        : this.clearable;
     },
-
-    shouldTrim() {
-      return typeof this.mergeConfig.trim === 'undefined' ? this.$aileInput.config.trim : this.mergeConfig.trim;
-    },
-
     calcStyle() {
       const style = {};
       if (this.mergeConfig.width) style.width = this.mergeConfig.width;
       return style;
-    },
-
-    mergeConfig() {
-      return { ...this.defaultConfig, ...this.$aileInput.config, ...this.config };
     }
   },
   methods: {
     handleKeydown(event) {
-      if (event.keyCode === 32 && this.shouldTrim) {
-        // 判断是否是在前后键入空格
+      // 判断是否是在前后键入空格
+      if (event.keyCode === 32 && this.mergeConfig.trim === 'strict') {
         // index 键入位置
         const { input, textarea } = this.$refs.input.$refs;
         const index = input ? input.selectionStart : textarea.selectionStart;
@@ -94,6 +96,16 @@ export default {
           event.preventDefault();
         }
       }
+    },
+    handleKeyup(event) {
+      this.$emit('keyup', event);
+    },
+    handleChange(val) {
+      if (this.mergeConfig.trim === 'weak') {
+        val = val.trim();
+        this.$emit('input', val);
+      }
+      this.$emit('change', val);
     },
     focus() {
       this.$refs.input.focus();
@@ -107,3 +119,17 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.show-word-limit.el-textarea ::v-deep .el-input__count {
+  line-height: 14px;
+}
+
+.show-word-limit.el-input.el-input--suffix > ::v-deep .el-input__inner {
+  padding-right: 85px;
+}
+
+.show-word-limit.el-input > ::v-deep .el-input__inner {
+  padding-right: 65px;
+}
+</style>

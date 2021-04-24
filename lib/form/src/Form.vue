@@ -10,7 +10,11 @@
   >
     <template v-if="layout">
       <el-row v-bind="layout">
-        <el-col v-for="(item, idx) in column" :key="idx" :span="getColSpan(item)">
+        <el-col
+          v-for="(item, idx) in column"
+          :key="idx"
+          :span="getColSpan(item)"
+        >
           <aile-form-item
             v-if="!item.show || item.show(model, model)"
             v-bind="$attrs"
@@ -22,6 +26,7 @@
             :label-width="labelWidth"
             :form-rules="rules"
             :disabled="disabled"
+            :merge-config="mergeConfig"
           />
         </el-col>
       </el-row>
@@ -40,6 +45,7 @@
           :label-width="labelWidth"
           :form-rules="rules"
           :disabled="disabled"
+          :merge-config="mergeConfig"
         />
       </template>
     </template>
@@ -49,9 +55,13 @@
 <script>
 import AileFormItem from './FormItem';
 
+const DefaultConfig = { labelPosition: 'top' };
+
 export default {
   name: 'AileForm',
   components: { AileFormItem },
+
+  inheritAttrs: false,
   props: {
     column: {
       type: Array,
@@ -87,6 +97,13 @@ export default {
     }
   },
   computed: {
+    mergeConfig() {
+      return {
+        ...DefaultConfig,
+        ...this.$aileForm.config,
+        ...this.config
+      };
+    },
     emptyWords() {
       return (
         this.emptyText || (this.$aileForm && this.$aileForm.emptyText) || ''
@@ -123,5 +140,11 @@ export default {
 <style scoped>
 .aile-form.el-form--inline {
   display: flex;
+}
+.aile-form.el-form--inline ::v-deep .aile-form-item__object {
+  display: flex;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 </style>

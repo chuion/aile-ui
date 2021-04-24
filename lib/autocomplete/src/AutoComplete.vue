@@ -8,10 +8,10 @@
     :style="calcStyle"
     :clearable="calcClearable"
     :value="value"
+    v-bind="$attrs"
     @keydown.native="handleKeydown"
     @clear="handleClear"
     @select="handleSelect"
-    v-bind="$attrs"
     v-on="$listeners"
   >
     <template v-if="$slots.prepend" slot="prepend">
@@ -39,7 +39,7 @@ const DefaultConfig = {
 
   dataSource: [],
   // queryKey String 远程请求的动态字段名称
-  queryKey: '',
+  queryKey: "",
   // requestParams Object 远程请求的静态参数
   requestParams: {},
   // scrollable Boolean 是否开启滚动加载
@@ -49,23 +49,23 @@ const DefaultConfig = {
   // remoteMethod Function 远程搜索API
   remoteMethod: null,
   // pageField String 分页页码参数
-  pageField: 'page_index',
+  pageField: "page_index",
   // sizeField String 页容量参数
-  sizeField: 'page_size',
+  sizeField: "page_size",
   // pageSize Number 分页每页显示条目个
   pageSize: 20,
-  respDataField: 'data',
-  respTotalField: 'total',
+  respDataField: "data",
+  respTotalField: "total",
   // respFormatter Function 请求成功后事件回调
-  respFormatter: res => res
+  respFormatter: (res) => res,
 };
 
 export default {
-  name: 'AileAutocomplete',
+  name: "AileAutocomplete",
   directives: {
     scroll: {
       bind(el, binding) {
-        el.handler = function() {
+        el.handler = function () {
           const condition =
             this.scrollHeight - this.scrollTop <= this.clientHeight;
           if (condition) {
@@ -73,39 +73,40 @@ export default {
           }
         };
         const SCROLL_DOM = el.querySelector(
-          '.el-autocomplete-suggestion .el-autocomplete-suggestion__wrap'
+          ".el-autocomplete-suggestion .el-autocomplete-suggestion__wrap"
         );
-        SCROLL_DOM.addEventListener('scroll', el.handler);
+        SCROLL_DOM.addEventListener("scroll", el.handler);
       },
       unbind(el) {
         const SCROLL_DOM = el.querySelector(
-          '.el-autocomplete-suggestion .el-autocomplete-suggestion__wrap'
+          ".el-autocomplete-suggestion .el-autocomplete-suggestion__wrap"
         );
-        SCROLL_DOM && SCROLL_DOM.removeEventListener('scroll', el.handler);
-      }
-    }
+        SCROLL_DOM && SCROLL_DOM.removeEventListener("scroll", el.handler);
+      },
+    },
   },
+  inheritAttrs: false,
   model: {
-    prop: 'value',
-    event: 'input'
+    prop: "value",
+    event: "input",
   },
   props: {
     value: {
       type: String,
-      default: ''
+      default: "",
     },
     valueKey: {
       type: String,
-      default: 'value'
+      default: "value",
     },
     clearable: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     config: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
@@ -113,35 +114,18 @@ export default {
       respSource: null,
       currentPage: 1,
       total: 0,
-      queryString: '',
+      queryString: "",
       clearClick: false,
-      loadMoreDisabled: false
+      loadMoreDisabled: false,
     };
   },
   computed: {
-    calcClearable() {
-      return typeof this.clearable === 'undefined'
-        ? this.$aileAutocomplete.clearable
-        : this.clearable;
-    },
-
-    shouldTrim() {
-      return typeof this.mergeConfig.trim === 'undefined'
-        ? this.$aileAutocomplete.config.trim
-        : this.mergeConfig.trim;
-    },
-
-    calcStyle() {
-      const style = {};
-      if (this.mergeConfig.width) style.width = this.mergeConfig.width;
-      return style;
-    },
     mergeConfig() {
       let { dataSource } = this.config;
       if (dataSource && dataSource.length) {
         const dataItem = dataSource[0];
-        if (typeof dataItem !== 'object') {
-          dataSource = dataSource.map(item => ({ [this.valueKey]: item }));
+        if (typeof dataItem !== "object") {
+          dataSource = dataSource.map((item) => ({ [this.valueKey]: item }));
         } else if (!{}.hasOwnProperty.call(dataItem, this.valueKey)) {
           throw Error(
             `Each item of dataSource should has ${this.valueKey} property`
@@ -154,8 +138,26 @@ export default {
         ...DefaultConfig,
         ...this.$aileAutocomplete.config,
         ...this.config,
-        dataSource
+        dataSource,
       };
+    },
+
+    calcClearable() {
+      return typeof this.clearable === "undefined"
+        ? this.$aileAutocomplete.clearable
+        : this.clearable;
+    },
+
+    shouldTrim() {
+      return typeof this.mergeConfig.trim === "undefined"
+        ? this.$aileAutocomplete.config.trim
+        : this.mergeConfig.trim;
+    },
+
+    calcStyle() {
+      const style = {};
+      if (this.mergeConfig.width) style.width = this.mergeConfig.width;
+      return style;
     },
 
     /**
@@ -167,7 +169,7 @@ export default {
         this.mergeConfig.remoteMethod &&
         this.currentPage * this.mergeConfig.pageSize < this.total
       );
-    }
+    },
   },
   methods: {
     handleKeydown(event) {
@@ -182,14 +184,14 @@ export default {
     },
     handleSelect(item) {
       this.loadMoreDisabled = true;
-      this.$emit('select', item);
+      this.$emit("select", item);
     },
     focus() {
       this.$refs.input.focus();
     },
     handleClear() {
       this.clearClick = true;
-      this.$emit('clear');
+      this.$emit("clear");
     },
 
     /**
@@ -217,7 +219,7 @@ export default {
         remoteMethod,
         requestParams,
         respFormatter,
-        respDataField
+        respDataField,
       } = this.mergeConfig;
       const query = { [queryKey]: this.queryString, ...requestParams };
       const res = await remoteMethod(query);
@@ -237,7 +239,7 @@ export default {
         sizeField,
         pageSize,
         respDataField,
-        respTotalField
+        respTotalField,
       } = this.mergeConfig;
       const query = { [queryKey]: this.queryString, ...requestParams };
       query[pageField] = this.currentPage;
@@ -276,7 +278,7 @@ export default {
         this.clearClick = false;
         return cb([]);
       }
-      this.queryString = typeof queryString === 'object' ? '' : queryString;
+      this.queryString = typeof queryString === "object" ? "" : queryString;
       const { remote, dataSource } = this.mergeConfig;
       let results = [];
       if (remote) {
@@ -285,8 +287,9 @@ export default {
       } else {
         // 返回传入的静态数据
         results = queryString
-          ? dataSource.filter(item => (item[this.valueKey] || '').includes(queryString)
-          )
+          ? dataSource.filter((item) =>
+              (item[this.valueKey] || "").includes(queryString)
+            )
           : dataSource;
       }
       cb(results);
@@ -299,9 +302,9 @@ export default {
       this.respSource = [];
       this.currentPage = 1;
       this.total = 0;
-      this.queryString = '';
+      this.queryString = "";
       this.clearClick = false;
-    }
-  }
+    },
+  },
 };
 </script>

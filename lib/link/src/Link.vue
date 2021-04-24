@@ -5,7 +5,7 @@
     :class="[mergeConfig.ellipsis && 'is-ellipsis']"
     :style="calcStyle"
     :underline="calcUnderline"
-    v-on="$listeners"
+    @click="$emit('click')"
   >
     <slot />
     <template #icon>
@@ -30,6 +30,7 @@ const DefaultConfig = {
 export default {
   name: 'AileLink',
 
+  inheritAttrs: false,
   props: {
     underline: {
       type: Boolean,
@@ -44,7 +45,7 @@ export default {
     mergeConfig() {
       return {
         ...DefaultConfig,
-        ...this.$aileSelect.config,
+        ...this.$aileLink.config,
         ...this.config
       };
     },

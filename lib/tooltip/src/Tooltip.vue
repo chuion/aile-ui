@@ -1,7 +1,7 @@
 <template>
   <el-tooltip
     ref="aileTooltip"
-    v-model="showPopper"
+    v-model="tooltipShow"
     v-bind="$attrs"
     class="aile-tooltip"
     :placement="calcPlacement"
@@ -20,6 +20,8 @@
 
 export default {
   name: 'AileTooltip',
+
+  inheritAttrs: false,
   props: {
     config: {
       // maxWidth 最大宽度
@@ -37,13 +39,14 @@ export default {
     popperClass: {
       type: String,
       default: ''
+    },
+    value: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
-    return {
-      showPopper: false,
-      defaultConfig: { maxWidth: undefined }
-    };
+    return { defaultConfig: { maxWidth: undefined } };
   },
   computed: {
     mergeConfig() {
@@ -68,10 +71,19 @@ export default {
     calcStyle() {
       const maxWidth = this.calcMaxWidth ? { maxWidth: this.calcMaxWidth } : {};
       return { ...maxWidth };
+    },
+    tooltipShow: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit('update:value', val);
+      }
+
     }
   },
   watch: {
-    showPopper(val) {
+    value(val) {
       if (val) {
         const dom = this.$refs.aileTooltip.$refs.popper;
         for (const key in this.calcStyle) {
