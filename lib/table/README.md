@@ -77,13 +77,13 @@ yarn add aile-ui
 
 仅展示必填项和新增项，其余参数见 [Element Doc Table #Table-column Attributes](https://element.eleme.cn/#/zh-CN/component/table)
 
-|   参数    |          数据类型           | 是否必须 |              说明              |
-| :-------: | :-------------------------: | :------: | :----------------------------: |
-|   prop    |           String            |    是    |      设置表格列的对齐方式      |
-|   label   |           String            |    是    |       设置表头的对其方式       |
-|  render   | Function(h, context)/VNode  |    否    | 自定义渲染内容,可选返回 VNode  |
-| formatter | Function(h, context)/string |    否    | 自定义渲染内容，可选返回字符串 |
-|   show    |     Function()/boolean      |    否    |     是否渲染该列，默认渲染     |
+|   参数    |                    数据类型                    | 是否必须 |              说明              |
+| :-------: | :--------------------------------------------: | :------: | :----------------------------: |
+|   prop    |                     String                     |    是    |      设置表格列的对齐方式      |
+|   label   |                     String                     |    是    |       设置表头的对其方式       |
+|  render   |           Function(h, context)/VNode           |    否    | 自定义渲染内容,可选返回 VNode  |
+| formatter | Function(row, column, cellValue, index)/string |    否    | 自定义渲染内容，可选返回字符串 |
+|   show    |               Function()/boolean               |    否    |     是否渲染该列，默认渲染     |
 
 ### Quick Start 快速开始
 
