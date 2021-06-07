@@ -94,6 +94,10 @@ export default {
     layout: {
       type: Object,
       default: null
+    },
+    config: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {

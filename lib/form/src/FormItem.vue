@@ -3,7 +3,7 @@
     v-bind="$attrs"
     :prop="propPath"
     :label="column.label"
-    :required="column.required"
+    :required="isRequired"
     :rules="column.rules"
     :error="column.error"
     :show-message="column.showMessage"
@@ -14,14 +14,16 @@
       formClass && formClass + '-item',
       calcLabelPosition && `is-label-${calcLabelPosition}`,
       column.class,
+      (column.renderLabel || showCustomLabel) && 'is-hide-hex'
     ]"
     v-on="$listeners"
   >
-    <template v-if="column.renderLabel" slot="label">
+    <template slot="label">
       <span
+        v-if="column.renderLabel"
         :class="[
           'aile-form-item__label-wrap',
-          (column.required || isRequired) && 'is-required',
+          isRequired && 'is-required',
         ]"
         :style="labelStyle"
       >
@@ -32,20 +34,11 @@
           :scope="{ itemIndex }"
         />
       </span>
-    </template>
-
-    <template
-      v-if="
-        !column.renderLabel &&
-        calcLabelWidth &&
-        {}.hasOwnProperty.call(column, 'label')
-      "
-      slot="label"
-    >
       <span
+        v-if="!column.renderLabel && showCustomLabel"
         :class="[
           'aile-form-item__label-wrap',
-          (column.required || isRequired) && 'is-required',
+          isRequired && 'is-required',
         ]"
         :style="labelStyle"
         >{{ column.label }}</span
@@ -308,19 +301,22 @@ export default {
     },
     isRequired() {
       const rules = this.getRules();
-      let isRequired = false;
+      let res = false;
 
       if (rules && rules.length) {
         rules.every((rule) => {
           if (rule.required) {
-            isRequired = true;
+            res = true;
             return false;
           }
           return true;
         });
       }
-      return isRequired;
+      return res;
     },
+    showCustomLabel() {
+      return this.calcLabelWidth && {}.hasOwnProperty.call(this.column, "label");
+    }
   },
   watch: {
     column: {
@@ -334,8 +330,7 @@ export default {
     getRules() {
       let formRules = this.formRules;
       const selfRules = this.column.rules;
-      const requiredRule =
-        this.column.required !== undefined ? { required: !!this.required } : [];
+      const requiredRule = this.column.required !== undefined ? { required: !!this.column.required } : [];
 
       const prop = getPropByPath(formRules, this.column.prop || "");
       formRules = formRules ? prop.o[this.column.prop || ""] || prop.v : [];

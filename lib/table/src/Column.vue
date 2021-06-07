@@ -125,27 +125,50 @@ export default {
     }
   },
   methods: {
+    getPropByPath(obj, path, strict) {
+      let tempObj = obj;
+      path = path.replace(/\[(\w+)\]/g, ".$1");
+      path = path.replace(/^\./, "");
+
+      const keyArr = path.split(".");
+      let i = 0;
+      for (i; i < keyArr.length - 1; i++) {
+        if (!tempObj && !strict) break;
+        const key = keyArr[i];
+
+        if (key in tempObj) {
+          tempObj = tempObj[key];
+        } else {
+          if (strict) {
+            throw new Error("please transfer a valid prop path to form item!");
+          }
+          break;
+        }
+      }
+      return {
+        o: tempObj,
+        k: keyArr[i],
+        v: tempObj?.[keyArr[i]],
+      };
+    },
     setColumn() {
       if (this.column.type) {
-        this.column.renderHeader = this.getColumnByType(
-          this.column.type
-        ).renderHeader;
-        this.column.render =
-          this.column.render ||
-          this.getColumnByType(this.column.type).renderCell;
+        this.column.renderHeader = this.getColumnByType(this.column.type).renderHeader;
+        this.column.render = this.column.render || this.getColumnByType(this.column.type).renderCell;
+        return
       }
       if (this.column.formatter) {
         this.column.render = (h, scope) => {
-          let value = scope.column.formatter(
-            scope.row,
-            scope.column,
-            scope.$index
-          );
+          const { row, column, $index } = scope;
+          const property = column.property;
+          const cellValue = property && this.getPropByPath(row, property, false).v;
+          let value = this.column.formatter(row, column, cellValue, $index);
           if (!value && value !== 0) {
             value = this.calcEmptyTextForCols;
           }
-          return <span>{value}</span>;
+          return <span class="aile-table-cell__formatter">{value}</span>;
         };
+        return
       }
       if (!this.column.render) {
         this.column.render = (h, scope) => {
@@ -153,7 +176,7 @@ export default {
           if (!value && value !== 0) {
             value = this.calcEmptyTextForCols;
           }
-          return <span>{value}</span>;
+          return <span class="aile-table-cell__empty">{value}</span>;
         };
       }
     },
@@ -191,31 +214,18 @@ export default {
           };
         case 'index':
           return {
-            renderHeader: (h, { store }) => (
-              <el-checkbox
-                disabled={store.states.data && store.states.data.length === 0}
-                indeterminate={
-                  store.states.selection.length > 0 &&
-                  !store.states.isAllSelected
-                }
-                nativeOn-click={store.toggleAllSelection}
-                value={store.states.isAllSelected}
-              />
-            ),
-            renderCell: (h, { row, column, store, $index }) => (
-              <el-checkbox
-                nativeOn-click={event => event.stopPropagation()}
-                value={store.isSelected(row)}
-                disabled={
-                  column.selectable
-                    ? !column.selectable.call(null, row, $index)
-                    : false
-                }
-                on-input={() => {
-                  store.commit('rowSelectedChanged', row);
-                }}
-              />
-            ),
+            renderHeader: (h, { store }) => column.label || '#',
+            renderCell: (h, { column, $index }) => {
+              let i = $index + 1;
+              const index = column.index;
+
+              if (typeof index === "number") {
+                i = $index + index;
+              } else if (typeof index === "function") {
+                i = index($index);
+              }
+              return <div>{i}</div>;
+            },
             sortable: false,
             resizable: false
           };
