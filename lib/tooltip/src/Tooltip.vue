@@ -1,12 +1,9 @@
 <template>
   <el-tooltip
     ref="aileTooltip"
-    v-model="tooltipShow"
-    v-bind="$attrs"
+    v-bind="mergeAttrs"
     class="aile-tooltip"
-    :placement="calcPlacement"
-    :open-delay="calcOpenDelay"
-    :popper-class="'aile-tooltip__popper' + ' ' + popperClass"
+    :popper-class="calcPopperClass"
     v-on="$listeners"
   >
     <template #content>
@@ -17,82 +14,34 @@
 </template>
 
 <script>
+import { mergeClass } from '../../../utils/index.js'
+
+const DefaultProps = {
+  placement: 'bottom',
+  showAfter: 0
+}
 
 export default {
   name: 'AileTooltip',
 
   inheritAttrs: false,
   props: {
-    config: {
-      // maxWidth 最大宽度
-      type: Object,
-      default: () => ({})
-    },
-    placement: {
-      type: String,
-      default: undefined
-    },
-    openDelay: {
-      type: Number,
-      default: 0
-    },
     popperClass: {
-      type: String,
+      type: [String, Array, Object],
       default: ''
-    },
-    value: {
-      type: Boolean,
-      default: false
     }
-  },
-  data() {
-    return { defaultConfig: { maxWidth: undefined } };
   },
   computed: {
-    mergeConfig() {
+    mergeAttrs () {
       return {
-        ...this.defaultConfig,
-        ...this.$aileTooltip.config,
-        ...this.config
-      };
-    },
-    calcPlacement() {
-      if (this.placement === undefined) {
-        return this.$aileTooltip.placement;
+        ...DefaultProps, // 默认属性
+        ...this.$aileTooltip.attrs, // 全局属性
+        ...this.$attrs // 组件属性
       }
-      return this.placement;
     },
-    calcOpenDelay() {
-      return this.openDelay || this.$aileTooltip.openDelay;
-    },
-    calcMaxWidth() {
-      return this.mergeConfig.maxWidth;
-    },
-    calcStyle() {
-      const maxWidth = this.calcMaxWidth ? { maxWidth: this.calcMaxWidth } : {};
-      return { ...maxWidth };
-    },
-    tooltipShow: {
-      get() {
-        return this.value;
-      },
-      set(val) {
-        this.$emit('update:value', val);
-      }
-
-    }
-  },
-  watch: {
-    value(val) {
-      if (val) {
-        const dom = this.$refs.aileTooltip.$refs.popper;
-        for (const key in this.calcStyle) {
-          if (Object.prototype.hasOwnProperty.call(this.calcStyle, key)) {
-            dom.style[key] = this.calcStyle[key];
-          }
-        }
-      }
+    calcPopperClass () {
+      return mergeClass(['aile-tooltip__popper', this.popperClass])
     }
   }
-};
+}
 </script>

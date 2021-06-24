@@ -2,7 +2,7 @@
 
 ### Intro 简介
 
-`aile-ui/link` 是一款文字链接组件，基于 `vue` 和 `element-ui` 进行的二次封装。
+`aile-ui/link` 是一款文字链接组件，基于 `Vue2` 和 `ElementUI` 进行的二次封装。
 - 支持对常见属性进行全局设置，使用更方便，管理更高效。
 - 采用 `$attrs` 和 `$listeners` 接收参数和监听事件，无缝对接 `element-ui` 中的 `Link` 文档板块；
 
@@ -40,7 +40,7 @@ yarn add aile-ui
 
 ### Attributes/Props 属性
 
-**支持 `ElementUI` 中 [Link](https://element.eleme.cn/#/zh-CN/component/link) 的所有属性：`type` / `underline` / `disabled` / `href` / `icon` 等**，此处仅展示额外属性：
+**支持 `ElementUI` 中 [Link](https://element.eleme.io/#/zh-CN/component/link) 的所有属性：`type` / `underline` / `disabled` / `href` / `icon` 等**，此处仅展示额外属性：
 
 |  参数  | 数据类型 | 默认值 |                说明                |
 | :----: | :------: | :----: | :--------------------------------: |
@@ -69,7 +69,7 @@ Vue.use(ElementUI)
 // 全量引入
 import AileUI from 'aile-ui'
 Vue.use(AileUI, {
-    Link: {
+    link: {
         underline: false,
         config: { ellipsis: true }
     }

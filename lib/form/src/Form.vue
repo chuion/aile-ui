@@ -1,121 +1,123 @@
 <template>
   <el-form
     ref="elForm"
-    v-bind="$attrs"
+    v-bind="mergeFormAttrs"
     :model="model"
     :class="['aile-form', formClass]"
-    :rules="rules"
-    :disabled="disabled"
     v-on="$listeners"
   >
-    <template v-if="layout">
-      <el-row v-bind="layout">
+    <template v-if="mergeConfig.layout">
+      <el-row v-bind="mergeConfig.layout">
         <el-col
-          v-for="(item, idx) in column"
+          v-for="(item, idx) in filteredColumns"
           :key="idx"
+          v-bind="item.layout || {}"
           :span="getColSpan(item)"
         >
           <aile-form-item
-            v-if="!item.show || item.show(model, model)"
-            v-bind="$attrs"
             :column="item"
-            :empty-words="emptyWords"
             :form="model"
-            :root-form="model"
-            :label-position="labelPosition"
-            :label-width="labelWidth"
-            :form-rules="rules"
-            :disabled="disabled"
+            :root="model"
             :merge-config="mergeConfig"
+            :merge-form-attrs="mergeFormAttrs"
+            :merge-form-item-attrs="mergeFormItemAttrs"
           />
         </el-col>
       </el-row>
     </template>
     <template v-else>
-      <template v-for="(item, idx) in column">
-        <aile-form-item
-          v-if="!item.show || item.show(model, model)"
-          :key="idx"
-          v-bind="$attrs"
-          :column="item"
-          :empty-words="emptyWords"
-          :form="model"
-          :root-form="model"
-          :label-position="labelPosition"
-          :label-width="labelWidth"
-          :form-rules="rules"
-          :disabled="disabled"
-          :merge-config="mergeConfig"
-        />
-      </template>
+      <aile-form-item
+        v-for="(item, idx) in filteredColumns"
+        :key="idx"
+        :column="item"
+        :form="model"
+        :root="model"
+        :merge-config="mergeConfig"
+        :merge-form-attrs="mergeFormAttrs"
+        :merge-form-item-attrs="mergeFormItemAttrs"
+      />
     </template>
   </el-form>
 </template>
 
 <script>
-import AileFormItem from './FormItem';
-
-const DefaultConfig = { labelPosition: 'top' };
+import AileFormItem from "./FormItem.vue";
+import {
+  DefaultConfig,
+  DefaultFormAttrs,
+  DefaultFormItemAttrs,
+} from "./config";
 
 export default {
-  name: 'AileForm',
+  name: "AileForm",
   components: { AileFormItem },
 
   inheritAttrs: false,
   props: {
-    column: {
-      type: Array,
-      default: () => []
-    },
-    emptyText: {
-      type: String,
-      default: ''
-    },
+    // 绑定表单值
     model: {
       type: Object,
-      default: () => ({})
+      required: true,
+      default: () => ({}),
     },
-    labelPosition: {
-      type: String,
-      default: ''
+
+    // 列参数
+    columns: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
-    labelWidth: {
-      type: String,
-      default: ''
-    },
-    rules: {
-      type: Object,
-      default: () => ({})
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    layout: {
-      type: Object,
-      default: null
-    },
+
+    // 配置项
     config: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
+
+    // el-form 属性
+    form: {
+      type: Object,
+      default: () => ({}),
+    },
+
+    // el-form-item 属性
+    formItem: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   computed: {
     mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileForm.config,
-        ...this.config
+        ...this.config,
       };
     },
-    emptyWords() {
-      return (
-        this.emptyText || (this.$aileForm && this.$aileForm.emptyText) || ''
+    mergeFormAttrs() {
+      return {
+        ...DefaultFormAttrs,
+        ...this.$aileForm.form,
+        ...this.$attrs,
+        ...this.form,
+      };
+    },
+    mergeFormItemAttrs() {
+      return {
+        ...DefaultFormItemAttrs,
+        ...this.$aileForm.formItem,
+        ...this.$attrs,
+        ...this.formItem,
+      };
+    },
+    filteredColumns() {
+      return this.columns.filter(
+        (item) => !item.show || item.show(this.model, this.model)
       );
     },
     formClass() {
-      return this.$aileForm ? this.$aileForm.formClass : '';
-    }
+      return this.$aileForm ? this.$aileForm.formClass : "";
+    },
   },
   methods: {
     validate(cb) {
@@ -131,13 +133,15 @@ export default {
       return this.$refs.elForm.clearValidate(props);
     },
     getColSpan(col) {
-      const defaultSpan = Math.floor(24 / Object.keys(this.column.length));
       if (col.layout && col.layout.span) {
         return col.layout.span;
       }
-      return defaultSpan;
-    }
-  }
+      if (!this.columns.length) {
+        return 24;
+      }
+      return Math.floor(24 / this.columns.length);
+    },
+  },
 };
 </script>
 

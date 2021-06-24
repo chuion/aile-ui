@@ -1,111 +1,70 @@
 <template>
   <el-input
     ref="input"
-    v-bind="$attrs"
+    v-bind="mergeAttrs"
     :style="calcStyle"
     :class="[$attrs['show-word-limit'] && 'show-word-limit']"
-    :clearable="shouldClearable"
-    :value="value"
     v-on="$listeners"
     @change="handleChange"
-    @keydown.native="handleKeydown"
-    @keyup.native="handleKeyup"
   >
-    <template
-      v-if="$slots.prepend"
-      slot="prepend"
-    >
+    <template v-if="$slots.prepend" #prepend>
       <slot name="prepend" />
     </template>
-    <template
-      v-if="$slots.append"
-      slot="append"
-    >
+    <template v-if="$slots.append" #append>
       <slot name="append" />
     </template>
-    <template
-      v-if="$slots.prefix"
-      slot="prefix"
-    >
+    <template v-if="$slots.prefix" #prefix>
       <slot name="prefix" />
     </template>
-    <template
-      v-if="$slots.suffix"
-      slot="suffix"
-    >
+    <template v-if="$slots.suffix" #suffix>
       <slot name="suffix" />
     </template>
   </el-input>
 </template>
 
 <script>
-const DefaultConfig = {
-  width: undefined,
-  trim: 'none'
-};
+import { DefaultConfig, DefaultInputAttrs } from "./config";
 
 export default {
-  name: 'AileInput',
-
-  inheritAttrs: false,
+  name: "AileInput",
   model: {
-    prop: 'value',
-    event: 'input'
+    prop: "value",
+    event: "input",
   },
   props: {
-    value: {
-      type: String,
-      default: ''
-    },
-    clearable: {
-      type: Boolean,
-      default: undefined
-    },
     config: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   computed: {
     mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileInput.config,
-        ...this.config
+        ...this.config,
       };
     },
-    shouldClearable() {
-      return typeof this.clearable === 'undefined'
-        ? this.$aileInput.clearable
-        : this.clearable;
+    mergeAttrs() {
+      return {
+        ...DefaultInputAttrs,
+        ...this.$aileInput.attrs,
+        ...this.$attrs,
+      };
     },
     calcStyle() {
       const style = {};
       if (this.mergeConfig.width) style.width = this.mergeConfig.width;
       return style;
-    }
+    },
   },
   methods: {
-    handleKeydown(event) {
-      // 判断是否是在前后键入空格
-      if (event.keyCode === 32 && this.mergeConfig.trim === 'strict') {
-        // index 键入位置
-        const { input, textarea } = this.$refs.input.$refs;
-        const index = input ? input.selectionStart : textarea.selectionStart;
-        if (index === 0 || index === event.target.value.length) {
-          event.preventDefault();
-        }
-      }
-    },
-    handleKeyup(event) {
-      this.$emit('keyup', event);
-    },
     handleChange(val) {
-      if (this.mergeConfig.trim === 'weak') {
+      if (this.mergeConfig.lazyTrim) {
         val = val.trim();
-        this.$emit('input', val);
+        this.$emit("input", val);
       }
-      this.$emit('change', val);
+      this.$emit("change", val);
     },
     focus() {
       this.$refs.input.focus();
@@ -115,8 +74,8 @@ export default {
     },
     select() {
       this.$refs.input.select();
-    }
-  }
+    },
+  },
 };
 </script>
 

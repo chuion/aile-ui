@@ -1,64 +1,37 @@
 <template>
-  <el-autocomplete
-    ref="autocomplete"
-    v-scroll="handleLoadMore"
-    class="aile-autocomplete"
-    :fetch-suggestions="handleFetchSuggestions"
-    :value-key="valueKey"
-    :style="calcStyle"
-    :clearable="calcClearable"
-    :value="value"
-    v-bind="$attrs"
-    @keydown.native="handleKeydown"
-    @clear="handleClear"
-    @select="handleSelect"
-    v-on="$listeners"
-  >
-    <template v-if="$slots.prepend" slot="prepend">
-      <slot name="prepend" />
-    </template>
-    <template v-if="$slots.append" slot="append">
-      <slot name="append" />
-    </template>
-    <template v-if="$slots.prefix" slot="prefix">
-      <slot name="prefix" />
-    </template>
-    <template v-if="$slots.suffix" slot="suffix">
-      <slot name="suffix" />
-    </template>
-    <template slot-scope="{ item }">
-      <slot :item="item" />
-    </template>
-  </el-autocomplete>
+  <div v-scroll="handleLoadMore" class="aile-autocomplete">
+    <el-autocomplete
+      ref="autocomplete"
+      v-bind="mergeAttrs"
+      :fetch-suggestions="handleFetchSuggestions"
+      :value-key="valueKey"
+      :style="calcStyle"
+      @clear="handleClear"
+      @select="handleSelect"
+      @change="handleChange"
+      v-on="$listeners"
+    >
+      <template v-if="$slots.prepend" #prepend>
+        <slot name="prepend" />
+      </template>
+      <template v-if="$slots.append" #append>
+        <slot name="append" />
+      </template>
+      <template v-if="$slots.prefix" #prefix>
+        <slot name="prefix" />
+      </template>
+      <template v-if="$slots.suffix" #suffix>
+        <slot name="suffix" />
+      </template>
+      <template #default="{ item }">
+        <slot :item="item" />
+      </template>
+    </el-autocomplete>
+  </div>
 </template>
 
 <script>
-const DefaultConfig = {
-  width: undefined,
-  trim: undefined,
-
-  dataSource: [],
-  // queryKey String 远程请求的动态字段名称
-  queryKey: "",
-  // requestParams Object 远程请求的静态参数
-  requestParams: {},
-  // scrollable Boolean 是否开启滚动加载
-  scrollable: false,
-  // remote Boolean 是否开启远程搜索 默认 false
-  remote: false,
-  // remoteMethod Function 远程搜索API
-  remoteMethod: null,
-  // pageField String 分页页码参数
-  pageField: "page_index",
-  // sizeField String 页容量参数
-  sizeField: "page_size",
-  // pageSize Number 分页每页显示条目个
-  pageSize: 20,
-  respDataField: "data",
-  respTotalField: "total",
-  // respFormatter Function 请求成功后事件回调
-  respFormatter: (res) => res,
-};
+import { DefaultConfig, DefaultAutocompleteAttrs } from "./config";
 
 export default {
   name: "AileAutocomplete",
@@ -83,7 +56,7 @@ export default {
         );
         SCROLL_DOM && SCROLL_DOM.removeEventListener("scroll", el.handler);
       },
-    },
+      },
   },
   inheritAttrs: false,
   model: {
@@ -91,18 +64,6 @@ export default {
     event: "input",
   },
   props: {
-    value: {
-      type: String,
-      default: "",
-    },
-    valueKey: {
-      type: String,
-      default: "value",
-    },
-    clearable: {
-      type: Boolean,
-      default: undefined,
-    },
     config: {
       type: Object,
       default: () => ({}),
@@ -110,7 +71,7 @@ export default {
   },
   data() {
     return {
-      cb: null,
+      callback: null,
       respSource: null,
       currentPage: 1,
       total: 0,
@@ -121,37 +82,35 @@ export default {
   },
   computed: {
     mergeConfig() {
-      let { dataSource } = this.config;
-      if (dataSource && dataSource.length) {
-        const dataItem = dataSource[0];
+      let { data } = this.config;
+      if (data && data.length) {
+        const dataItem = data[0];
         if (typeof dataItem !== "object") {
-          dataSource = dataSource.map((item) => ({ [this.valueKey]: item }));
-        } else if (!{}.hasOwnProperty.call(dataItem, this.valueKey)) {
+          data = data.map((item) => ({ [this.mergeAttrs.valueKey]: item }));
+        } else if (
+          !{}.hasOwnProperty.call(dataItem, this.mergeAttrs.valueKey)
+        ) {
           throw Error(
-            `Each item of dataSource should has ${this.valueKey} property`
+            `Each item of data should has ${this.mergeAttrs.valueKey} property`
           );
         }
       } else {
-        dataSource = [];
+        data = [];
       }
       return {
         ...DefaultConfig,
         ...this.$aileAutocomplete.config,
         ...this.config,
-        dataSource,
+        data,
       };
     },
 
-    calcClearable() {
-      return typeof this.clearable === "undefined"
-        ? this.$aileAutocomplete.clearable
-        : this.clearable;
-    },
-
-    shouldTrim() {
-      return typeof this.mergeConfig.trim === "undefined"
-        ? this.$aileAutocomplete.config.trim
-        : this.mergeConfig.trim;
+    mergeAttrs() {
+      return {
+        ...DefaultAutocompleteAttrs,
+        ...this.$aileAutocomplete.attrs,
+        ...this.$attrs,
+      };
     },
 
     calcStyle() {
@@ -172,15 +131,12 @@ export default {
     },
   },
   methods: {
-    handleKeydown(event) {
-      if (event.keyCode === 32 && this.shouldTrim) {
-        // 判断是否是在前后键入空格
-        // index 键入位置
-        const index = this.$refs.input.$refs.input.selectionStart;
-        if (index === 0 || index === event.target.value.length) {
-          event.preventDefault();
-        }
+    handleChange(val) {
+      if (this.mergeConfig.lazyTrim) {
+        val = val.trim();
+        this.$emit("update:modelValue", val);
       }
+      this.$emit("change", val);
     },
     handleSelect(item) {
       this.loadMoreDisabled = true;
@@ -197,17 +153,17 @@ export default {
     /**
      * 远程获取数据
      */
-    getRemoteMethod(cb) {
+    getRemoteList(callback) {
       const { scrollable } = this.mergeConfig;
       this.loadMoreDisabled = false;
       if (scrollable) {
         // 滚动分页加载
-        this.cb = cb;
         this.currentPage = 1;
-        return this.fetchListByScroll();
+        this.callback = callback;
+        return this.fetchListByScroll(callback);
       }
       // 无分页加载
-      return this.fetchListOnce();
+      return this.fetchListOnce(callback);
     },
 
     /**
@@ -215,13 +171,13 @@ export default {
      */
     async fetchListOnce() {
       const {
-        queryKey,
+        queryField,
         remoteMethod,
         requestParams,
         respFormatter,
         respDataField,
       } = this.mergeConfig;
-      const query = { [queryKey]: this.queryString, ...requestParams };
+      const query = { [queryField]: this.queryString, ...requestParams };
       const res = await remoteMethod(query);
       return respFormatter(res[respDataField]);
     },
@@ -231,7 +187,7 @@ export default {
      */
     async fetchListByScroll() {
       const {
-        queryKey,
+        queryField,
         remoteMethod,
         requestParams,
         respFormatter,
@@ -241,7 +197,7 @@ export default {
         respDataField,
         respTotalField,
       } = this.mergeConfig;
-      const query = { [queryKey]: this.queryString, ...requestParams };
+      const query = { [queryField]: this.queryString, ...requestParams };
       query[pageField] = this.currentPage;
       query[sizeField] = pageSize;
       try {
@@ -254,7 +210,7 @@ export default {
         }
         this.respSource = [...this.respSource, ...respSource];
 
-        this.cb(this.respSource);
+        this.callback(this.respSource);
       } catch (error) {
         this._reset();
       }
@@ -279,18 +235,18 @@ export default {
         return cb([]);
       }
       this.queryString = typeof queryString === "object" ? "" : queryString;
-      const { remote, dataSource } = this.mergeConfig;
+      const { remote, data } = this.mergeConfig;
       let results = [];
       if (remote) {
         // 返回远程请求获取数据
-        results = await this.getRemoteMethod(cb);
+        results = await this.getRemoteList(cb);
       } else {
         // 返回传入的静态数据
         results = queryString
-          ? dataSource.filter((item) =>
-              (item[this.valueKey] || "").includes(queryString)
+          ? data.filter((item) =>
+              (item[this.mergeAttrs.valueKey] || "").includes(queryString)
             )
-          : dataSource;
+          : data;
       }
       cb(results);
     },
@@ -308,3 +264,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.aile-autocomplete {
+  display: inline-block;
+  width: auto;
+}
+</style>

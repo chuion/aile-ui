@@ -1,16 +1,12 @@
 <template>
   <div
-    :style="{
-      width,
-      height,
-      minHeight
-    }"
-    :class="['aile-card', `is-${calcShadow}-shadow`]"
+    :style="cardStyle"
+    :class="cardClassList"
   >
     <template v-if="calcTitle">
       <div
-        :class="['aile-card__header', headerClass]"
-        :style="headerStyle"
+        :class="headerClassList"
+        :style="headerStyleList"
       >
         <slot name="title">
           <!-- 普通标题 -->
@@ -33,14 +29,14 @@
           </el-tabs>
         </slot>
         <!-- 右侧slot -->
-        <slot name="header" />
+        <slot name="sub" />
       </div>
     </template>
 
     <div
       v-loading="loading"
-      :class="['aile-card__content', contentClass]"
-      :style="contentStyle"
+      :class="['aile-card__body', bodyClass]"
+      :style="bodyStyle"
     >
       <template v-if="loading || showEmpty">
         <slot name="empty">
@@ -57,10 +53,17 @@
 </template>
 
 <script>
+import { mergeClass } from '../../../utils'
+import { DefaultConfig } from './config'
 export default {
   name: 'AileCard',
 
+  inheritAttrs: false,
   props: {
+    config: {
+      type: Object,
+      default: () => ({})
+    },
     // Card标题
     title: {
       type: [String, Array],
@@ -72,21 +75,6 @@ export default {
       type: Boolean,
       default: false
     },
-    // Card宽度，默认100%
-    width: {
-      type: String,
-      default: '100%'
-    },
-    // Card高度，默认100%
-    height: {
-      type: String,
-      default: '100%'
-    },
-    // Card最小高度，默认'auto'
-    minHeight: {
-      type: String,
-      default: 'auto'
-    },
     // showEmpty为true时，展示空白占位组件
     showEmpty: {
       type: Boolean,
@@ -97,85 +85,126 @@ export default {
       type: Boolean,
       default: false
     },
-    shadow: {
-      type: String,
-      default: undefined
-    },
     activeTitle: {
       type: String,
       default: ''
     },
-
     headerClass: {
-      type: String,
-      default: ''
-    },
-    contentClass: {
-      type: String,
+      type: [String, Array, Object],
       default: ''
     },
     headerStyle: {
       type: Object,
       default: () => ({})
     },
-    contentStyle: {
+    bodyClass: {
+      type: [String, Array, Object],
+      default: ''
+    },
+    bodyStyle: {
       type: Object,
       default: () => ({})
     }
   },
-  data() {
-    return { selectedTab: '' };
+  data () {
+    return { selectedTab: '' }
   },
   computed: {
-    calcTitle() {
+    mergeConfig () {
+      return {
+        ...DefaultConfig,
+        ...this.$aileCard.config,
+        ...this.config,
+        ...this.$attrs
+      }
+    },
+    calcTitle () {
       if (this.isSimpleTitle) {
-        return this.title;
+        return this.title
       }
       return this.title.map(item => ({
         label: item.label || item,
         value: item.value || item
-      }));
+      }))
     },
-    calcShadow() {
-      if (this.shadow === undefined) {
-        return this.$aileCard.shadow;
+    isSimpleTitle () {
+      return typeof this.title === 'string'
+    },
+    cardStyle () {
+      const { width, height, minHeight } = this.mergeConfig
+      return {
+        width,
+        height,
+        minHeight,
+        ...(this.$attrs.style || {})
       }
-      return this.shadow;
     },
-    isSimpleTitle() {
-      return typeof this.title === 'string';
+    cardClassList () {
+      return mergeClass(
+        [
+          'aile-card',
+          this.mergeConfig.shadow && `is-${this.mergeConfig.shadow}-shadow`
+        ],
+        this.$attrs.class
+      )
+    },
+    headerClassList () {
+      return mergeClass(
+        'aile-card__body',
+        this.mergeConfig.headerClass,
+        this.headerClass
+      )
+    },
+    headerStyleList () {
+      return {
+        ...this.mergeConfig.headerStyle,
+        ...this.headerStyle
+      }
+    },
+    bodyClassList () {
+      return mergeClass(
+        'aile-card__body',
+        this.mergeConfig.bodyClass,
+        this.bodyClass
+      )
+    },
+    bodyStyleList () {
+      return {
+        ...this.mergeConfig.bodyStyle,
+        ...this.bodyStyle
+      }
     }
   },
   watch: {
-    selectedTab(val) {
-      this.$emit('change-title', val);
+    selectedTab (val) {
+      this.$emit('change', val)
     },
-    activeTitle(val) {
-      this.setActiveTitle(val);
+    activeTitle (val) {
+      this.setActiveTitle(val)
     }
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
   methods: {
-    init() {
+    init () {
       if (
         !this.lazyLoad &&
         Array.isArray(this.calcTitle) &&
         this.calcTitle.length
       ) {
-        this.setActiveTitle(this.calcTitle[0].value || this.calcTitle[0].label);
+        this.setActiveTitle(this.calcTitle[0].value || this.calcTitle[0].label)
       }
     },
 
     /**
      * 设置当前活跃的标签
      */
-    setActiveTitle(tab) {
-      this.selectedTab = tab;
+    setActiveTitle (tab) {
+      this.selectedTab = tab
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -189,7 +218,8 @@ export default {
   box-shadow: 0px 0px 14px 2px rgba(43, 43, 43, 0.07);
 }
 
-.aile-card.is-hover-shadow:hover, .aile-card.is-hover-shadow:focus {
+.aile-card.is-hover-shadow:hover,
+.aile-card.is-hover-shadow:focus {
   box-shadow: 0px 0px 14px 2px rgba(43, 43, 43, 0.07);
 }
 
@@ -216,11 +246,11 @@ export default {
   user-select: none;
 }
 
-.aile-card__header .tabs ::v-deep .el-tabs__header {
+.aile-card__header .tabs :deep(.el-tabs__header) {
   margin-bottom: 0;
 }
 
-.aile-card__header .tabs ::v-deep .el-tabs__header .el-tabs__item {
+.aile-card__header .tabs :deep(.el-tabs__header .el-tabs__item) {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -229,21 +259,23 @@ export default {
   user-select: none;
 }
 
-.aile-card__content {
+.aile-card__body {
   position: relative;
   width: 100%;
   height: calc(100% - 40px);
   padding: 10px 18px;
   box-sizing: border-box;
   background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.aile-card__content .empty-place {
+.aile-card__body .empty-place {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 </style>

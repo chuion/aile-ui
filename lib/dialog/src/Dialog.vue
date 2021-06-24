@@ -1,14 +1,9 @@
 <template>
   <el-dialog
-    :title="title"
-    :class="['aile-dialog', mergeConfig.hideFooter && 'is-hide-footer']"
     :visible.sync="showDialog"
-    :close-on-click-modal="calcCloseOnClickModal"
-    :close-on-press-escape="calcCloseOnPressEscape"
-    :append-to-body="calcAppendToBody"
-    :modal-append-to-body="calcModalAppendToBody"
-    :width="width"
-    v-bind="$attrs"
+    v-bind="mergeAttrs"
+    :custom-class="calcCustomClass"
+    @closed="handleClosed"
     v-on="$listeners"
   >
     <template #title>
@@ -46,36 +41,8 @@
 </template>
 
 <script>
-// AileDialog的默认参数，可通过传入props.config进行覆盖
-const DefaultConfig = {
-  // 是否显示【确定】按钮
-  showConfirm: false,
-
-  // 【确定】按钮文字内容
-  confirmText: "确定",
-
-  // 【确定】按钮加载状态
-  confirmLoading: false,
-
-  // 【确定】按钮禁用状态
-  confirmDisabled: false,
-
-  // 是否展示【关闭】按钮
-  showCancel: true,
-
-  // 【关闭】按钮文字内容
-  cancelText: "关闭",
-
-  // 是否隐藏底部按钮区域
-  hideFooter: false,
-
-  // 底部按钮区域对齐方式
-  footerAlign: "right",
-
-  confirmType: "primary",
-
-  cancelType: "info",
-};
+import { mergeClass } from "../../../utils";
+import { DefaultConfig, DefaultDialogAttrs } from "./config";
 
 export default {
   name: "AileDialog",
@@ -91,28 +58,8 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    appendToBody: {
-      type: Boolean,
-      default: undefined,
-    },
-    modalAppendToBody: {
-      type: Boolean,
-      default: undefined,
-    },
-    closeOnClickModal: {
-      type: Boolean,
-      default: undefined,
-    },
-    closeOnPressEscape: {
-      type: Boolean,
-      default: undefined,
-    },
-    width: {
-      type: String,
-      default: undefined,
-    },
-    title: {
-      type: String,
+    class: {
+      type: [String, Array, Object],
       default: "",
     },
   },
@@ -124,6 +71,19 @@ export default {
         ...this.config,
       };
     },
+    mergeAttrs() {
+      return {
+        ...DefaultDialogAttrs,
+        ...this.$aileDialog.attrs,
+        ...this.$attrs,
+      };
+    },
+    calcCustomClass() {
+      return mergeClass(
+        ["aile-dialog", this.mergeConfig.hideFooter && "is-hide-footer"],
+        this.class
+      );
+    },
     showDialog: {
       get() {
         return this.visible;
@@ -132,48 +92,19 @@ export default {
         this.$emit("update:visible", val);
       },
     },
-    calcWidth() {
-      if (this.width !== undefined) {
-        return this.width;
-      }
-      return this.$aileDialog.width;
-    },
-    calcAppendToBody() {
-      if (this.appendToBody !== undefined) {
-        return this.appendToBody;
-      }
-      return this.$aileDialog.appendToBody;
-    },
-    calcCloseOnClickModal() {
-      if (this.closeOnClickModal !== undefined) {
-        return this.closeOnClickModal;
-      }
-      return this.$aileDialog.closeOnClickModal;
-    },
-    calcCloseOnPressEscape() {
-      if (this.closeOnPressEscape !== undefined) {
-        return this.closeOnPressEscape;
-      }
-      return this.$aileDialog.closeOnPressEscape;
-    },
-    calcModalAppendToBody() {
-      if (this.modalAppendToBody !== undefined) {
-        return this.modalAppendToBody;
-      }
-      return this.$aileDialog.modalAppendToBody;
-    },
   },
   methods: {
     async handleCancel() {
       if (this.$listeners && this.$listeners.cancel) {
-        /**
-         * el-dialog before-close 仅当用户通过点击关闭图标或遮罩关闭 Dialog 时起效。
-         * 如果你在 footer 具名 slot 里添加了用于关闭 Dialog 的按钮，那么可以在按钮的点击回调函数里加入 before-close 的相关逻辑。
-         * 所以当存在cancel 逻辑时， 把$emit('update:visible', false）逻辑放到cancel 逻辑执行成功后
-         */
         await this.$emit("cancel");
       } else {
         this.$emit("update:visible", false);
+      }
+    },
+    handleClosed() {
+      this.$emit("update:visible", false);
+      if (tthis.$listeners && this.$listeners.closed) {
+        this.$emit("closed");
       }
     },
   },

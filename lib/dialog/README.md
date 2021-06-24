@@ -2,7 +2,7 @@
 
 ### Intro 简介
 
-`aile-ui/dialog` 是一款对话框组件，基于 `vue` 和 `element-ui` 进行的二次封装。
+`aile-ui/dialog` 是一款对话框组件，基于 `Vue2` 和 `ElementUI` 进行的二次封装。
 
 - 采用 `$attrs` 和 `$listeners` 接收参数和监听事件，无缝对接 `element-ui` 中的 `Dialog` 文档，上手快。
 - 支持安装时个性化配置
@@ -22,17 +22,13 @@ yarn add aile-ui
 
 #### 全局配置项
 
-配置项内容可在全局引入时设置，或者直接使用 `<aile-dialog {...options} />` ，需注意：直接使用的优先级高于全局配置
-下表所列属性可在 `main.js` 中安装组件时进行统一配置：
+配置项内容可在全局引入时设置，下表所列属性可在 `main.js` 中安装组件时进行统一配置：
 
-|        参数        | 数据类型 | 默认值 |   可选值   |                说明                |
-| :----------------: | :------: | :----: | :--------: | :--------------------------------: |
-|       width        |  String  | '50%'  |     -      |            Dialog 宽度             |
-|    appendToBody    | Boolean  | false  | true/false | Dialog 自身是否插入至 body 元素上  |
-| modalAppendToBody  | Boolean  |  true  | true/false |    遮罩层是否插入至 body 元素上    |
-| closeOnClickModal  | Boolean  |  true  | true/false | 是否可以通过点击 modal 关闭 Dialog |
-| closeOnPressEscape | Boolean  |  true  | true/false |  是否可以通过按下 ESC 关闭 Dialog  |
-|     **config**     |  Object  |   -    |     -      |         详细配置见下方表格         |
+|    参数    | 数据类型 | 默认值 | 可选值 |                                   说明                                   |
+| :--------: | :------: | :----: | :----: | :----------------------------------------------------------------------: |
+| **config** |  Object  |   -    |   -    |                     [Config 配置项](#config-配置项)                      |
+| **attrs**  |  Object  |   -    |   -    | [ElDialog Props](https://element.eleme.io/#/zh-CN/component/dialog) |
+
 
 #### config 配置项
 
@@ -51,19 +47,19 @@ yarn add aile-ui
 
 ### Attributes/Props 属性
 
-**支持 `ElementUI` 中 [Dialog](https://element.eleme.cn/#/zh-CN/component/Dialog) 的所有属性：`visible` / `title` / `width` / `fullscreen` / `top` / `modal` / `modal-append-to-body` 等**，此处仅展示额外属性：
+**支持 `ElementUI` 中 [Dialog](https://element.eleme.io/#/zh-CN/component/Dialog) 的所有属性：`visible` / `title` / `width` / `fullscreen` / `top` / `modal` / `modal-append-to-body` 等**，此处仅展示额外属性：
 
-|  参数  | 数据类型 | 默认值 |                 说明                 |
-| :----: | :------: | :----: | :----------------------------------: |
-| config |  object  |   -    | 配置项，字段同全局 config 配置项相同 |
+|  参数  | 数据类型 | 默认值 |              说明               |
+| :----: | :------: | :----: | :-----------------------------: |
+| config |  object  |   -    | [Config 配置项](#config-配置项) |
 
 ### Slot 插槽
 
-**支持 `ElementUI` 中 [Dialog](https://element.eleme.cn/#/zh-CN/component/Dialog) 的所有插槽**
+**支持 `ElementUI` 中 [Dialog](https://element.eleme.io/#/zh-CN/component/Dialog) 的所有插槽**
 
 ### Events 事件
 
-支持全部 `el-dialog` 方法，仅展示新增事件，其余事件详见 [Element Doc Dialog #Dialog Events](https://element.eleme.cn/#/zh-CN/component/dialog)
+支持全部 `el-dialog` 方法，仅展示新增事件，其余事件详见 [Element Doc Dialog #Dialog Events](https://element.eleme.io/#/zh-CN/component/dialog)
 
 | 事件名  |         说明         | 参数  |
 | :-----: | :------------------: | :---: |
@@ -85,27 +81,31 @@ Vue.use(ElementUI);
 // 全量引入
 import AileUI from 'aile-ui';
 Vue.use(AileUI, {
-  Dialog: {
-    appendToBody: false, // Dialog 自身是否插入至 body 元素上
-    modalAppendToBody: true, // 遮罩层是否插入至 body 元素上
-    closeOnClickModal: true, // 是否可以通过点击 modal 关闭 Dialog
-    closeOnPressEscape: true, // 是否可以通过按下 ESC 关闭 Dialog
+  dialog: {
     config: {
-      footerAlign: 'center',
+      cancelText: '取消',
+      cancelType: 'danger',
+      showConfirm: true,
+      confirmType: 'success'
     },
+    attrs: {
+      width: '90%'
+    }
   },
 });
 
 // or 按需引入
 import AileDialog from 'aile-ui/lib/dialog';
 Vue.use(AileDialog, {
-  appendToBody: false, // Dialog 自身是否插入至 body 元素上
-  modalAppendToBody: true, // 遮罩层是否插入至 body 元素上
-  closeOnClickModal: true, // 是否可以通过点击 modal 关闭 Dialog
-  closeOnPressEscape: true, // 是否可以通过按下 ESC 关闭 Dialog
   config: {
-    footerAlign: 'center',
+    cancelText: '取消',
+    cancelType: 'danger',
+    showConfirm: true,
+    confirmType: 'success'
   },
+  attrs: {
+    width: '90%'
+  }
 });
 ```
 

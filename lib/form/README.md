@@ -2,13 +2,13 @@
 
 ### Intro 简介
 
-`aile-ui/form` 是一款表单组件，基于 `vue` 和 `element-ui` 进行的二次封装，无需繁琐的模板代码，所有的表单配置项均可通过属性传递，使你的代码更干净。
+`aile-ui/form` 是一款表单组件，基于 `Vue2` 和 `ElementUI` 进行的二次封装，无需繁琐的模板代码，所有的表单配置项均可通过属性传递，使你的代码更干净。
 
 ### Feature 特色
 
 - `aile-ui/form` 没有预设表单组件，所有表单组件均通过 `render` 属性传递，通过灵活的 JSX 语法实现高度自定义组件，因此，它非常小巧，不过需要提前安装 `vue` 和 `element-ui` ；
 
-- `aile-ui/form` 底层采用 `$attrs` 和 `$listeners` 接收参数和监听事件，无缝对接 `element-ui` 中的 `Form` 文档板块，上手更快（所有 `<el-form>` 接受的参数 `<aile-form>` 都支持，所有 `<el-form-item>` 接受的参数，column都有相应的字段可以设置，所有的方法、事件和插槽，除了 [Form-Item Methods](https://element.eleme.cn/#/zh-CN/component/form#form-item-methods)，其他都支持）；
+- `aile-ui/form` 底层采用 `$attrs` 和 `$listeners` 接收参数和监听事件，无缝对接 `element-ui` 中的 `Form` 文档板块，上手更快（所有 `<el-form>` 接受的参数 `<aile-form>` 都支持，所有 `<el-form-item>` 接受的参数，column都有相应的字段可以设置，所有的方法、事件和插槽，除了 [Form-Item Methods](https://element.eleme.io/#/zh-CN/component/form#form-item-methods)，其他都支持）；
 
 - 针对简单场景，可传递 `formatter` 属性进行格式化输出，在绑定了表单的情况下，可省略 `render` 和 `formatter` 属性，aile-form 会默认返回 `<span>` 标签包裹的表单值，当然，你还可以自定义当前的 `class` ！
 
@@ -25,8 +25,8 @@ export default {
           end: '2020/03'
         },
         hobby: [
-          sport: { name: 'basketball', point: 10 },
-          drink: { name: 'tea', point: 9 } // 根据需要可以动态增减
+          { name: 'basketball', point: 10 },
+          { name: 'tea', point: 9 } // 根据需要可以动态增减
         ]
 }
 ```
@@ -49,35 +49,43 @@ npm i aile-ui
 yarn add aile-ui
 ```
 
-### Options 配置项
+### Global Options 全局配置项
 
 配置项内容可在全局引入时设置，或者直接使用 `<aile-form  {...options} />` ，需注意：直接使用的优先级高于全局配置
 
-|   参数    | 数据类型 | 默认值 | 可选值 |             说明             |
-|:---------:|:--------:|:------:|:------:|:----------------------------:|
-| emptyText |  String  |  '-'   |   -    | 表单数据为空时显示的文本内容 |
-| formClass |  String  |   ''   |   -    |       自定义class名称        |
+|   参数   | 数据类型 | 默认值 |                                           说明                                           |
+| :------: | :------: | :----: | :--------------------------------------------------------------------------------------: |
+|  config  |  Object  |   {}   |                             [Config 配置项](#config-配置项)                              |
+|   form   |  Object  |   {}   |             [ElForm Props](https://element.eleme.io/#/zh-CN/component/form)              |
+| formItem |  Object  |   {}   | [ElFormItem Props](https://element.eleme.io/#/zh-CN/component/form#form-item-attributes) |
+
+### Config 配置项
+
+|   参数    | 数据类型 | 默认值 |        说明        |
+| :-------: | :------: | :----: | :----------------: |
+| emptyText |  String  |  '-'   |     空白占位符     |
+|  layout   |  Object  |  null  | ElLayout Row Props |
 
 ### Form Attributes 表单属性
 
-仅展示必填项和新增项，其余参数见 [Element Doc Form #Form Attributes](https://element.eleme.cn/#/zh-CN/component/form)
+仅展示必填项和新增项，其余参数见 [Element Doc Form #Form Attributes](https://element.eleme.io/#/zh-CN/component/form)
 
-|  参数  | 数据类型 | 是否必须 | 默认值 | 可选值 |               说明               |
-|:------:|:--------:|:--------:|:------:|:------:|:--------------------------------:|
-| column |  Array   |    是    |   -    |   -    | 表单列配置项，具体内容见下方说明 |
-| model  |  Object  |    是    |   -    |   -    |             表单数据             |
+|   参数   | 数据类型 | 是否必须 | 默认值 | 可选值 |                                           说明                                           |
+| :------: | :------: | :------: | :----: | :----: | :--------------------------------------------------------------------------------------: |
+|  model   |  Object  |    是    |   -    |   -    |                                表单数据(使用方式同ElForm)                                |
+| columns  |  Array   |    是    |   -    |   -    |                             [表单列配置项](#column-列配置项)                             |
+|  config  |  Array   |    是    |   -    |   -    |                             [Config 配置项](#config-配置项)                              |
+|   form   |  Array   |    是    |   -    |   -    |             [ElForm Props](https://element.eleme.io/#/zh-CN/component/form)              |
+| formItem |  Array   |    是    |   -    |   -    | [ElFormItem Props](https://element.eleme.io/#/zh-CN/component/form#form-item-attributes) |
+
 
 ### Form Methods 表单方法
 
-支持全部 `el-form` 方法，详见 [Element Doc Form #Form Methods](https://element.eleme.cn/#/zh-CN/component/form)
+支持全部 `el-form` 方法，详见 [Element Doc Form #Form Methods](https://element.eleme.io/#/zh-CN/component/form)
 
 ### Form Events 表单事件
 
-支持全部 `el-form` 方法，详见 [Element Doc Form #Form Events](https://element.eleme.cn/#/zh-CN/component/form)
-
-### Form-Item Attributes 表单列属性
-
-支持全部 `el-form-item` 属性，详见 [Element Doc Form #Form Events](https://element.eleme.cn/#/zh-CN/component/form)
+支持全部 `el-form` 方法，详见 [Element Doc Form #Form Events](https://element.eleme.io/#/zh-CN/component/form)
 
 ### Form-Item Methods 表单列方法
 
@@ -85,25 +93,25 @@ yarn add aile-ui
 
 ### Column 列配置项
 
-仅展示必填项和新增项，其余参数见 [Element Doc Form #Form-column Attributes](https://element.eleme.cn/#/zh-CN/component/form)
+仅展示必填项和新增项，其余参数见 [Element Doc Form #Form-column Attributes](https://element.eleme.io/#/zh-CN/component/form)
 
-|      参数      |                数据类型                | 是否必须 |                                       说明                                        |
-|:--------------:|:--------------------------------------:|:--------:|:---------------------------------------------------------------------------------:|
-|      prop      |                 String                 |    是    |                                 设置表单列的别名                                  |
-|     label      |                 String                 |    是    |                               设置表单列的显示标签                                |
-|     render     |    Function(h, form, root) => VNode    |    否    |                           自定义渲染内容,可选返回VNode                            |
-|   formatter    |     Function(form, root) => string     |    否    |                          自定义渲染内容，可选返回字符串                           |
-|    children    |                 Array                  |    否    |           当数据项类型为[object]时使用,返回column数组,与render/item互斥           |
-|      item      | Function(form, root) => [column, ...]  |    否    | 当数据项类型为[array]时使用,可动态增删子节点,返回column数组,与render/children互斥 |
-| itemButtonText |                 String                 |    否    |                          设置数组表单-添加按钮的文字内容                          |
-| itemButtonIcon |                 String                 |    否    |                          设置数组表单-添加按钮的图标类名                          |
-|     value      |                   -                    |    否    |     当上一级数据项类型为[array]，且传递了[item]属性时使用,可设置数据项初始值      |
-|      show      |    Function(form, root) => boolean     |    否    |                              是否渲染该列，默认渲染                               |
-|     layout     |                 Object                 |    否    |               设置布局模式，可传入[el-row]和[el-col]支持的所有属性                |
-|  renderLabel   |     Function(h, form, root)/VNode      |    否    |                                  自定义标签内容                                   |
-|  renderError   | Function(h, form, root, {error})/VNode |    否    |                           自定义表单校验信息的显示方式                            |
-|   labelWidth   |                 String                 |    否    |                设置当前表单域标签的宽度，例如 '50px'，支持 auto。                 |
-| labelPosition  |                 String                 |    否    |                 设置当前表单域标签的位置，可选值：right/left/top                  |
+|     参数      |                数据类型                | 是否必须 |                                            说明                                             |
+| :-----------: | :------------------------------------: | :------: | :-----------------------------------------------------------------------------------------: |
+|     prop      |                 String                 |    否    |                           设置表单列的别名(非必须，但是建议设置)                            |
+|     label     |                 String                 |    否    |                         设置表单列的显示标签(非必须，但是建议设置)                          |
+|    render     |    Function(h, form, root) => VNode    |    否    |                                自定义渲染内容,可选返回VNode                                 |
+|   formatter   |     Function(form, root) => string     |    否    |                               自定义渲染内容，可选返回字符串                                |
+|   children    |                 Array                  |    否    |          当数据项类型为[object]时使用,返回column数组,与render/formatter/items互斥           |
+|     items     | Function(form, root) => [column, ...]  |    否    | 当数据项类型为[array]时使用,可动态增删子节点,返回column数组,与render/formatter/children互斥 |
+|  buttonText   |                 String                 |    否    |                               设置数组表单-添加按钮的文字内容                               |
+|  buttonClass  |                 String                 |    否    |                               设置数组表单-添加按钮的图标类名                               |
+| defaultValue  |                   -                    |    否    |          当上一级数据项类型为[array]，且传递了[items]属性时使用,可设置数据项初始值          |
+|     show      |    Function(form, root) => boolean     |    否    |                                   是否渲染该列，默认渲染                                    |
+|    layout     |                 Object                 |    否    |                    设置布局模式，可传入[el-row]和[el-col]支持的所有属性                     |
+|  renderLabel  |     Function(h, form, root)/VNode      |    否    |                                       自定义标签内容                                        |
+|  renderError  | Function(h, form, root, {error})/VNode |    否    |                                自定义表单校验信息的显示方式                                 |
+|  labelWidth   |                 String                 |    否    |                     设置当前表单域标签的宽度，例如 '50px'，支持 auto。                      |
+| labelPosition |                 String                 |    否    |                   设置当前表单域标签的位置，可选值：right/center/left/top                   |
 
 ### Quick Start 快速开始
 
@@ -112,23 +120,39 @@ yarn add aile-ui
 - 引用组件，根据需要可全局引入或者局部引入
 
 ```ts
-import Vue from 'vue'
-import ElementUI from 'element-ui'
-import 'element-ui/libs/theme-chalk/index.css'
-Vue.use(ElementUI)
+import Vue from 'vue';
+import ElementUI from 'element-ui';
+import 'element-ui/libs/theme-chalk/index.css';
+Vue.use(ElementUI);
 
 // 全量引入
-import AileUI from 'aile-ui'
+import AileUI from 'aile-ui';
 Vue.use(AileUI, {
-    Form: {
-        emptyText: '--'
+  form: {
+    config: {
+      emptyText: '--'
+    },
+    form: {
+      labelWidth: '80px'
+    },
+    formItem: {
+      required: true
     }
+  }
 })
 
 // or 按需引入
 import AileForm from 'aile-ui/lib/form'
 Vue.use(AileForm, {
+  config: {
     emptyText: '--'
+  },
+  form: {
+    labelWidth: '80px'
+  },
+  formItem: {
+    required: true
+  }
 })
 
 ```
@@ -349,7 +373,7 @@ export default {
         /**
          * 嵌套数组的表单
          *
-         * 配置项：item
+         * 配置项：items
          * 数据类型：函数
          * 数据结构：(form, root) => column数组
          * 含义：设置数组每一项的数据结构
@@ -361,7 +385,7 @@ export default {
         {
           prop: 'skill',
           label: '能力评级',
-          item: (form, root) => {
+          items: (form, root) => {
             return [
               {
                 prop: 'name',
@@ -403,9 +427,11 @@ export default {
 
 2. 模块化开发
 
+以下为原生实现，或者直接查看 **[最佳实践](#最佳实践)**
+
 当表单的复杂度进一步提高，模块化解耦就成了刚需，`aile-ui/form` 的解决方案：本质上是构造 column 数组。
 
-以下为原生实现，或者直接查看 [最佳实践](#最佳实践)
+
 
 - 根组件示例：`Demo.vue`
 
@@ -532,7 +558,7 @@ export function Info() {
           const optionList = ['html', 'css', 'javascript'].map(
             return <el-option label={item} value={item} key={item} />
           )
-          return <el-select>{optionList}</el-select>
+          return <el-select v-model={form.hobby}>{optionList}</el-select>
         }
       }
   ]
@@ -606,6 +632,8 @@ export default {
 使用了 `AileSelect` 后，代码量大幅减少，获取下拉列表的逻辑被封装到了下拉组件内部。
 
 ```javascript
+import { fetchListAPI } from '@/api'
+
 export default function Location(customLabel) {
   return {
     prop: 'location',
@@ -618,10 +646,10 @@ export default function Location(customLabel) {
           clearable
           remote
           config={{
-            method: this.$api.search,
+            method: fetchListAPI,
             scrollable: true,
-            itemLabel: 'label',
-            itemValue: 'value'
+            label: 'label',
+            value: 'value'
           }}
         />
     )
@@ -646,8 +674,9 @@ export function Info() {
         label: '兴趣',
         render: (h, form, root) => (
           <aile-select
+            v-model={form.hobby}
             config={{
-              datasource: ['html', 'css', 'javascript']
+              data: ['html', 'css', 'javascript']
             }}
           />
         )

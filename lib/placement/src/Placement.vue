@@ -3,37 +3,37 @@
     v-if="state !== 'hide'"
     class="aile-placement"
     :class="`aile-placement--${state}`"
-    :style="style"
+    :style="calcStyle"
   >
     <template v-if="state === 'init'">
       <slot name="init">
         <div class="aile-placement__img">
-          <template v-if="calcInitSrc">
+          <template v-if="mergeConfig.initImageSrc">
             <img
-              :src="calcInitSrc"
+              :src="mergeConfig.initImageSrc"
               class="img"
-              :style="imgStyle"
+              :style="imageStyle"
             >
           </template>
         </div>
         <div class="aile-placement__desc">
-          {{ calcInitText }}
+          {{ mergeConfig.initText }}
         </div>
       </slot>
     </template>
     <template v-if="state === 'empty'">
       <slot name="empty">
         <div class="aile-placement__img">
-          <template v-if="calcEmptySrc">
+          <template v-if="mergeConfig.emptyImageSrc">
             <img
-              :src="calcEmptySrc"
+              :src="mergeConfig.emptyImageSrc"
               class="img"
-              :style="imgStyle"
+              :style="imageStyle"
             >
           </template>
         </div>
         <div class="aile-placement__desc">
-          {{ calcEmptyText }}
+          {{ mergeConfig.emptyText }}
         </div>
       </slot>
     </template>
@@ -41,119 +41,90 @@
 </template>
 
 <script>
+import { DefaultConfig } from './config'
+
 export default {
   name: 'AilePlacement',
   props: {
-    loading: {
-      type: Boolean,
-      default: undefined
+    config: {
+      type: Object,
+      default: () => ({})
     },
     empty: {
       required: true,
       type: Boolean,
       default: undefined
     },
-    emptySrc: {
-      type: String,
-      default: undefined
-    },
-    emptyText: {
-      type: String,
-      default: undefined
-    },
-    initSrc: {
-      type: String,
-      default: undefined
-    },
-    initText: {
-      type: String,
+    loading: {
+      type: Boolean,
       default: undefined
     },
     width: {
       type: String,
-      default: '100%'
+      default: undefined
     },
     height: {
       type: String,
-      default: '100%'
-    },
-    imgWidth: {
-      type: String,
-      default: undefined
-    },
-    imgHeight: {
-      type: String,
       default: undefined
     }
   },
-  data() {
-    return { state: undefined };
+  data () {
+    return { state: undefined }
   },
   computed: {
-    style() {
+    mergeConfig () {
       return {
-        width: this.width,
-        height: this.height
-      };
-    },
-    imgStyle() {
-      return {
-        width: this.imgWidth || this.mergeConfig.imgWidth || '76px',
-        height: this.imgHeight || this.mergeConfig.imgHeight || '76px'
-      };
-    },
-    mergeConfig() {
-      return {
-        ...this.$ailePlacement,
+        ...DefaultConfig,
+        ...this.$ailePlacement.config,
         ...this.config
-      };
+      }
     },
-    calcInitText() {
-      return this.initText || this.mergeConfig.initText;
+    calcStyle () {
+      return {
+        width: this.width || this.mergeConfig.width,
+        height: this.height || this.mergeConfig.height
+      }
     },
-    calcEmptyText() {
-      return this.emptyText || this.mergeConfig.emptyText;
-    },
-    calcInitSrc() {
-      return this.initSrc || this.mergeConfig.initSrc;
-    },
-    calcEmptySrc() {
-      return this.emptySrc || this.mergeConfig.emptySrc;
+    imageStyle () {
+      return {
+        width: this.mergeConfig.imageWidth,
+        height: this.mergeConfig.imageHeight
+      }
     }
   },
   watch: {
-    loading(newVal, oldVal) {
+    loading (newVal, oldVal) {
       if (newVal === true) {
-        this.state = 'loading';
+        this.state = 'loading'
       }
       if (newVal === false && oldVal === true) {
-        this.changeState();
+        this.changeState()
       }
     },
     empty: {
-      handler() {
-        this.changeState();
+      handler () {
+        this.changeState()
       },
       immediate: true
     }
   },
-  mounted() {
+  mounted () {
     if (this.loading !== undefined) {
-      this.state = 'init';
+      this.state = 'init'
     } else {
-      this.changeState();
+      this.changeState()
     }
   },
   methods: {
-    changeState() {
+    changeState () {
       if (this.empty) {
-        this.state = 'empty';
+        this.state = 'empty'
       } else {
-        this.state = 'hide';
+        this.state = 'hide'
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

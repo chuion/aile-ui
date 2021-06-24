@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/aile-ui_logo.png">
+  <img src="./docs/assets/aile-ui_logo.png" width="200">
 </p>
 
 <p align="center">
@@ -16,7 +16,7 @@
 
 ## Features
 
-`AileUI` 是一个基于 `vue 2.x` 和 `element-ui 2.x` 进行二次开发的UI库，包含以下常用组件：
+`AileUI` 是一个基于 [Vue 2](https://cn.vuejs.org) 和 [Element UI](https://element.eleme.io) 进行二次开发的UI库，包含以下常用组件：
 
 - [Autocomplete 带输入建议的输入框](./lib/autocomplete/README.md)
 - [Avatar 头像](./lib/avatar/README.md)
@@ -37,16 +37,16 @@
 通过 `npm` 或者 `yarn` 安装项目
 
 ```bash
-npm i aile-ui
+npm i aile-ui element-ui
 
 # 或者
-yarn add aile-ui
+yarn add aile-ui element-ui
 ```
 
 ## Quick Start
 
 引用组件，根据需要可全局引入或者局部引入
-注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入ElementUI组件后方可正常使用
+注意：由于 `AileUI` 是基于 `ElementUI` 进行的二次开发，因此需全局引入 `ElementUI` 组件后方可正常使用
 
 `main.js` 全局引入
 
@@ -55,10 +55,10 @@ import Vue from 'vue'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-// 方式1：引入全部组件包并设置参数，key的名称是组件类别（首字母大写）
+// 方式1：引入全部组件包并设置参数，key的名称是组件类别
 import AileUI from 'aile-ui'
 Vue.use(AileUI, {
-  Autocomplete: {
+  autocomplete: {
     clearable: true,
     config: {
       trim: true

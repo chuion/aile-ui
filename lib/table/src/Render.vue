@@ -10,8 +10,12 @@ export default {
     render: {
       type: Function,
       default: function() {}
+    },
+    cellEmptyText: {
+      type: Object,
+      default: () => ({})
     }
   },
-  render: (h, ctx) => (ctx.props.render ? ctx.props.render(h, ctx.props.scope) || (<span>{ctx.parent.calcEmptyTextForCols}</span>) : '')
+  render: (h, ctx) => ctx.props.render(h, ctx.props.scope) || (<span className="aile-table-item__placeholder">{ctx.props.cellEmptyText}</span>)
 };
 </script>

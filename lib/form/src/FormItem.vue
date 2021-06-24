@@ -1,50 +1,42 @@
 <template>
   <el-form-item
-    v-bind="$attrs"
+    v-bind="mergeAttrs"
     :prop="propPath"
-    :label="column.label"
     :required="isRequired"
-    :rules="column.rules"
-    :error="column.error"
-    :show-message="column.showMessage"
-    :inline-message="column.inlineMessage"
-    :size="column.size"
     :class="[
       'aile-form-item',
       formClass && formClass + '-item',
       calcLabelPosition && `is-label-${calcLabelPosition}`,
       column.class,
-      (column.renderLabel || showCustomLabel) && 'is-hide-hex'
+      (column.renderLabel || showCustomLabel) && 'is-hide-hex',
     ]"
     v-on="$listeners"
   >
-    <template slot="label">
+    <!-- Label -->
+    <template v-if="column.renderLabel || showCustomLabel" #label>
       <span
         v-if="column.renderLabel"
-        :class="[
-          'aile-form-item__label-wrap',
-          isRequired && 'is-required',
-        ]"
+        :class="['aile-form-item__label-wrap', isRequired && 'is-required']"
         :style="labelStyle"
       >
         <render
           :form="form"
-          :root-form="rootForm"
+          :root="root"
           :render="column.renderLabel"
           :scope="{ itemIndex }"
+          :merge-config="mergeConfig"
         />
       </span>
       <span
         v-if="!column.renderLabel && showCustomLabel"
-        :class="[
-          'aile-form-item__label-wrap',
-          isRequired && 'is-required',
-        ]"
+        :class="['aile-form-item__label-wrap', isRequired && 'is-required']"
         :style="labelStyle"
-        >{{ column.label }}</span
       >
+        {{ column.label }}
+      </span>
     </template>
 
+    <!-- render children -->
     <section
       v-if="column.children"
       :class="[
@@ -55,52 +47,44 @@
     >
       <template v-if="column.layout">
         <el-row v-bind="column.layout">
-          <template v-for="(col, index) in column.children">
-            <el-col :key="index" :span="getColSpan(col)" v-bind="col.layout">
-              <aile-form-item
-                v-if="
-                  !col.show || col.show(form[column.prop], rootForm, itemIndex)
-                "
-                :column="col"
-                :form="form[column.prop]"
-                :root-form="rootForm"
-                :empty-words="emptyWords"
-                :parent-full-prop="propPath"
-                v-bind="column.layout"
-                :label-position="labelPosition"
-                :label-width="labelWidth"
-                :item-index="itemIndex"
-                :form-rules="formRules"
-                :disabled="disabled"
-                :merge-config="mergeConfig"
-              />
-            </el-col>
-          </template>
+          <el-col
+            v-for="(col, index) in objectColumns"
+            :span="getColSpan(col)"
+            v-bind="col.layout"
+            :key="index"
+          >
+            <aile-form-item
+              :column="col"
+              :form="form[column.prop]"
+              :root="root"
+              :parent-full-prop="propPath"
+              :item-index="itemIndex"
+              :merge-config="mergeConfig"
+              :merge-form-attrs="mergeFormAttrs"
+              :merge-form-item-attrs="mergeFormItemAttrs"
+            />
+          </el-col>
         </el-row>
       </template>
       <template v-else>
-        <template v-for="(col, index) in column.children">
-          <aile-form-item
-            v-if="!col.show || col.show(form[column.prop], rootForm)"
-            :key="index"
-            :column="col"
-            :form="form[column.prop]"
-            :root-form="rootForm"
-            :empty-words="emptyWords"
-            :parent-full-prop="propPath"
-            :label-position="labelPosition"
-            :label-width="labelWidth"
-            :item-index="itemIndex"
-            :form-rules="formRules"
-            :disabled="disabled"
-            :merge-config="mergeConfig"
-          />
-        </template>
+        <aile-form-item
+          v-for="(col, index) in objectColumns"
+          :key="index"
+          :column="col"
+          :form="form[column.prop]"
+          :root="root"
+          :parent-full-prop="propPath"
+          :item-index="itemIndex"
+          :merge-config="mergeConfig"
+          :merge-form-attrs="mergeFormAttrs"
+          :merge-form-item-attrs="mergeFormItemAttrs"
+        />
       </template>
     </section>
 
+    <!-- render array items -->
     <section
-      v-else-if="column.item"
+      v-else-if="column.items"
       :class="[
         'aile-form-item__array',
         formClass && formClass + '-item__array',
@@ -115,47 +99,39 @@
           <template v-if="column.layout">
             <el-row v-bind="column.layout">
               <el-col
-                v-for="(col, idx) in column.item(value, rootForm)"
+                v-for="(col, idx) in column.items(value, root)"
                 :key="idx"
-                :span="getColSpan(col)"
                 v-bind="col.layout"
+                :span="getColSpan(col)"
               >
                 <aile-form-item
-                  v-if="
-                    !col.show || col.show(form[column.prop], rootForm, index)
-                  "
+                  v-if="!col.show || col.show(form[column.prop], root, index)"
                   :key="index + '-' + idx"
                   :column="col"
                   :form="value"
-                  :root-form="rootForm"
-                  :empty-words="emptyWords"
+                  :root="root"
                   :parent-full-prop="getParentPropForArray(index)"
-                  :label-position="labelPosition"
-                  :label-width="labelWidth"
                   :item-index="index"
-                  :form-rules="formRules"
-                  :disabled="disabled"
                   :merge-config="mergeConfig"
+                  :merge-form-attrs="mergeFormAttrs"
+                  :merge-form-item-attrs="mergeFormItemAttrs"
                 />
               </el-col>
             </el-row>
           </template>
           <template v-else>
-            <template v-for="(col, idx) in column.item(value, rootForm)">
+            <template v-for="(col, idx) in column.items(value, root)">
               <aile-form-item
-                v-if="!col.show || col.show(form[column.prop], rootForm, index)"
+                v-if="!col.show || col.show(form[column.prop], root, index)"
                 :key="index + '-' + idx"
                 :column="col"
                 :form="value"
-                :root-form="rootForm"
-                :empty-words="emptyWords"
+                :root="root"
                 :parent-full-prop="getParentPropForArray(index)"
-                :label-position="labelPosition"
-                :label-width="labelWidth"
                 :item-index="index"
-                :form-rules="formRules"
-                :disabled="disabled"
                 :merge-config="mergeConfig"
+                :merge-form-attrs="mergeFormAttrs"
+                :merge-form-item-attrs="mergeFormItemAttrs"
               />
             </template>
           </template>
@@ -172,8 +148,8 @@
       <div class="array-add" :class="[disabled && 'is-disabled']">
         <el-button
           :icon="
-            {}.hasOwnProperty.call(column, 'itemButtonIcon')
-              ? column.itemButtonIcon
+            {}.hasOwnProperty.call(column, 'buttonClass')
+              ? column.buttonClass
               : 'el-icon-plus'
           "
           :disabled="disabled"
@@ -182,35 +158,38 @@
           plain
           @click="handleAddItem"
         >
-          {{ column.itemButtonText || "新增" }}
+          {{ column.buttonText || "新增" }}
         </el-button>
       </div>
     </section>
 
+    <!-- render components -->
     <template v-else>
       <div class="aile-form-item__render">
         <render
           :form="form"
-          :root-form="rootForm"
+          :root="root"
           :render="column.render"
           :scope="{ itemIndex }"
+          :merge-config="mergeConfig"
         />
       </div>
     </template>
 
-    <template v-if="column.renderError" slot="error" slot-scope="scope">
+    <!-- render error -->
+    <template v-if="column.renderError" v-slot:error="error">
       <render
         :form="form"
-        :root-form="rootForm"
+        :root="root"
         :render="column.renderError"
-        :scope="{ ...scope, itemIndex }"
+        :scope="{ ...error, itemIndex }"
+        :merge-config="mergeConfig"
       />
     </template>
   </el-form-item>
 </template>
 
 <script>
-/* eslint-disable vue/no-mutating-props */
 import Render from "./Render";
 import { getPropByPath } from "./utils";
 
@@ -220,10 +199,6 @@ export default {
 
   inheritAttrs: false,
   props: {
-    mergeConfig: {
-      type: Object,
-      default: () => ({}),
-    },
     column: {
       type: Object,
       default: () => ({}),
@@ -232,74 +207,87 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    rootForm: {
+    root: {
       type: Object,
       default: () => ({}),
     },
-    emptyWords: {
+    mergeConfig: {
+      type: Object,
+      default: () => ({}),
+    },
+    mergeFormAttrs: {
+      type: Object,
+      default: () => ({}),
+    },
+    mergeFormItemAttrs: {
+      type: Object,
+      default: () => ({}),
+    },
+    parentPropPath: {
       type: String,
       default: "",
     },
-    arrayIndex: {
-      type: Number,
-      default: null,
-    },
-    parentFullProp: {
-      type: String,
-      default: "",
-    },
-    labelPosition: {
-      type: String,
-      default: "",
-    },
-    labelWidth: {
-      type: String,
-      default: "",
-    },
+
     itemIndex: {
       type: Number,
       default: -1,
     },
-    formRules: {
-      type: [Array, Object],
-      default: () => ({}),
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
+    mergeAttrs() {
+      const res = {
+        ...this.mergeFormItemAttrs,
+        ...this.column,
+        prop: this.propPath,
+      };
+      ["render", "children", "items", "layout"].forEach((key) => {
+        delete res[key];
+      });
+      return res;
+    },
     propPath() {
-      if (!this.parentFullProp) {
+      if (!this.parentPropPath) {
         return this.column.prop;
       }
-      return this.parentFullProp + "." + this.column.prop;
+      return this.parentPropPath + "." + this.column.prop;
     },
+
+    objectColumns() {
+      if (!this.column.children || !Array.isArray(this.column.children)) {
+        return [];
+      }
+      return this.column.children.filter(
+        (item) =>
+          !item.show ||
+          item.show(this.form[this.column.prop], this.root, this.itemIndex)
+      );
+    },
+
+    disabled() {
+      return this.mergeAttrs.disabled || this.mergeFormAttrs.disabled;
+    },
+
     formClass() {
       return this.$aileForm ? this.$aileForm.formClass : "";
     },
     calcLabelWidth() {
-      return this.column.labelWidth || this.labelWidth;
+      return this.column.labelWidth || this.mergeFormAttrs.labelWidth;
     },
     calcLabelPosition() {
-      return (
-        this.column.labelPosition ||
-        this.labelPosition ||
-        this.mergeConfig.labelPosition
-      );
+      return this.column.labelPosition || this.mergeFormAttrs.labelPosition;
     },
     labelStyle() {
-      return {
-        width: this.calcLabelWidth || "auto",
-        display: "inline-block",
-        textAlign:
-          (["left", "right"].includes(this.calcLabelPosition) &&
-            this.calcLabelPosition) ||
-          "left",
-      };
+      if (["left", "right", "center"].includes(this.calcLabelPosition)) {
+        return {
+          display: "inline-block",
+          width: this.calcLabelWidth,
+          textAlign: this.calcLabelPosition,
+        };
+      }
+      return {};
     },
     isRequired() {
+      if (this.column.required) return true;
       const rules = this.getRules();
       let res = false;
 
@@ -315,22 +303,26 @@ export default {
       return res;
     },
     showCustomLabel() {
-      return this.calcLabelWidth && {}.hasOwnProperty.call(this.column, "label");
-    }
+      return (
+        this.calcLabelWidth && {}.hasOwnProperty.call(this.column, "label")
+      );
+    },
   },
   watch: {
     column: {
       handler() {
-        this.setColumn();
+        this.generateRender();
       },
       immediate: true,
     },
   },
   methods: {
     getRules() {
-      let formRules = this.formRules;
+      let formRules = this.mergeFormAttrs.rules;
       const selfRules = this.column.rules;
-      const requiredRule = this.column.required !== undefined ? { required: !!this.column.required } : [];
+      const requiredRule = this.column.required
+        ? [{ required: !!this.column.required }]
+        : [];
 
       const prop = getPropByPath(formRules, this.column.prop || "");
       formRules = formRules ? prop.o[this.column.prop || ""] || prop.v : [];
@@ -341,30 +333,35 @@ export default {
     /**
      * 设置fomatter和默认渲染样式
      */
-    setColumn() {
+    generateRender() {
+      // 存在render函数，直接使用
+      if (this.column.render) return;
+
+      // 不存在render函数，但是存在formatter函数，则构造相应render函数
       if (this.column.formatter) {
-        this.column.render = (h, form, rootForm) => {
-          let value = this.column.formatter(form, rootForm);
+        this.column.render = (form, root) => {
+          let value = this.column.formatter(form, root);
           if (!value && value !== 0) {
-            value = this.emptyWords;
+            value = this.mergeConfig.emptyText;
           }
           return <span class={[this.column.class]}>{value}</span>;
         };
+        return;
       }
-      if (!this.column.render) {
-        this.column.render = (h, form) => {
-          if (this.column.prop) {
-            let value =
-              (this.$attrs.value && this.$attrs.value[this.column.prop]) ||
-              (form && form[this.column.prop]);
-            if (!value && value !== 0) {
-              value = this.emptyWords;
-            }
-            return <span class={[this.column.class]}>{value}</span>;
+
+      // 不存在render函数和formatter函数，则构造默认render函数
+      this.column.render = (form) => {
+        if (this.column.prop) {
+          let value =
+            (this.$attrs.value && this.$attrs.value[this.column.prop]) ||
+            (form && form[this.column.prop]);
+          if (!value && value !== 0) {
+            value = this.mergeConfig.emptyText;
           }
-          return <span>{this.emptyWords}</span>;
-        };
-      }
+          return <span class={[this.column.class]}>{value}</span>;
+        }
+        return <span>{this.mergeConfig.emptyText}</span>;
+      };
     },
 
     /**
@@ -385,8 +382,8 @@ export default {
         } else if (Object.prototype.hasOwnProperty.call(it, "item")) {
           obj[it.prop] = [];
         } else {
-          obj[it.prop] = {}.hasOwnProperty.call(it, "value")
-            ? it.value
+          obj[it.prop] = {}.hasOwnProperty.call(it, "defaultValue")
+            ? it.defaultValue
             : undefined;
         }
       });
@@ -398,7 +395,7 @@ export default {
      */
     handleAddItem() {
       let item = {};
-      const column = this.column.item(this.form, this.rootForm);
+      const column = this.column.items(this.form, this.root);
       item = this._getNewArrayItem(item, column);
       this.form[this.column.prop].push(item);
     },
@@ -415,7 +412,7 @@ export default {
         24 /
           (
             this.column.children ||
-            this.column.item(this.form[this.column.prop], this.rootForm)
+            this.column.items(this.form[this.column.prop], this.root)
           ).length
       );
       if (col.layout && col.layout.span) {
@@ -515,6 +512,15 @@ export default {
 
 .aile-form-item__array .array-add.is-disabled {
   display: none;
+}
+
+.aile-form-item ::v-deep .el-form-item__label {
+  display: flex;
+}
+
+.aile-form-item__label-wrap {
+  box-sizing: border-box;
+  padding: 0 5px;
 }
 
 .aile-form-item.is-label-right,
