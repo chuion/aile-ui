@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { DefaultConfig } from './config'
+import { DefaultConfig } from './config';
 
 export default {
   name: 'AilePlacement',
@@ -68,63 +68,63 @@ export default {
       default: undefined
     }
   },
-  data () {
-    return { state: undefined }
+  data() {
+    return { state: undefined };
   },
   computed: {
-    mergeConfig () {
+    mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$ailePlacement.config,
         ...this.config
-      }
+      };
     },
-    calcStyle () {
+    calcStyle() {
       return {
         width: this.width || this.mergeConfig.width,
         height: this.height || this.mergeConfig.height
-      }
+      };
     },
-    imageStyle () {
+    imageStyle() {
       return {
         width: this.mergeConfig.imageWidth,
         height: this.mergeConfig.imageHeight
-      }
+      };
     }
   },
   watch: {
-    loading (newVal, oldVal) {
+    loading(newVal, oldVal) {
       if (newVal === true) {
-        this.state = 'loading'
+        this.state = 'loading';
       }
       if (newVal === false && oldVal === true) {
-        this.changeState()
+        this.changeState();
       }
     },
     empty: {
-      handler () {
-        this.changeState()
+      handler() {
+        this.changeState();
       },
       immediate: true
     }
   },
-  mounted () {
+  mounted() {
     if (this.loading !== undefined) {
-      this.state = 'init'
+      this.state = 'init';
     } else {
-      this.changeState()
+      this.changeState();
     }
   },
   methods: {
-    changeState () {
+    changeState() {
       if (this.empty) {
-        this.state = 'empty'
+        this.state = 'empty';
       } else {
-        this.state = 'hide'
+        this.state = 'hide';
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>

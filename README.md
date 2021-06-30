@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/aile-ui_logo.png" width="200">
+  <img src="./images/aile-ui_logo.png" width="200">
 </p>
 
 <p align="center">

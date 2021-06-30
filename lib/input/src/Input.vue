@@ -23,48 +23,48 @@
 </template>
 
 <script>
-import { DefaultConfig, DefaultInputAttrs } from "./config";
+import { DefaultConfig, DefaultInputAttrs } from './config';
 
 export default {
-  name: "AileInput",
+  name: 'AileInput',
   model: {
-    prop: "value",
-    event: "input",
+    prop: 'value',
+    event: 'input'
   },
   props: {
     config: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   computed: {
     mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileInput.config,
-        ...this.config,
+        ...this.config
       };
     },
     mergeAttrs() {
       return {
         ...DefaultInputAttrs,
         ...this.$aileInput.attrs,
-        ...this.$attrs,
+        ...this.$attrs
       };
     },
     calcStyle() {
       const style = {};
       if (this.mergeConfig.width) style.width = this.mergeConfig.width;
       return style;
-    },
+    }
   },
   methods: {
     handleChange(val) {
       if (this.mergeConfig.lazyTrim) {
         val = val.trim();
-        this.$emit("input", val);
+        this.$emit('input', val);
       }
-      this.$emit("change", val);
+      this.$emit('change', val);
     },
     focus() {
       this.$refs.input.focus();
@@ -74,8 +74,8 @@ export default {
     },
     select() {
       this.$refs.input.select();
-    },
-  },
+    }
+  }
 };
 </script>
 

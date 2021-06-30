@@ -41,46 +41,46 @@
 </template>
 
 <script>
-import { mergeClass } from "../../../utils";
-import { DefaultConfig, DefaultDialogAttrs } from "./config";
+import { mergeClass } from '../../../utils';
+import { DefaultConfig, DefaultDialogAttrs } from './config';
 
 export default {
-  name: "AileDialog",
+  name: 'AileDialog',
 
   inheritAttrs: false,
   props: {
     visible: {
       type: Boolean,
       default: false,
-      required: true,
+      required: true
     },
     config: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     class: {
       type: [String, Array, Object],
-      default: "",
-    },
+      default: ''
+    }
   },
   computed: {
     mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileDialog.config,
-        ...this.config,
+        ...this.config
       };
     },
     mergeAttrs() {
       return {
         ...DefaultDialogAttrs,
         ...this.$aileDialog.attrs,
-        ...this.$attrs,
+        ...this.$attrs
       };
     },
     calcCustomClass() {
       return mergeClass(
-        ["aile-dialog", this.mergeConfig.hideFooter && "is-hide-footer"],
+        ['aile-dialog', this.mergeConfig.hideFooter && 'is-hide-footer'],
         this.class
       );
     },
@@ -89,25 +89,25 @@ export default {
         return this.visible;
       },
       set(val) {
-        this.$emit("update:visible", val);
-      },
-    },
+        this.$emit('update:visible', val);
+      }
+    }
   },
   methods: {
     async handleCancel() {
       if (this.$listeners && this.$listeners.cancel) {
-        await this.$emit("cancel");
+        await this.$emit('cancel');
       } else {
-        this.$emit("update:visible", false);
+        this.$emit('update:visible', false);
       }
     },
     handleClosed() {
-      this.$emit("update:visible", false);
-      if (tthis.$listeners && this.$listeners.closed) {
-        this.$emit("closed");
+      this.$emit('update:visible', false);
+      if (this.$listeners && this.$listeners.closed) {
+        this.$emit('closed');
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

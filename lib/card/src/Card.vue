@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import { mergeClass } from '../../../utils'
-import { DefaultConfig } from './config'
+import { mergeClass } from '../../../utils';
+import { DefaultConfig } from './config';
 export default {
   name: 'AileCard',
 
@@ -106,105 +106,105 @@ export default {
       default: () => ({})
     }
   },
-  data () {
-    return { selectedTab: '' }
+  data() {
+    return { selectedTab: '' };
   },
   computed: {
-    mergeConfig () {
+    mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileCard.config,
         ...this.config,
         ...this.$attrs
-      }
+      };
     },
-    calcTitle () {
+    calcTitle() {
       if (this.isSimpleTitle) {
-        return this.title
+        return this.title;
       }
       return this.title.map(item => ({
         label: item.label || item,
         value: item.value || item
-      }))
+      }));
     },
-    isSimpleTitle () {
-      return typeof this.title === 'string'
+    isSimpleTitle() {
+      return typeof this.title === 'string';
     },
-    cardStyle () {
-      const { width, height, minHeight } = this.mergeConfig
+    cardStyle() {
+      const { width, height, minHeight } = this.mergeConfig;
       return {
         width,
         height,
         minHeight,
         ...(this.$attrs.style || {})
-      }
+      };
     },
-    cardClassList () {
+    cardClassList() {
       return mergeClass(
         [
           'aile-card',
           this.mergeConfig.shadow && `is-${this.mergeConfig.shadow}-shadow`
         ],
         this.$attrs.class
-      )
+      );
     },
-    headerClassList () {
+    headerClassList() {
       return mergeClass(
         'aile-card__body',
         this.mergeConfig.headerClass,
         this.headerClass
-      )
+      );
     },
-    headerStyleList () {
+    headerStyleList() {
       return {
         ...this.mergeConfig.headerStyle,
         ...this.headerStyle
-      }
+      };
     },
-    bodyClassList () {
+    bodyClassList() {
       return mergeClass(
         'aile-card__body',
         this.mergeConfig.bodyClass,
         this.bodyClass
-      )
+      );
     },
-    bodyStyleList () {
+    bodyStyleList() {
       return {
         ...this.mergeConfig.bodyStyle,
         ...this.bodyStyle
-      }
+      };
     }
   },
   watch: {
-    selectedTab (val) {
-      this.$emit('change', val)
+    selectedTab(val) {
+      this.$emit('change', val);
     },
-    activeTitle (val) {
-      this.setActiveTitle(val)
+    activeTitle(val) {
+      this.setActiveTitle(val);
     }
   },
-  created () {
-    this.init()
+  created() {
+    this.init();
   },
   methods: {
-    init () {
+    init() {
       if (
         !this.lazyLoad &&
         Array.isArray(this.calcTitle) &&
         this.calcTitle.length
       ) {
-        this.setActiveTitle(this.calcTitle[0].value || this.calcTitle[0].label)
+        this.setActiveTitle(this.calcTitle[0].value || this.calcTitle[0].label);
       }
     },
 
     /**
      * 设置当前活跃的标签
      */
-    setActiveTitle (tab) {
-      this.selectedTab = tab
+    setActiveTitle(tab) {
+      this.selectedTab = tab;
     }
   }
-}
+};
 </script>
 
 <style scoped>

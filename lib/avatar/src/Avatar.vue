@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { DefaultConfig, DefaultAvatarAttrs } from './config'
+import { DefaultConfig, DefaultAvatarAttrs } from './config';
 
 export default {
   name: 'AileAvatar',
@@ -39,37 +39,37 @@ export default {
     }
   },
   computed: {
-    mergeConfig () {
+    mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileAvatar.config,
         ...this.config
-      }
+      };
     },
-    mergeAttrs () {
+    mergeAttrs() {
       return {
         ...DefaultAvatarAttrs,
         ...this.$aileAvatar.attrs,
         ...this.$attrs
-      }
+      };
     },
-    avatarSrc () {
-      return this.mergeConfig.srcFormatter(this.src)
+    avatarSrc() {
+      return this.mergeConfig.srcFormatter(this.src);
     },
 
-    avatarStyle () {
+    avatarStyle() {
       if (!this.mergeConfig.size) {
-        return this.$attrs.style || {}
+        return this.$attrs.style || {};
       }
 
       return {
         width: this.mergeConfig.size,
         height: this.mergeConfig.size,
         ...(this.$attrs.style || {})
-      }
+      };
     }
   }
-}
+};
 </script>
 
 <style scoped>

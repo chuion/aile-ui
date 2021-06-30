@@ -190,57 +190,58 @@
 </template>
 
 <script>
-import Render from "./Render";
-import { getPropByPath } from "./utils";
+/* eslint-disable vue/no-mutating-props */
+import Render from './Render';
+import { getPropByPath } from './utils';
 
 export default {
-  name: "AileFormItem",
+  name: 'AileFormItem',
   components: { Render },
 
   inheritAttrs: false,
   props: {
     column: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     form: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     root: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     mergeConfig: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     mergeFormAttrs: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     mergeFormItemAttrs: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     parentPropPath: {
       type: String,
-      default: "",
+      default: ''
     },
 
     itemIndex: {
       type: Number,
-      default: -1,
-    },
+      default: -1
+    }
   },
   computed: {
     mergeAttrs() {
       const res = {
         ...this.mergeFormItemAttrs,
         ...this.column,
-        prop: this.propPath,
+        prop: this.propPath
       };
-      ["render", "children", "items", "layout"].forEach((key) => {
+      ['render', 'children', 'items', 'layout'].forEach(key => {
         delete res[key];
       });
       return res;
@@ -249,7 +250,7 @@ export default {
       if (!this.parentPropPath) {
         return this.column.prop;
       }
-      return this.parentPropPath + "." + this.column.prop;
+      return this.parentPropPath + '.' + this.column.prop;
     },
 
     objectColumns() {
@@ -257,8 +258,7 @@ export default {
         return [];
       }
       return this.column.children.filter(
-        (item) =>
-          !item.show ||
+        item => !item.show ||
           item.show(this.form[this.column.prop], this.root, this.itemIndex)
       );
     },
@@ -268,7 +268,7 @@ export default {
     },
 
     formClass() {
-      return this.$aileForm ? this.$aileForm.formClass : "";
+      return this.$aileForm ? this.$aileForm.formClass : '';
     },
     calcLabelWidth() {
       return this.column.labelWidth || this.mergeFormAttrs.labelWidth;
@@ -277,11 +277,11 @@ export default {
       return this.column.labelPosition || this.mergeFormAttrs.labelPosition;
     },
     labelStyle() {
-      if (["left", "right", "center"].includes(this.calcLabelPosition)) {
+      if (['left', 'right', 'center'].includes(this.calcLabelPosition)) {
         return {
-          display: "inline-block",
+          display: 'inline-block',
           width: this.calcLabelWidth,
-          textAlign: this.calcLabelPosition,
+          textAlign: this.calcLabelPosition
         };
       }
       return {};
@@ -292,7 +292,7 @@ export default {
       let res = false;
 
       if (rules && rules.length) {
-        rules.every((rule) => {
+        rules.every(rule => {
           if (rule.required) {
             res = true;
             return false;
@@ -304,17 +304,17 @@ export default {
     },
     showCustomLabel() {
       return (
-        this.calcLabelWidth && {}.hasOwnProperty.call(this.column, "label")
+        this.calcLabelWidth && {}.hasOwnProperty.call(this.column, 'label')
       );
-    },
+    }
   },
   watch: {
     column: {
       handler() {
         this.generateRender();
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     getRules() {
@@ -324,8 +324,8 @@ export default {
         ? [{ required: !!this.column.required }]
         : [];
 
-      const prop = getPropByPath(formRules, this.column.prop || "");
-      formRules = formRules ? prop.o[this.column.prop || ""] || prop.v : [];
+      const prop = getPropByPath(formRules, this.column.prop || '');
+      formRules = formRules ? prop.o[this.column.prop || ''] || prop.v : [];
 
       return [].concat(selfRules || formRules || []).concat(requiredRule);
     },
@@ -350,11 +350,9 @@ export default {
       }
 
       // 不存在render函数和formatter函数，则构造默认render函数
-      this.column.render = (form) => {
+      this.column.render = form => {
         if (this.column.prop) {
-          let value =
-            (this.$attrs.value && this.$attrs.value[this.column.prop]) ||
-            (form && form[this.column.prop]);
+          let value = (this.$attrs.value && this.$attrs.value[this.column.prop]) || (form && form[this.column.prop]);
           if (!value && value !== 0) {
             value = this.mergeConfig.emptyText;
           }
@@ -375,14 +373,14 @@ export default {
      * 生成新的数组项
      */
     _getNewArrayItem(obj, column) {
-      column.forEach((it) => {
-        if (Object.prototype.hasOwnProperty.call(it, "children")) {
+      column.forEach(it => {
+        if (Object.prototype.hasOwnProperty.call(it, 'children')) {
           obj[it.prop] = {};
           this._getNewArrayItem(obj[it.prop], it.children);
-        } else if (Object.prototype.hasOwnProperty.call(it, "item")) {
+        } else if (Object.prototype.hasOwnProperty.call(it, 'item')) {
           obj[it.prop] = [];
         } else {
-          obj[it.prop] = {}.hasOwnProperty.call(it, "defaultValue")
+          obj[it.prop] = {}.hasOwnProperty.call(it, 'defaultValue')
             ? it.defaultValue
             : undefined;
         }
@@ -419,8 +417,8 @@ export default {
         return col.layout.span;
       }
       return defaultSpan;
-    },
-  },
+    }
+  }
 };
 </script>
 

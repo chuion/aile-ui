@@ -29,9 +29,10 @@
 </template>
 
 <script>
-import AileRender from "./Render.jsx";
-import { DefaultTableColumnAttrs } from "./config.js";
-import { isEmpty } from "../../../utils/index.js";
+/* eslint-disable vue/no-mutating-props */
+import AileRender from './Render';
+import { DefaultTableColumnAttrs } from './config.js';
+import { isEmpty } from '../../../utils/index.js';
 
 const cellForced = {
   selection: {
@@ -62,57 +63,57 @@ const cellForced = {
               : false
           }
           onChange={() => {
-            store.commit("rowSelectedChanged", row);
+            store.commit('rowSelectedChanged', row);
           }}
-          onClick={(event) => event.stopPropagation()}
+          onClick={event => event.stopPropagation()}
         />
       );
     },
     sortable: false,
-    resizable: false,
+    resizable: false
   },
   index: {
-    renderHeader: ({ column }) => column.label || "#",
-    renderCell: function ({ column, $index }) {
+    renderHeader: ({ column }) => column.label || '#',
+    renderCell: function({ column, $index }) {
       let i = $index + 1;
       const index = column.index;
 
-      if (typeof index === "number") {
+      if (typeof index === 'number') {
         i = $index + index;
-      } else if (typeof index === "function") {
+      } else if (typeof index === 'function') {
         i = index($index);
       }
       return <div>{i}</div>;
     },
     sortable: false,
-    resizable: false,
+    resizable: false
   },
   expand: {
-    renderHeader: ({ column }) => column.label || "",
+    renderHeader: ({ column }) => column.label || '',
     renderCell: ({ row, store }) => {
       if (!store) return;
-      const classes = ["el-table__expand-icon"];
+      const classes = ['el-table__expand-icon'];
       if (store.states.expandRows.value.indexOf(row) > -1) {
-        classes.push("el-table__expand-icon--expanded");
+        classes.push('el-table__expand-icon--expanded');
       }
-      const callback = function (e) {
+      const callback = function(e) {
         e.stopPropagation();
         store.toggleRowExpansion(row);
       };
       return (
         <div class={classes} onClick={callback}>
-          <i class="el-icon el-icon-arrow-right" />
+          <i class='el-icon el-icon-arrow-right' />
         </div>
       );
     },
     sortable: false,
     resizable: false,
-    className: "el-table__expand-column",
-  },
+    className: 'el-table__expand-column'
+  }
 };
 
 export default {
-  name: "AileColumn",
+  name: 'AileColumn',
 
   components: { AileRender },
   inheritAttrs: false,
@@ -120,18 +121,18 @@ export default {
     // <aile-table /> 配置项
     mergeConfig: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     // 当前列
     column: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     // <el-table-column /> 属性
     tableColumn: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   computed: {
     // 需要挂载到 <el-table-column /> 上的属性
@@ -140,30 +141,30 @@ export default {
         ...DefaultTableColumnAttrs, // 默认属性
         ...this.$aileTable.tableColumn, // 全局属性
         ...this.tableColumn, // 表格设置的列属性
-        ...this.column, // 列属性
+        ...this.column // 列属性
       };
-      ["render", "renderHeader", "formatter", "show"].forEach((key) => {
+      ['render', 'renderHeader', 'formatter', 'show'].forEach(key => {
         delete res[key];
       });
       return res;
-    },
+    }
   },
   watch: {
     column: {
       handler() {
         this.generateRender();
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     /** ElTable原生函数：获取当前cell对应的数据 */
     getPropByPath(obj, path, strict) {
       let tempObj = obj;
-      path = path.replace(/\[(\w+)\]/g, ".$1");
-      path = path.replace(/^\./, "");
+      path = path.replace(/\[(\w+)\]/ug, '.$1');
+      path = path.replace(/^\./u, '');
 
-      const keyArr = path.split(".");
+      const keyArr = path.split('.');
       let i = 0;
       for (i; i < keyArr.length - 1; i++) {
         if (!tempObj && !strict) break;
@@ -173,7 +174,7 @@ export default {
           tempObj = tempObj[key];
         } else {
           if (strict) {
-            throw new Error("please transfer a valid prop path to form item!");
+            throw new Error('please transfer a valid prop path to form item!');
           }
           break;
         }
@@ -181,7 +182,7 @@ export default {
       return {
         o: tempObj,
         k: keyArr[i],
-        v: (tempObj || {})[keyArr[i]],
+        v: (tempObj || {})[keyArr[i]]
       };
     },
 
@@ -190,32 +191,30 @@ export default {
       // 存在特殊类型，采用预设的render
       if (this.column.type) {
         this.column.renderHeader = cellForced[this.column.type].renderHeader;
-        this.column.render =
-          this.column.render || cellForced[this.column.type].renderCell;
+        this.column.render = this.column.render || cellForced[this.column.type].renderCell;
         return;
       }
 
       // 存在formatter，构建相应render函数
       if (this.column.formatter) {
-        this.column.render = (scope) => {
+        this.column.render = scope => {
           const { row, column, $index } = scope;
           if (isEmpty(column)) return;
           const property = column.property;
-          const cellValue =
-            property && this.getPropByPath(row, property, false).v;
+          const cellValue = property && this.getPropByPath(row, property, false).v;
 
           let value = this.column.formatter(row, column, cellValue, $index);
           if (isEmpty(value)) {
             value = this.mergeConfig.cellEmptyText;
           }
-          return <span class="aile-table-cell__formatter">{value}</span>;
+          return <span class='aile-table-cell__formatter'>{value}</span>;
         };
         return;
       }
 
       // 不存在render，构建包含默认文字的render函数
       if (!this.column.render) {
-        this.column.render = (scope) => {
+        this.column.render = scope => {
           let value = scope.row[scope.column.property];
           if (isEmpty(value)) {
             value = this.mergeConfig.cellEmptyText;
@@ -223,8 +222,8 @@ export default {
           return <span>{value}</span>;
         };
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,47 +1,47 @@
-export function checkType (data) {
-  const type = Object.prototype.toString.call(data)
-  return type.slice(8, -1).toLowerCase()
+export function checkType(data) {
+  const type = Object.prototype.toString.call(data);
+  return type.slice(8, -1).toLowerCase();
 }
 
-export function isEmpty (data) {
-  const dataType = checkType(data)
+export function isEmpty(data) {
+  const dataType = checkType(data);
   switch (dataType) {
     case 'array':
-      return !data.length
+      return !data.length;
     case 'object':
-      return !Object.keys(data).length
+      return !Object.keys(data).length;
     case 'map':
     case 'set':
-      return !data.size
+      return !data.size;
     case 'boolean':
     case 'number':
     case 'symbol':
     case 'function':
-      return false
+      return false;
     default:
-      return !data
+      return !data;
   }
 }
 
-export function mergeClass (...classList) {
-  const res = []
+export function mergeClass(...classList) {
+  const res = [];
   classList.forEach(item => {
     switch (checkType(item)) {
       case 'string':
-        res.push(item)
-        break
+        res.push(item);
+        break;
       case 'array':
-        res.push(...item)
-        break
+        res.push(...item);
+        break;
       case 'object':
         Object.keys(item).forEach(key => {
           if (item[key]) {
-            res.push(key)
+            res.push(key);
           }
-        })
-        break
+        });
+        break;
       default:
     }
-  })
-  return res.filter(item => !!item).join(' ')
+  });
+  return res.filter(item => !!item).join(' ');
 }

@@ -41,15 +41,15 @@
 </template>
 
 <script>
-import AileFormItem from "./FormItem.vue";
+import AileFormItem from './FormItem.vue';
 import {
   DefaultConfig,
   DefaultFormAttrs,
-  DefaultFormItemAttrs,
-} from "./config";
+  DefaultFormItemAttrs
+} from './config';
 
 export default {
-  name: "AileForm",
+  name: 'AileForm',
   components: { AileFormItem },
 
   inheritAttrs: false,
@@ -58,40 +58,40 @@ export default {
     model: {
       type: Object,
       required: true,
-      default: () => ({}),
+      default: () => ({})
     },
 
     // 列参数
     columns: {
       type: Array,
       required: true,
-      default: () => [],
+      default: () => []
     },
 
     // 配置项
     config: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
 
     // el-form 属性
     form: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
 
     // el-form-item 属性
     formItem: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   computed: {
     mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileForm.config,
-        ...this.config,
+        ...this.config
       };
     },
     mergeFormAttrs() {
@@ -99,7 +99,7 @@ export default {
         ...DefaultFormAttrs,
         ...this.$aileForm.form,
         ...this.$attrs,
-        ...this.form,
+        ...this.form
       };
     },
     mergeFormItemAttrs() {
@@ -107,17 +107,17 @@ export default {
         ...DefaultFormItemAttrs,
         ...this.$aileForm.formItem,
         ...this.$attrs,
-        ...this.formItem,
+        ...this.formItem
       };
     },
     filteredColumns() {
       return this.columns.filter(
-        (item) => !item.show || item.show(this.model, this.model)
+        item => !item.show || item.show(this.model, this.model)
       );
     },
     formClass() {
-      return this.$aileForm ? this.$aileForm.formClass : "";
-    },
+      return this.$aileForm ? this.$aileForm.formClass : '';
+    }
   },
   methods: {
     validate(cb) {
@@ -140,8 +140,8 @@ export default {
         return 24;
       }
       return Math.floor(24 / this.columns.length);
-    },
-  },
+    }
+  }
 };
 </script>
 

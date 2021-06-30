@@ -16,6 +16,6 @@ export default {
       default: () => ({})
     }
   },
-  render: (h, ctx) => ctx.props.render(h, ctx.props.scope) || (<span className="aile-table-item__placeholder">{ctx.props.cellEmptyText}</span>)
+  render: (h, ctx) => ctx.props.render(h, ctx.props.scope) || (<span className='aile-table-item__placeholder'>{ctx.props.cellEmptyText}</span>)
 };
 </script>

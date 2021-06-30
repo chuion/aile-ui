@@ -14,12 +14,12 @@
 </template>
 
 <script>
-import { mergeClass } from '../../../utils/index.js'
+import { mergeClass } from '../../../utils/index.js';
 
 const DefaultProps = {
   placement: 'bottom',
   showAfter: 0
-}
+};
 
 export default {
   name: 'AileTooltip',
@@ -32,16 +32,16 @@ export default {
     }
   },
   computed: {
-    mergeAttrs () {
+    mergeAttrs() {
       return {
         ...DefaultProps, // 默认属性
         ...this.$aileTooltip.attrs, // 全局属性
         ...this.$attrs // 组件属性
-      }
+      };
     },
-    calcPopperClass () {
-      return mergeClass(['aile-tooltip__popper', this.popperClass])
+    calcPopperClass() {
+      return mergeClass(['aile-tooltip__popper', this.popperClass]);
     }
   }
-}
+};
 </script>

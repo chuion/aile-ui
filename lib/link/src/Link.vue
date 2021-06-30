@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { DefaultConfig, DefaultLinkAttrs } from './config.js'
+import { DefaultConfig, DefaultLinkAttrs } from './config.js';
 
 export default {
   name: 'AileLink',
@@ -26,37 +26,37 @@ export default {
     }
   },
   computed: {
-    mergeConfig () {
+    mergeConfig() {
       return {
         ...DefaultConfig,
         ...this.$aileLink.config,
         ...this.config
-      }
+      };
     },
-    mergeAttrs () {
+    mergeAttrs() {
       return {
         ...DefaultLinkAttrs,
         ...this.$aileLink.attrs,
         ...this.$attrs
-      }
+      };
     },
-    calcStyle () {
+    calcStyle() {
       if (this.mergeConfig.inputMaxWidth) {
         return {
           '--maxWidth': this.mergeConfig.maxWidth,
           '--inputMaxWidth': this.mergeConfig.inputMaxWidth
-        }
+        };
       }
-      const inputMaxWidth = ['100%']
-      if (this.$attrs.icon) inputMaxWidth.push('20px')
-      if (this.$slots.icon) inputMaxWidth.push('20px')
+      const inputMaxWidth = ['100%'];
+      if (this.$attrs.icon) inputMaxWidth.push('20px');
+      if (this.$slots.icon) inputMaxWidth.push('20px');
       return {
         '--maxWidth': this.mergeConfig.maxWidth,
         '--inputMaxWidth': `calc(${inputMaxWidth.join(' - ')})`
-      }
+      };
     }
   }
-}
+};
 </script>
 
 <style scoped>

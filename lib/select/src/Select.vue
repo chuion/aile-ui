@@ -38,24 +38,24 @@
 </template>
 
 <script>
-import isEqual from "./isEqual";
+import isEqual from './isEqual';
 import {
   DefaultConfig,
   DefaultSelectAttrs,
-  DefaultTooltipAttrs,
-} from "./config.js";
+  DefaultTooltipAttrs
+} from './config.js';
 
 export default {
-  name: "AileSelect",
+  name: 'AileSelect',
 
   directives: {
     scroll: {
       bind(el, binding) {
         // 获取element-ui定义好的scroll盒子
         const SELECTWRAP_DOM = el.querySelector(
-          ".el-select-dropdown .el-select-dropdown__wrap"
+          '.el-select-dropdown .el-select-dropdown__wrap'
         );
-        SELECTWRAP_DOM.addEventListener("scroll", function () {
+        SELECTWRAP_DOM.addEventListener('scroll', function() {
           /**
            * scrollHeight 获取元素内容高度(只读)
            * scrollTop 获取或者设置元素的偏移值,常用于, 计算滚动条的位置, 当一个元素的容器没有产生垂直方向的滚动条, 那它的scrollTop的值默认为0.
@@ -69,21 +69,21 @@ export default {
             binding.value();
           }
         });
-      },
-    },
+      }
+    }
   },
 
   inheritAttrs: false,
   props: {
     config: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
 
     remoteMethod: {
       type: Function,
-      default: () => {},
-    },
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -91,8 +91,8 @@ export default {
       remoteLoading: false,
       currentPage: 1,
       total: 0,
-      payload: "",
-      selectedOptions: [],
+      payload: '',
+      selectedOptions: []
     };
   },
   computed: {
@@ -101,7 +101,7 @@ export default {
       return {
         ...DefaultConfig,
         ...this.$aileSelect.config,
-        ...this.config,
+        ...this.config
       };
     },
 
@@ -110,7 +110,7 @@ export default {
       const res = {
         ...DefaultSelectAttrs, // 默认属性
         ...this.$aileSelect.attrs, // 全局属性
-        ...this.$attrs,
+        ...this.$attrs
       };
       delete res.tooltip;
       return res;
@@ -121,7 +121,7 @@ export default {
       return {
         ...DefaultTooltipAttrs,
         ...this.$aileSelect.tooltip,
-        ...this.$attrs.tooltip,
+        ...this.$attrs.tooltip
       };
     },
 
@@ -156,34 +156,34 @@ export default {
         return this.remoteLoading;
       }
       return this.currentPage === 1 && this.remoteLoading;
-    },
+    }
   },
   watch: {
-    "mergeConfig.isClear"(val) {
+    'mergeConfig.isClear'(val) {
       if (val) {
         this._reset();
       }
     },
-    "mergeConfig.data"(newVal, oldVal) {
+    'mergeConfig.data'(newVal, oldVal) {
       if (!isEqual(newVal, oldVal)) {
         this._updateOptionList(newVal, newVal.length);
       }
     },
-    "mergeConfig.requestParams"(newVal, oldVal) {
+    'mergeConfig.requestParams'(newVal, oldVal) {
       if (!isEqual(newVal, oldVal)) {
         this.getRemoteList();
       }
-    },
+    }
   },
   mounted() {
     this.init();
     this.$refs.select.$refs.popper.$el.addEventListener(
-      "mousewheel",
+      'mousewheel',
       this.cleanTooltip
     );
-    this.$once("hook:beforeDestroy", () => {
+    this.$once('hook:beforeDestroy', () => {
       this.$refs.select.$refs.popper.$el.removeEventListener(
-        "mousewheel",
+        'mousewheel',
         this.cleanTooltip
       );
     });
@@ -208,7 +208,7 @@ export default {
         await this.remoteMethod();
       }
       if (this.$attrs.onInited) {
-        this.$emit("inited", this.options);
+        this.$emit('inited', this.options);
       }
     },
 
@@ -217,7 +217,7 @@ export default {
      */
     calcValue(item) {
       if (this.mergeConfig.value) {
-        if (typeof this.mergeConfig.value === "function") {
+        if (typeof this.mergeConfig.value === 'function') {
           return this.mergeConfig.value(item);
         } else {
           return item[this.mergeConfig.value];
@@ -231,7 +231,7 @@ export default {
      */
     calcLabel(item) {
       if (this.mergeConfig.label) {
-        if (typeof this.mergeConfig.label === "function") {
+        if (typeof this.mergeConfig.label === 'function') {
           return this.mergeConfig.label(item);
         } else {
           return item[this.mergeConfig.label];
@@ -245,7 +245,7 @@ export default {
      */
     calcDisabled(item) {
       if (this.mergeConfig.disabled) {
-        if (typeof this.mergeConfig.disabled === "function") {
+        if (typeof this.mergeConfig.disabled === 'function') {
           return this.mergeConfig.disabled(item);
         } else {
           return item[this.mergeConfig.disabled];
@@ -258,9 +258,9 @@ export default {
      * 计算可选项是否需要禁用tooltip
      */
     tooltipDisable(item) {
-      if (typeof this.mergeConfig.showTooltip === "boolean") {
+      if (typeof this.mergeConfig.showTooltip === 'boolean') {
         return !this.mergeConfig.showTooltip;
-      } else if (typeof this.mergeConfig.showTooltip === "function") {
+      } else if (typeof this.mergeConfig.showTooltip === 'function') {
         return !this.mergeConfig.showTooltip(item);
       }
     },
@@ -268,7 +268,7 @@ export default {
     /**
      * 根据配置中的 scrollable 决定采用何种请求方式
      */
-    async getRemoteList(payload = "") {
+    async getRemoteList(payload = '') {
       this.payload = payload;
       this.currentPage = 1;
       this.total = 0;
@@ -304,7 +304,7 @@ export default {
       this.options = [];
       this.currentPage = 1;
       this.total = 0;
-      this.payload = "";
+      this.payload = '';
     },
 
     /**
@@ -349,7 +349,7 @@ export default {
       const query = {
         [config.pageField]: this.currentPage,
         [config.sizeField]: config.pageSize,
-        ...config.requestParams,
+        ...config.requestParams
       };
       if (config.queryField && this.payload) {
         query[config.queryField] = this.payload;
@@ -384,15 +384,14 @@ export default {
     handleChange(selected) {
       if (Array.isArray(selected)) {
         this.selectedOptions = selected.map(
-          (item) =>
-            this.selectedOptions.find((opt) => this.calcValue(opt) === item) ||
-            this.options.find((opt) => this.calcValue(opt) === item)
+          item => this.selectedOptions.find(opt => this.calcValue(opt) === item) ||
+            this.options.find(opt => this.calcValue(opt) === item)
         );
-        this.$emit("select", this.selectedOptions);
+        this.$emit('select', this.selectedOptions);
       } else {
         this.$emit(
-          "select",
-          this.options.find((item) => selected === this.calcValue(item))
+          'select',
+          this.options.find(item => selected === this.calcValue(item))
         );
       }
     },
@@ -410,13 +409,13 @@ export default {
     },
     // 清理tooltip Dom元素
     cleanTooltip() {
-      const body = document.getElementsByTagName("body")[0];
-      const tooltips = document.getElementsByClassName("el-tooltip__popper");
+      const body = document.getElementsByTagName('body')[0];
+      const tooltips = document.getElementsByClassName('el-tooltip__popper');
       const length = tooltips.length;
       for (let i = length - 1; i >= 0; i--) {
         body.removeChild(tooltips[i]);
       }
-    },
-  },
+    }
+  }
 };
 </script>
