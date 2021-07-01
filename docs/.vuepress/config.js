@@ -1,16 +1,21 @@
 const path = require("path");
 
 module.exports = {
-  title: "AileUI",
-  description: "AileUI Documents",
   plugins: ["demo-container"],
   alias: {
     "aile-ui": path.resolve(__dirname, "../../"),
   },
+  locales: {
+    '/': {
+      lang: 'zh-CN',
+      title: 'AileUI 中文',
+      description: 'AileUI 中文文档 爱了爱了'
+    }
+  },
   head: [
     [
       "link", // 设置 favicon.ico，注意图片放在 public 文件夹下
-      { rel: "icon", href: "favicon.ico" },
+      { rel: "icon", href: "/favicon.ico" },
     ],
   ],
   themeConfig: {
@@ -34,7 +39,6 @@ module.exports = {
         "card",
         "dialog",
         "form",
-        "input",
         "link",
         // 'placement',
         "select",
@@ -42,10 +46,5 @@ module.exports = {
         "tooltip",
       ],
     },
-  },
-  chainWebpack: (config) => {
-    config.resolveLoader
-    .modules
-    .add(path.resolve(__dirname, './node_modules'))
-  },
+  }
 };

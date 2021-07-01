@@ -37,6 +37,23 @@
       text-align: left;
     }
   }
+  &.demo-input-rows {
+    text-align: center;
+
+    .sub-title {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #8492a6;
+    }
+
+    .el-col:not(:last-child) {
+      border-right: 1px solid rgba(224, 230, 237, 0.5);
+    }
+
+    .el-autocomplete {
+      text-align: left;
+    }
+  }
 }
 .el-autocomplete-suggestion.my-autocomplete {
   li {
