@@ -8,7 +8,7 @@ module.exports = {
   locales: {
     '/': {
       lang: 'zh-CN',
-      title: 'AileUI 中文',
+      title: 'AileUI',
       description: 'AileUI 中文文档 爱了爱了'
     }
   },
@@ -40,7 +40,7 @@ module.exports = {
         "dialog",
         "form",
         "link",
-        // 'placement',
+        'placement',
         "select",
         "table",
         "tooltip",

@@ -1,21 +1,17 @@
 .demo-avatar {
 
-  &.demo-basic {
-    text-align: center;
+  display: flex;
+  justify-content: space-between;
 
-    .demo-basic--circle, .demo-basic--square {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .block {
-        flex: 1;
-      }
+  .el-col {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-      .block:not(:last-child) {
-        border-right: 1px solid rgba(224, 230, 237, 0.5);
-      }
-    }
-
+  .el-col:not(:last-child) {
+    border-right: 1px solid rgba(224, 230, 237, 0.5);
   }
 
   .sub-title {

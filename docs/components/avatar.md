@@ -2,146 +2,174 @@
 
 用图标、图片或者字符的形式展示用户或事物信息。
 
+:::tip 简介
+`aile-ui/avatar` 是一款 **Avatar** 组件，基于 `Vue2` 和 `ElementUI` 进行的二次封装，使用组件时，在原 `ElAvatar` 属性的基础上新增 `config` 属性，增强 Avatar 的功能。
+:::
+
 ## 基本用法
 
-通过 `shape` 和 `size` 设置头像的形状和大小。
+支持 `element-ui` 中的 [Avatar文档板块](https://element.eleme.io/#/zh-CN/component/avatar) 的所有使用方式，包括Props/Methods/Slots/Events等，你可以认为：`<aile-avatar />` 就是 `<el-avatar />`。
 
-:::demo
+## 细化的尺寸设置
+:::demo `config.size` 仅接受字符串
 ```html
-<template>
-  <el-row class="demo-avatar demo-basic">
-    <el-col :span="12">
-      <div class="sub-title">circle</div>
-      <div class="demo-basic--circle">
-        <div class="block"><aile-avatar :size="50" :src="circleUrl"></aile-avatar></div>
-        <div class="block" v-for="size in sizeList" :key="size">
-          <aile-avatar :size="size" :src="circleUrl"></aile-avatar>
-        </div>
-      </div>
-    </el-col>  
-    <el-col :span="12">
-      <div class="sub-title">square</div>
-      <div class="demo-basic--circle">
-        <div class="block"><aile-avatar shape="square" :size="50" :src="squareUrl"></aile-avatar></div>
-        <div class="block" v-for="size in sizeList" :key="size">
-          <aile-avatar shape="square" :size="size" :src="squareUrl"></aile-avatar>
-        </div>
-      </div>
-    </el-col> 
-  </el-row>
-</template>
+<el-row class="demo-avatar">
+  <el-col :span="8">
+    <aile-avatar 
+      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      fit="cover"
+      :config="{
+        size: '40px'
+      }"
+    />
+  </el-col>
+  <el-col :span="8">
+    <aile-avatar 
+      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      fit="cover"
+      :config="{
+        size: '50px'
+      }"
+    />
+  </el-col>
+  <el-col :span="8">
+    <aile-avatar 
+      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      fit="cover"
+      :config="{
+        size: '60px'
+      }"
+    />
+  </el-col>
+</el-row>
+```
+:::
+
+## 自定义图片地址处理函数
+
+:::demo `config.srcFormatter` 可在全局设置，也可单独设置进行覆盖，可以根据实际情况增强src功能，比如支持 base64 编码的图片~
+```html
+<el-row class="demo-avatar">
+  <el-col :span="8">
+    <aile-avatar 
+      src="/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      fit="cover"
+      :config="config"
+    />
+  </el-col>
+  <el-col :span="8">
+    <aile-avatar 
+      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      fit="cover"
+      :config="config"
+    />
+  </el-col>
+  <el-col :span="8">
+    <aile-avatar 
+      fit="cover"
+      :config="config"
+    />
+  </el-col>
+</el-row>
+
 <script>
-  export default {
-    data () {
-      return {
-        circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-        squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-        sizeList: ["large", "medium", "small"]
+export default {
+  data() {
+    return {
+      config: {
+        srcFormatter: src => {
+          if (!src) {
+            return "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+          }
+          if (src.startsWith('http')) {
+            return src;
+          }
+          return 'https://cube.elemecdn.com' + src
+        }
       }
     }
   }
+}
 </script>
-
 ```
 :::
 
-## 展示类型
-
-支持三种类型：图标、图片和字符
+## 显示文字
 
 :::demo
 ```html
-<template>
-  <div class="demo-type">
-    <div>
-      <aile-avatar icon="el-icon-user-solid"></aile-avatar>
-    </div>
-    <div>
-      <aile-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></aile-avatar>
-    </div>
-    <div>
-      <aile-avatar> user </aile-avatar>
-    </div>
-  </div>
-</template>
-```
-:::
+<el-row class="demo-avatar">
+  <el-col :span="8">
+    <aile-avatar
+      label="李狗蛋"
+      fit="cover"
+      :config="config"
+    />
+  </el-col>
+  <el-col :span="8">
+    <aile-avatar
+      label="Scott"
+      fit="cover"
+      :config="config"
+    />
+  </el-col>
+  <el-col :span="8">
+    <aile-avatar 
+      src="xoxo"
+      fit="cover"
+      :config="config"
+    />
+  </el-col>
+</el-row>
 
-## 图片加载失败的 fallback 行为
-
-当展示类型为图片的时候，图片加载失败的 fallback 行为
-
-:::demo
-```html
-<template>
-  <div class="demo-type">
-    <aile-avatar :size="60" src="https://empty" @error="errorHandler">
-      <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-    </aile-avatar>
-  </div>
-</template>
 <script>
-  export default {
-    methods: {
-      errorHandler() {
-        return true
+export default {
+  data() {
+    return {
+      config: {
+        labelFormatter: name => {
+          return name.slice(0, 2).toUpperCase()
+        },
+        labelStyle: {
+          fontSize: '16px',
+          backgroundColor: '#3381D0'
+        },
+        labelPlaceholder: 'Unknown',
       }
     }
   }
+}
 </script>
-
 ```
 :::
 
-## 图片如何适应容器框
+## 配置项
 
-当展示类型为图片的时候，使用 `fit` 属性定义图片如何适应容器框，同原生 [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)。
+### 插件配置
 
-:::demo
-```html
-<template>
-  <div class="demo-fit">
-    <div class="block" v-for="fit in fits" :key="fit">
-        <span class="title">{{ fit }}</span>
-        <aile-avatar shape="square" :size="100" :fit="fit" :src="url"></aile-avatar>
-    </div>
-  </div>
-</template>
-<script>
-  export default {
-    data() {
-      return {
-        fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
-        url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-      }
-    }
-  }
-</script>
+在 `main.js` 中通过插件方式引入 AileUI 时（使用方式：[插件安装](/components/#快速开始)），可对全局的 `AileAvatar` 配置如下属性：
 
-```
-:::
+|           参数           | 数据类型 | 默认值 |                                说明                                 |
+| :----------------------: | :------: | :----: | :-----------------------------------------------------------------: |
+| [config](#config-配置项) |  Object  |   {}   |                               配置项                                |
+|          attrs           |  Object  |   {}   | [ElAvatar Props](https://element.eleme.io/#/zh-CN/component/avatar) |
 
-## Attributes
+#### config 配置项
 
-| 参数              | 说明                             | 类型            | 可选值 | 默认值 |
-| ----------------- | -------------------------------- | --------------- | ------ | ------ |
-| icon              | 设置头像的图标类型，参考 Icon 组件   | string          |        |        |
-| size              | 设置头像的大小                     | number/string | number / large / medium / small | large  |
-| shape             | 设置头像的形状  | string |    circle / square     |   circle  |
-| src               | 图片头像的资源地址 | string |        |      |
-| srcSet            | 以逗号分隔的一个或多个字符串列表表明一系列用户代理使用的可能的图像 | string |        |      |
-| alt               | 描述图像的替换文本 | string |        |      |
-| fit               | 当展示类型为图片的时候，设置图片如何适应容器框 | string |    fill / contain / cover / none / scale-down    |   cover   |
+|       参数       | 数据类型 |                        默认值                        |               说明               |
+| :--------------: | :------: | :--------------------------------------------------: | :------------------------------: |
+| labelPlaceholder |  string  |                       Unknown                        |  当图片读取失败时显示的默认标签  |
+|  labelFormatter  | function |        name => name.slice(0, 2).toUpperCase()        |          标签格式化函数          |
+|    labelStyle    |  object  | { fontSize: '16px';<br> backgroundColor: '#3381D0' } |             标签样式             |
+|   srcFormatter   | function |                         ...                          |          src格式化函数           |
+|       size       |  string  |                          -                           | avatar尺寸，统一设置width/height |
 
+### Attributes/Props 属性
 
-## Events
+**支持 `ElementUI` 中 [Avatar](https://element.eleme.io/#/zh-CN/component/Avatar) 的所有属性：`icon` / `size` / `shape` / `src` / `srcSet` / `all` / `fit` 等**，此处仅展示额外属性：
 
-| 事件名 | 说明               | 回调参数 |
-| ------ | ------------------ | -------- |
-| error  | 图片类头像加载失败的回调， 返回 false 会关闭组件默认的 fallback 行为 |(e: Event)  |
-
-## Slot
-
-| 名称	 | 说明               |  
-| ------ | ------------------ | 
-| default  | 自定义头像展示内容 |
+|           参数           | 数据类型 | 默认值 |                说明                |
+| :----------------------: | :------: | :----: | :--------------------------------: |
+|          label           |  string  |   -    |     当图片读取失败时显示的字符     |
+|           src            |  string  |   -    |     图像来源，支持网址和base64     |
+| [config](#config-配置项) |  object  |   -    | 配置项，字段同全局config配置项相同 |
