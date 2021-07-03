@@ -1,25 +1,12 @@
 <template>
-  <div
-    :style="cardStyle"
-    :class="cardClassList"
-  >
-    <template v-if="calcTitle">
-      <div
-        :class="headerClassList"
-        :style="headerStyleList"
-      >
+  <div :style="cardStyle" :class="cardClassList">
+    <template v-if="showHeader">
+      <div :class="headerClassList" :style="headerStyleList">
         <slot name="title">
           <!-- 普通标题 -->
-          <span
-            v-if="isSimpleTitle"
-            class="title"
-          >{{ calcTitle }}</span>
+          <span v-if="isSimpleTitle" class="title">{{ calcTitle }}</span>
           <!-- 可切换标题 -->
-          <el-tabs
-            v-else
-            v-model="selectedTab"
-            class="tabs"
-          >
+          <el-tabs v-else v-model="selectedTab" class="tabs">
             <el-tab-pane
               v-for="item in calcTitle"
               :key="item.value"
@@ -33,27 +20,23 @@
       </div>
     </template>
 
-    <div
-      v-loading="loading"
-      :class="['aile-card__body', bodyClass]"
-      :style="bodyStyle"
-    >
-      <template v-if="loading || showEmpty">
-        <slot name="empty">
+    <div v-loading="loading" :class="bodyClassList" :style="bodyStyleList">
+      <template v-if="!loading && !isEmpty">
+        <slot :activeTitle="selectedTab" />
+      </template>
+      <template v-else>
+        <slot name="empty" v-if="isEmpty">
           <div class="empty-place">
             暂无数据
           </div>
         </slot>
-      </template>
-      <template v-else>
-        <slot :activeTitle="selectedTab" />
       </template>
     </div>
   </div>
 </template>
 
 <script>
-import { mergeClass } from '../../../utils';
+import { isEmpty, mergeClass } from '../../../utils';
 import { DefaultConfig } from './config';
 export default {
   name: 'AileCard',
@@ -70,13 +53,13 @@ export default {
       default: ''
     },
     // 仅针对title为数组的情况
-    // 设置lazyLoad为true，则不进行标题初始化操作，外部可调用'$refs.Card.setActiveTitle(tab)'激活选项卡
+    // 设置lazyLoad为true，则不进行标题初始化操作，外部通过更改activeTitle来渲染相应组件
     lazyLoad: {
       type: Boolean,
       default: false
     },
-    // showEmpty为true时，展示空白占位组件
-    showEmpty: {
+    // isEmpty为true时，展示空白占位组件
+    isEmpty: {
       type: Boolean,
       default: false
     },
@@ -118,6 +101,12 @@ export default {
         ...this.$attrs
       };
     },
+    showHeader() {
+      if (this.$slots.title || this.$slots.sub) {
+        return true;
+      }
+      return !isEmpty(this.title);
+    },
     calcTitle() {
       if (this.isSimpleTitle) {
         return this.title;
@@ -150,7 +139,7 @@ export default {
     },
     headerClassList() {
       return mergeClass(
-        'aile-card__body',
+        'aile-card__header',
         this.mergeConfig.headerClass,
         this.headerClass
       );
@@ -165,7 +154,8 @@ export default {
       return mergeClass(
         'aile-card__body',
         this.mergeConfig.bodyClass,
-        this.bodyClass
+        this.bodyClass,
+        this.showHeader ? '' : 'is-hide-header'
       );
     },
     bodyStyleList() {
@@ -193,7 +183,13 @@ export default {
         Array.isArray(this.calcTitle) &&
         this.calcTitle.length
       ) {
-        this.setActiveTitle(this.calcTitle[0].value || this.calcTitle[0].label);
+        if (this.activeTitle) {
+          this.setActiveTitle(this.activeTitle);
+        } else {
+          this.setActiveTitle(
+            this.calcTitle[0].value || this.calcTitle[0].label
+          );
+        }
       }
     },
 
@@ -212,6 +208,7 @@ export default {
   position: relative;
   overflow: hidden;
   border-radius: 4px;
+  border: 1px solid #ebeef5;
 }
 
 .aile-card.is-always-shadow {
@@ -233,6 +230,7 @@ export default {
   box-sizing: border-box;
   background: #fff;
   border-radius: 4px 4px 0 0;
+  border-bottom: 1px solid #ebeef5;
 }
 
 .aile-card__header .title {
@@ -246,17 +244,21 @@ export default {
   user-select: none;
 }
 
-.aile-card__header .tabs :deep(.el-tabs__header) {
+.aile-card__header .tabs ::v-deep .el-tabs__header {
   margin-bottom: 0;
 }
 
-.aile-card__header .tabs :deep(.el-tabs__header .el-tabs__item) {
+.aile-card__header .tabs ::v-deep .el-tabs__header .el-tabs__item {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.aile-card__header .tabs ::v-deep .el-tabs__nav-wrap.is-top::after {
+  height: 1px;
 }
 
 .aile-card__body {
@@ -269,6 +271,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.aile-card__body.is-hide-header {
+  height: 100%;
 }
 
 .aile-card__body .empty-place {

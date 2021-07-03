@@ -62,6 +62,7 @@ export default {
 <style scoped>
 .aile-link {
   max-width: var(--maxWidth);
+  text-decoration: none !important;
 }
 
 .aile-link.is-ellipsis::v-deep span.el-link--inner {
