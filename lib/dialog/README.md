@@ -24,9 +24,9 @@ yarn add aile-ui
 
 配置项内容可在全局引入时设置，下表所列属性可在 `main.js` 中安装组件时进行统一配置：
 
-|    参数    | 数据类型 | 默认值 | 可选值 |                                   说明                                   |
-| :--------: | :------: | :----: | :----: | :----------------------------------------------------------------------: |
-| **config** |  Object  |   -    |   -    |                     [Config 配置项](#config-配置项)                      |
+|    参数    | 数据类型 | 默认值 | 可选值 |                                说明                                 |
+| :--------: | :------: | :----: | :----: | :-----------------------------------------------------------------: |
+| **config** |  Object  |   -    |   -    |                   [Config 配置项](#config-配置项)                   |
 | **attrs**  |  Object  |   -    |   -    | [ElDialog Props](https://element.eleme.io/#/zh-CN/component/dialog) |
 
 
@@ -61,10 +61,10 @@ yarn add aile-ui
 
 支持全部 `el-dialog` 方法，仅展示新增事件，其余事件详见 [Element Doc Dialog #Dialog Events](https://element.eleme.io/#/zh-CN/component/dialog)
 
-| 事件名  |         说明         | 参数  |
-| :-----: | :------------------: | :---: |
-| confirm | 点击【确定】按钮事件 |  无   |
-| cancel  | 点击【关闭】按钮事件 |  无   |
+| 事件名  |         说明         |               使用方式               |
+| :-----: | :------------------: | :----------------------------------: |
+| confirm | 点击【确定】按钮事件 | function(done)，done 用于关闭 Dialog |
+| cancel  | 点击【关闭】按钮事件 | function(done)，done 用于关闭 Dialog |
 
 ### Quick Start 快速开始
 

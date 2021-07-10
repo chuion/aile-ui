@@ -22,7 +22,7 @@
             size="small"
             :loading="mergeConfig.confirmLoading"
             :disabled="mergeConfig.confirmDisabled"
-            @click="$emit('confirm')"
+            @click="handleConfirm"
           >
             {{ mergeConfig.confirmText }}
           </el-button>
@@ -57,10 +57,6 @@ export default {
     config: {
       type: Object,
       default: () => ({})
-    },
-    class: {
-      type: [String, Array, Object],
-      default: ''
     }
   },
   computed: {
@@ -81,7 +77,7 @@ export default {
     calcCustomClass() {
       return mergeClass(
         ['aile-dialog', this.mergeConfig.hideFooter && 'is-hide-footer'],
-        this.class
+        this.$attrs.class
       );
     },
     showDialog: {
@@ -96,9 +92,11 @@ export default {
   methods: {
     async handleCancel() {
       if (this.$listeners && this.$listeners.cancel) {
-        await this.$emit('cancel');
+        await this.$emit('cancel', this.done);
+      } else if (this.mergeAttrs['before-close']) {
+        this.mergeAttrs['before-close'](this.done);
       } else {
-        this.$emit('update:visible', false);
+        this.done();
       }
     },
     handleClosed() {
@@ -106,6 +104,12 @@ export default {
       if (this.$listeners && this.$listeners.closed) {
         this.$emit('closed');
       }
+    },
+    handleConfirm() {
+      this.$emit('confirm', this.done);
+    },
+    done() {
+      this.$emit('update:visible', false);
     }
   }
 };

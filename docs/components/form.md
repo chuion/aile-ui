@@ -2,56 +2,26 @@
 
 由输入框、选择器、单选框、多选框等控件组成，用以收集、校验、提交数据
 
+:::tip 简介
+`aile-ui/form` 是一款 **Form** 组件，基于 `Vue2` 和 `ElementUI` 进行的二次封装，使用组件时，在原 `ElForm` 属性的基础上新增 `config` 属性，增强 Form 的功能。
+强烈建议配合AileUI其他组件一起使用，解决诸如 `Select` 组件远程请求回来的数据需要自行实现双向数据绑定的问题。
+:::
+
 ### 典型表单
 
 包括各种表单项，比如输入框、选择器、开关、单选框、多选框等。
 
-:::demo 在 Form 组件中，每一个表单域由一个 Form-Item 组件构成，表单域中可以放置各种类型的表单控件，包括 Input、Select、Checkbox、Radio、Switch、DatePicker、TimePicker
+:::demo 在 AileForm 组件中，表单域由 `columns` 中配置生成，表单域中可以放置各种类型的表单控件，包括 Input、Select、Checkbox、Radio、Switch、DatePicker、TimePicker
 ```html
-<el-form ref="form" :model="form" label-width="80px">
-  <el-form-item label="活动名称">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域">
-    <el-select v-model="form.region" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="活动时间">
-    <el-col :span="11">
-      <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-    </el-col>
-    <el-col class="line" :span="2">-</el-col>
-    <el-col :span="11">
-      <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-    </el-col>
-  </el-form-item>
-  <el-form-item label="即时配送">
-    <el-switch v-model="form.delivery"></el-switch>
-  </el-form-item>
-  <el-form-item label="活动性质">
-    <el-checkbox-group v-model="form.type">
-      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-      <el-checkbox label="地推活动" name="type"></el-checkbox>
-      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-    </el-checkbox-group>
-  </el-form-item>
-  <el-form-item label="特殊资源">
-    <el-radio-group v-model="form.resource">
-      <el-radio label="线上品牌商赞助"></el-radio>
-      <el-radio label="线下场地免费"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item label="活动形式">
-    <el-input type="textarea" v-model="form.desc"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="onSubmit">立即创建</el-button>
-    <el-button>取消</el-button>
-  </el-form-item>
-</el-form>
+<div class="demo-form">
+  <aile-form 
+    ref="form" 
+    :model="form" 
+    :columns="columns"
+    abel-width="80px"
+  />
+</div>
+
 <script>
   export default {
     data() {
@@ -68,9 +38,103 @@
         }
       }
     },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'name',
+            label: '活动名称',
+            render: (h, form) => (
+              <aile-input v-model={form.name} />
+            )
+          },
+          {
+            prop: 'region',
+            label: '活动区域',
+            render: (h, form) => (
+              <aile-select 
+                v-model={form.region} 
+                config={{
+                  data: [
+                    {
+                      label: '区域一',
+                      value: 'shanghai'
+                    },
+                    {
+                      label: '区域二',
+                      value: 'beijing'
+                    }
+                  ],
+                  label: 'label',
+                  value: 'value'
+                }}
+              />
+            )
+          },
+          {
+            label: '活动时间',
+            render: (h, form) => (
+              <el-row>
+                <el-col span={11}>
+                  <el-date-picker type="date" placeholder="选择日期" v-model={form.date1} style="width: 100%;"></el-date-picker>
+                </el-col>
+                <el-col class="line" span={2}>-</el-col>
+                <el-col span={11}>
+                  <el-time-picker placeholder="选择时间" v-model={form.date2} style="width: 100%;"></el-time-picker>
+                </el-col>
+              </el-row>
+            )
+          },
+          {
+            prop: 'delivery',
+            label: '即时配送',
+            render: (h, form) => (
+              <el-switch v-model={form.delivery}></el-switch>
+            )
+          },
+          {
+            prop: 'type',
+            label: '活动性质',
+            render: (h, form) => (
+              <el-checkbox-group v-model={form.type}>
+                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+                <el-checkbox label="地推活动" name="type"></el-checkbox>
+                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+              </el-checkbox-group>
+            )
+          },
+          {
+            prop: 'resource',
+            label: '特殊资源',
+            render: (h, form) => (
+              <el-radio-group v-model={form.resource}>
+                <el-radio label="线上品牌商赞助"></el-radio>
+                <el-radio label="线下场地免费"></el-radio>
+              </el-radio-group>
+            )
+          },
+          {
+            prop: 'desc',
+            label: '活动形式',
+            render: (h, form) => (
+              <aile-input type="textarea" v-model={form.desc}></aile-input>
+            )
+          },
+          {
+            render: h => (
+              <div>
+                <el-button type="primary" onClick={this.onSubmit}>立即创建</el-button>
+                <el-button>取消</el-button>
+              </div>
+            )
+          }
+        ]
+      }
+    },
     methods: {
       onSubmit() {
-        console.log('submit!');
+        console.log('submit: ', this.form);
       }
     }
   }
@@ -91,20 +155,15 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 
 :::demo 设置 `inline` 属性可以让表单域变为行内的表单域
 ```html
-<el-form :inline="true" :model="formInline" class="demo-form-inline">
-  <el-form-item label="审批人">
-    <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域">
-    <el-select v-model="formInline.region" placeholder="活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="onSubmit">查询</el-button>
-  </el-form-item>
-</el-form>
+<div class="demo-form">
+  <aile-form 
+    class="demo-form-inline" 
+    :model="formInline"
+    :columns="columns" 
+    :inline="true" 
+  />
+</div>
+
 <script>
   export default {
     data() {
@@ -113,6 +172,47 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
           user: '',
           region: ''
         }
+      }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'user',
+            label: '审批人',
+            render: (h, form) => (
+              <aile-input v-model={form.user} placeholder="审批人" />
+            )
+          },
+          {
+            prop: 'region',
+            label: '活动区域',
+            render: (h, form) => (
+              <aile-select 
+                v-model={form.region} 
+                config={{
+                  data: [
+                    {
+                      label: '区域一',
+                      value: 'shanghai'
+                    },
+                    {
+                      label: '区域二',
+                      value: 'beijing'
+                    }
+                  ],
+                  label: 'label',
+                  value: 'value'
+                }}
+              />
+            )
+          },
+          {
+            render: h => (
+              <el-button type="primary" onClick={this.onSubmit}>查询</el-button>
+            )
+          }
+        ]
       }
     },
     methods: {
@@ -137,7 +237,13 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
   <el-radio-button label="top">顶部对齐</el-radio-button>
 </el-radio-group>
 <div style="margin: 20px;"></div>
-<el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+<aile-form 
+  :label-position="labelPosition" 
+  label-width="80px" 
+  :model="formLabelAlign" 
+  :columns="columns"
+/>
+<!-- <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
   <el-form-item label="名称">
     <el-input v-model="formLabelAlign.name"></el-input>
   </el-form-item>
@@ -147,7 +253,7 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
   <el-form-item label="活动形式">
     <el-input v-model="formLabelAlign.type"></el-input>
   </el-form-item>
-</el-form>
+</el-form> -->
 <script>
   export default {
     data() {
@@ -159,6 +265,33 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
           type: ''
         }
       };
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'name',
+            label: '名称',
+            render: (h, form) => (
+              <el-input v-model={form.name} />
+            )
+          },
+          {
+            prop: 'region',
+            label: '活动区域',
+            render: (h, form) => (
+              <el-input v-model={form.region} />
+            )
+          },
+          {
+            prop: 'type',
+            label: '活动形式',
+            render: (h, form) => (
+              <el-input v-model={form.type} />
+            )
+          }
+        ]
+      }
     }
   }
 </script>

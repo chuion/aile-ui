@@ -209,6 +209,7 @@ export default {
   overflow: hidden;
   border-radius: 4px;
   border: 1px solid #ebeef5;
+  z-index: 1;
 }
 
 .aile-card.is-always-shadow {
