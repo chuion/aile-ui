@@ -25,7 +25,6 @@
 - [Form 表单](./lib/form/README.md)
 - [Input 输入框](./lib/input/README.md)
 - [Link 链接](./lib/link/README.md)
-- [Placement 占位图片](./lib/placement/README.md)
 - [Select 下拉选择器](./lib/select/README.md)
 - [Table 表格](./lib/table/README.md)
 - [Tooltip 提示框](./lib/tooltip/README.md)

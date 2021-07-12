@@ -40,7 +40,6 @@ module.exports = {
         "dialog",
         "form",
         "link",
-        'placement',
         "select",
         "table",
         "tooltip",
