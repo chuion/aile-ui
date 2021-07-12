@@ -12,6 +12,7 @@
         v-bind="mergeTableAttrs"
         :data="data"
         :span-method="mergeConfig.merge ? mergeMethod : mergeConfig.spanMethod"
+        v-on="$listeners"
       >
         <template v-for="(item, index) in columns">
           <aile-column
@@ -38,6 +39,7 @@
       <el-pagination
         ref="elPagination"
         v-bind="mergePaginationAttrs"
+        v-on="$listeners"
       >
         <slot name="pagination" />
       </el-pagination>
@@ -54,6 +56,7 @@ import {
   DefaultPaginationAttrs,
   DefaultTableAttrs
 } from './config.js';
+import { mergeAttrs } from '../../../utils';
 
 export default {
   name: 'AileTable',
@@ -109,24 +112,31 @@ export default {
 
     // el-table 属性
     mergeTableAttrs() {
+      const res = mergeAttrs(
+        DefaultTableAttrs, // 默认属性
+        (this.$aileTooltip.table || {}), // 全局属性
+        this.$attrs,
+        (this.table || {}) // 组件属性
+      );
+      const userAttrs = mergeAttrs(this.$attrs);
+      if (userAttrs.height || userAttrs.maxHeight) {
+        return res;
+      }
       return {
-        ...DefaultTableAttrs, // 默认属性
-        ...this.$aileTooltip.table, // 全局属性
-        ...this.$attrs,
-        ...(this.table || {}), // 组件属性
+        ...res,
         [this.mergeConfig.heightMode]: this.tableHeight + 'px' // 计算表格高度
       };
     },
 
     // el-pagination 属性
     mergePaginationAttrs() {
-      return {
-        ...DefaultPaginationAttrs, // 默认属性
-        ...this.$aileTooltip.pagination, // 全局属性
-        ...this.$attrs,
-        ...(this.pagination || {}), // 组件属性
-        onCurrentChange: this.onPaginationCurrentChange
-      };
+      return mergeAttrs(
+        DefaultPaginationAttrs, // 默认属性
+        (this.$aileTooltip.pagination || {}), // 全局属性
+        this.$attrs,
+        (this.pagination || {}), // 组件属性
+        { onCurrentChange: this.onPaginationCurrentChange }
+      );
     },
 
     dataLength() {
@@ -159,7 +169,12 @@ export default {
     resize(immediate) {
       // 计算表格实际高度
       const _resizeHeight = () => {
-        const total = this.$refs.aileTableRef.clientHeight; // 容器总高度
+        const userAttrs = mergeAttrs(this.$attrs);
+        if (userAttrs.height || userAttrs.maxHeight) {
+          this.tableHeight = userAttrs.height || userAttrs.maxHeight;
+          return;
+        }
+        const total = (this.$refs.aileTableRef || {}).clientHeight; // 容器总高度
         const inside = this.mergeConfig.tablePadding * 2; // 表格上下padding之和
         let result = total - inside;
         if (this.pagination) {

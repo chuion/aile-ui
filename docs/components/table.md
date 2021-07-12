@@ -2,6 +2,9 @@
 
 用于展示多条结构类似的数据，可对数据进行排序、筛选、对比或其他自定义操作。
 
+:::tip 简介
+`aile-ui/table` 是一款 **Table** 组件，基于 `Vue2` 和 `ElementUI` 进行的二次封装，使用组件时，在原 `ElTable` 属性的基础上新增 `config` 属性，增强 Table 的功能。
+:::
 ### 基础表格
 
 基础的表格展示用法。
@@ -9,24 +12,12 @@
 :::demo 当`el-table`元素中注入`data`对象数组后，在`el-table-column`中用`prop`属性来对应对象中的键名即可填入数据，用`label`属性来定义表格的列名。可以使用`width`属性来定义列宽。
 ```html
   <template>
-    <el-table
-      :data="tableData"
-      style="width: 100%">
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址">
-      </el-table-column>
-    </el-table>
+    <div class="demo-table">
+      <aile-table
+        :data="tableData"
+        :columns="columns"
+      />
+    </div>
   </template>
 
   <script>
@@ -51,6 +42,26 @@
             address: '上海市普陀区金沙江路 1516 弄'
           }]
         }
+      },
+      computed: {
+        columns() {
+          return [
+            {
+              prop: 'date',
+              label: '日期',
+              width: '180'
+            },
+            {
+              prop: 'name',
+              label: '姓名',
+              width: '180'
+            },
+            {
+              prop: 'address',
+              label: '地址'
+            }
+          ]
+        }
       }
     }
   </script>
@@ -64,25 +75,13 @@
 :::demo `stripe`属性可以创建带斑马纹的表格。它接受一个`Boolean`，默认为`false`，设置为`true`即为启用。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    stripe
-    style="width: 100%">
-    <el-table-column
-      prop="date"
-      label="日期"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址">
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      stripe
+      :data="tableData"
+      :columns="columns"
+    />
+  </div>
 </template>
 
 <script>
@@ -107,7 +106,27 @@
           address: '上海市普陀区金沙江路 1516 弄'
         }]
       }
-    }
+    },
+      computed: {
+        columns() {
+          return [
+            {
+              prop: 'date',
+              label: '日期',
+              width: '180'
+            },
+            {
+              prop: 'name',
+              label: '姓名',
+              width: '180'
+            },
+            {
+              prop: 'address',
+              label: '地址'
+            }
+          ]
+        }
+      }
   }
 </script>
 ```
@@ -118,25 +137,14 @@
 :::demo 默认情况下，Table 组件是不具有竖直方向的边框的，如果需要，可以使用`border`属性，它接受一个`Boolean`，设置为`true`即可启用。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    border
-    style="width: 100%">
-    <el-table-column
-      prop="date"
-      label="日期"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址">
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      stripe
+      border
+      :data="tableData"
+      :columns="columns"
+    />
+  </div>
 </template>
 
 <script>
@@ -160,6 +168,26 @@
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
         }]
+      }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            width: '180'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '180'
+          },
+          {
+            prop: 'address',
+            label: '地址'
+          }
+        ]
       }
     }
   }
@@ -174,35 +202,23 @@
 :::demo 可以通过指定 Table 组件的 `row-class-name` 属性来为 Table 中的某一行添加 class，表明该行处于某种状态。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%"
-    :row-class-name="tableRowClassName">
-    <el-table-column
-      prop="date"
-      label="日期"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址">
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      :data="tableData"
+      :columns="columns"
+      :row-class-name="tableRowClassName"
+    />
+  </div>
 </template>
 
 <style>
-  .el-table .warning-row {
-    background: oldlace;
-  }
+.demo-table .el-table .warning-row {
+  background: oldlace;
+}
 
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
+.demo-table .el-table .success-row {
+  background: #f0f9eb;
+}
 </style>
 
 <script>
@@ -237,6 +253,26 @@
           address: '上海市普陀区金沙江路 1518 弄'
         }]
       }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            width: '180'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '180'
+          },
+          {
+            prop: 'address',
+            label: '地址'
+          }
+        ]
+      }
     }
   }
 </script>
@@ -250,26 +286,14 @@
 :::demo 只要在`el-table`元素中定义了`height`属性，即可实现固定表头的表格，而不需要额外的代码。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    height="250"
-    border
-    style="width: 100%">
-    <el-table-column
-      prop="date"
-      label="日期"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址">
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      height="250"
+      border
+      :data="tableData"
+      :columns="columns"
+    />
+  </div>
 </template>
 
 <script>
@@ -306,6 +330,26 @@
           address: '上海市普陀区金沙江路 1518 弄'
         }]
       }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            width: '180'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '180'
+          },
+          {
+            prop: 'address',
+            label: '地址'
+          }
+        ]
+      }
     }
   }
 </script>
@@ -319,51 +363,13 @@
 :::demo 固定列需要使用`fixed`属性，它接受 Boolean 值或者`left` `right`，表示左边固定还是右边固定。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    border
-    style="width: 100%">
-    <el-table-column
-      fixed
-      prop="date"
-      label="日期"
-      width="150">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="province"
-      label="省份"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="city"
-      label="市区"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      width="300">
-    </el-table-column>
-    <el-table-column
-      prop="zip"
-      label="邮编"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      fixed="right"
-      label="操作"
-      width="100">
-      <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-        <el-button type="text" size="small">编辑</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      border
+      :data="tableData"
+      :columns="columns"
+    />
+  </div>
 </template>
 
 <script>
@@ -406,6 +412,58 @@
           zip: 200333
         }]
       }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            width: '150'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '120'
+          },
+          {
+            prop: 'province',
+            label: '省份',
+            width: '120'
+          },
+          {
+            prop: 'city',
+            label: '市区',
+            width: '120'
+          },
+          {
+            prop: 'address',
+            label: '地址',
+            width: '300'
+          },
+          {
+            prop: 'zip',
+            label: '邮编',
+            width: '120'
+          },
+          {
+            prop: 'city',
+            label: '市区',
+            width: '120'
+          },
+          {
+            label: '操作',
+            fixed: 'right',
+            width: '100',
+            render: (h, scope) => (
+              <div>
+                <el-button onClick={() => this.handleClick(scope.row)} type="text" size="small">查看</el-button>
+                <el-button type="text" size="small">编辑</el-button>
+              </div>
+            )
+          }
+        ]
+      }
     }
   }
 </script>
@@ -419,42 +477,13 @@
 :::demo 固定列和表头可以同时使用，只需要将上述两个属性分别设置好即可。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%"
-    height="250">
-    <el-table-column
-      fixed
-      prop="date"
-      label="日期"
-      width="150">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="province"
-      label="省份"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="city"
-      label="市区"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      width="300">
-    </el-table-column>
-    <el-table-column
-      prop="zip"
-      label="邮编"
-      width="120">
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      :data="tableData"
+      :columns="columns"
+      height="250"
+    />
+  </div>
 </template>
 
 <script>
@@ -512,6 +541,47 @@
           zip: 200333
         }]
       }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            width: '150'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '120'
+          },
+          {
+            prop: 'province',
+            label: '省份',
+            width: '120'
+          },
+          {
+            prop: 'city',
+            label: '市区',
+            width: '120'
+          },
+          {
+            prop: 'address',
+            label: '地址',
+            width: '300'
+          },
+          {
+            prop: 'zip',
+            label: '邮编',
+            width: '120'
+          },
+          {
+            prop: 'city',
+            label: '市区',
+            width: '120'
+          }
+        ]
+      }
     }
   }
 </script>
@@ -525,55 +595,13 @@
 :::demo 通过设置`max-height`属性为 Table 指定最大高度。此时若表格所需的高度大于最大高度，则会显示一个滚动条。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%"
-    max-height="250">
-    <el-table-column
-      fixed
-      prop="date"
-      label="日期"
-      width="150">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="province"
-      label="省份"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="city"
-      label="市区"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      width="300">
-    </el-table-column>
-    <el-table-column
-      prop="zip"
-      label="邮编"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      fixed="right"
-      label="操作"
-      width="120">
-      <template slot-scope="scope">
-        <el-button
-          @click.native.prevent="deleteRow(scope.$index, tableData)"
-          type="text"
-          size="small">
-          移除
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      :data="tableData"
+      :columns="columns"
+      max-height="250"
+    />
+  </div>
 </template>
 
 <script>
@@ -636,6 +664,57 @@
           zip: 200333
         }]
       }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            width: '150'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '120'
+          },
+          {
+            prop: 'province',
+            label: '省份',
+            width: '120'
+          },
+          {
+            prop: 'city',
+            label: '市区',
+            width: '120'
+          },
+          {
+            prop: 'address',
+            label: '地址',
+            width: '300'
+          },
+          {
+            prop: 'zip',
+            label: '邮编',
+            width: '120'
+          },
+          {
+            label: '操作',
+            fixed: 'right',
+            width: '100',
+            render: (h, scope) => (
+              <el-button
+                onClick={() => {
+                  this.deleteRow(scope.$index, this.tableData)
+                }}
+                type="text"
+                size="small">
+                移除
+              </el-button>
+            )
+          }
+        ]
+      }
     }
   }
 </script>
@@ -646,47 +725,15 @@
 
 数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。
 
-:::demo 只需要在 el-table-column 里面嵌套 el-table-column，就可以实现多级表头。
+:::demo 通过设置column中的children进行表格头嵌套，理论支持无限极嵌套，嵌套也支持自定义表头及列数据。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%">
-    <el-table-column
-      prop="date"
-      label="日期"
-      width="150">
-    </el-table-column>
-    <el-table-column label="配送信息">
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="120">
-      </el-table-column>
-      <el-table-column label="地址">
-        <el-table-column
-          prop="province"
-          label="省份"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="city"
-          label="市区"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="地址"
-          width="300">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="邮编"
-          width="120">
-        </el-table-column>
-      </el-table-column>
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      :data="tableData"
+      :columns="columns"
+    />
+  </div>
 </template>
 
 <script>
@@ -744,6 +791,52 @@
           zip: 200333
         }]
       }
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            width: '150'
+          },
+          {
+            label: '配送信息',
+            children: [
+              {
+                prop: 'name',
+                label: '姓名',
+                width: '120'
+              },
+              {
+                label: '地址',
+                children: [
+                  {
+                    prop: 'province',
+                    label: '省份',
+                    width: '120'
+                  },
+                  {
+                    prop: 'city',
+                    label: '市区',
+                    width: '120'
+                  },
+                  {
+                    prop: 'address',
+                    label: '地址',
+                    width: '300'
+                  },
+                  {
+                    prop: 'zip',
+                    label: '邮编',
+                    width: '120'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 </script>
@@ -757,31 +850,15 @@
 :::demo Table 组件提供了单选的支持，只需要配置`highlight-current-row`属性即可实现单选。之后由`current-change`事件来管理选中时触发的事件，它会传入`currentRow`，`oldCurrentRow`。如果需要显示索引，可以增加一列`el-table-column`，设置`type`属性为`index`即可显示从 1 开始的索引号。
 ```html
 <template>
-  <el-table
-    ref="singleTable"
-    :data="tableData"
-    highlight-current-row
-    @current-change="handleCurrentChange"
-    style="width: 100%">
-    <el-table-column
-      type="index"
-      width="50">
-    </el-table-column>
-    <el-table-column
-      property="date"
-      label="日期"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      property="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      property="address"
-      label="地址">
-    </el-table-column>
-  </el-table>
+  <div class="demo-table" style="height: 250px">
+    <aile-table
+      ref="singleTable"
+      :data="tableData"
+      :columns="columns"
+      highlight-current-row
+      @current-change="handleCurrentChange"
+    />
+  </div>
   <div style="margin-top: 20px">
     <el-button @click="setCurrent(tableData[1])">选中第二行</el-button>
     <el-button @click="setCurrent()">取消选择</el-button>
@@ -812,7 +889,30 @@
         currentRow: null
       }
     },
-
+    computed: {
+      columns() {
+        return [
+          {
+            type: 'index',
+            width: '50'
+          },
+          {
+            prop: 'date',
+            label: '日期',
+            width: '120'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '120'
+          },
+          {
+            prop: 'address',
+            label: '地址'
+          }
+        ]
+      }
+    },
     methods: {
       setCurrent(row) {
         this.$refs.singleTable.setCurrentRow(row);
@@ -833,32 +933,15 @@
 :::demo 实现多选非常简单: 手动添加一个`el-table-column`，设`type`属性为`selection`即可；默认情况下若内容过多会折行显示，若需要单行显示可以使用`show-overflow-tooltip`属性，它接受一个`Boolean`，为`true`时多余的内容会在 hover 时以 tooltip 的形式显示出来。
 ```html
 <template>
-  <el-table
-    ref="multipleTable"
-    :data="tableData"
-    tooltip-effect="dark"
-    style="width: 100%"
-    @selection-change="handleSelectionChange">
-    <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      label="日期"
-      width="120">
-      <template slot-scope="scope">{{ scope.row.date }}</template>
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      show-overflow-tooltip>
-    </el-table-column>
-  </el-table>
+  <div class="demo-table" style="height: 250px">
+    <aile-table
+      ref="multipleTable"
+      :data="tableData"
+      :columns="columns"
+      tooltip-effect="light"
+      @selection-change="handleSelectionChange"
+    />
+  </div>
   <div style="margin-top: 20px">
     <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
     <el-button @click="toggleSelection()">取消选择</el-button>
@@ -901,7 +984,33 @@
         multipleSelection: []
       }
     },
-
+    computed: {
+      columns() {
+        return [
+          {
+            type: 'selection',
+            width: '55'
+          },
+          {
+            label: '日期',
+            width: '120',
+            render: (h, scope) => (
+              <span>{scope.row.date}</span>
+            )
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '120'
+          },
+          {
+            prop: 'address',
+            label: '地址',
+            showOverflowTooltip: true
+          }
+        ]
+      }
+    },
     methods: {
       toggleSelection(rows) {
         if (rows) {
@@ -925,32 +1034,16 @@
 
 对表格进行排序，可快速查找或对比数据。
 
-:::demo 在列中设置`sortable`属性即可实现以该列为基准的排序，接受一个`Boolean`，默认为`false`。可以通过 Table 的`default-sort`属性设置默认的排序列和排序顺序。可以使用`sort-method`或者`sort-by`使用自定义的排序规则。如果需要后端排序，需将`sortable`设置为`custom`，同时在 Table 上监听`sort-change`事件，在事件回调中可以获取当前排序的字段名和排序顺序，从而向接口请求排序后的表格数据。在本例中，我们还使用了`formatter`属性，它用于格式化指定列的值，接受一个`Function`，会传入两个参数：`row`和`column`，可以根据自己的需求进行处理。
+:::demo 在列中设置`sortable`属性即可实现以该列为基准的排序，接受一个`Boolean`，默认为`false`。可以通过 Table 的`default-sort`属性设置默认的排序列和排序顺序。可以使用`sort-method`或者`sort-by`使用自定义的排序规则。如果需要后端排序，需将`sortable`设置为`custom`，同时在 Table 上监听`sort-change`事件，在事件回调中可以获取当前排序的字段名和排序顺序，从而向接口请求排序后的表格数据。在本例中，我们还使用了`formatter`属性，它用于格式化指定列的值，接受一个`Function`，会传入4个参数：`row`、`column`、`cellValue`和`$index`，可以根据自己的需求进行处理。
 ```html
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%"
-    :default-sort = "{prop: 'date', order: 'descending'}"
-    >
-    <el-table-column
-      prop="date"
-      label="日期"
-      sortable
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      sortable
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      :formatter="formatter">
-    </el-table-column>
-  </el-table>
+  <div class="demo-table">
+    <aile-table
+      :data="tableData"
+      :columns="columns"
+      :default-sort = "{prop: 'date', order: 'descending'}"
+    />
+  </div>
 </template>
 
 <script>
@@ -976,9 +1069,28 @@
         }]
       }
     },
-    methods: {
-      formatter(row, column) {
-        return row.address;
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'date',
+            label: '日期',
+            sortable: true,
+            width: '180'
+          },
+          {
+            prop: 'name',
+            label: '姓名',
+            width: '180'
+          },
+          {
+            prop: 'address',
+            label: '地址',
+            formatter: (row, column, cellValue, $index) => {
+              return row.address
+            }
+          }
+        ]
       }
     }
   }
@@ -992,6 +1104,18 @@
 
 :::demo 在列中设置`filters` `filter-method`属性即可开启该列的筛选，filters 是一个数组，`filter-method`是一个方法，它用于决定某些数据是否显示，会传入三个参数：`value`, `row` 和 `column`。
 ```html
+<!-- <template>
+  <el-button @click="resetDateFilter">清除日期过滤器</el-button>
+  <el-button @click="clearFilter">清除所有过滤器</el-button>
+  <div class="demo-table">
+    <aile-table
+      :data="tableData"
+      :columns="columns"
+      :default-sort = "{prop: 'date', order: 'descending'}"
+    />
+  </div>
+</template> -->
+
 <template>
   <el-button @click="resetDateFilter">清除日期过滤器</el-button>
   <el-button @click="clearFilter">清除所有过滤器</el-button>

@@ -10,20 +10,21 @@
       <span v-else>{{ slotProps.column.label }}</span>
     </template>
 
+    <template v-if="column.children">
+      <aile-column
+        v-for="(col, index) in column.children"
+        :key="index"
+        :column="col"
+        :table-column="tableColumn"
+      />
+    </template>
+
     <template #default="slotProps">
       <aile-render
         :scope="slotProps"
         :render="column.render"
         :cellEmptyText="mergeConfig.cellEmptyText"
       />
-      <template v-if="column.children">
-        <aile-column
-          v-for="(col, index) in column.children"
-          :key="index"
-          :column="col"
-          :table-column="tableColumn"
-        />
-      </template>
     </template>
   </el-table-column>
 </template>
@@ -36,45 +37,28 @@ import { isEmpty } from '../../../utils/index.js';
 
 const cellForced = {
   selection: {
-    renderHeader: ({ store }) => {
-      function isDisabled() {
-        return store.states.data.value && store.states.data.value.length === 0;
-      }
-      return (
-        <el-checkbox
-          disabled={isDisabled()}
-          indeterminate={
-            store.states.selection.value.length > 0 &&
-            !store.states.isAllSelected.value
-          }
-          onUpdate:modelValue={store.toggleAllSelection}
-          modelValue={store.states.isAllSelected.value}
-        />
-      );
+    renderHeader: function(h, { store }) {
+      return <el-checkbox
+        disabled={ store.states.data && store.states.data.length === 0 }
+        indeterminate={ store.states.selection.length > 0 && !this.isAllSelected }
+        nativeOn-click={ this.toggleAllSelection }
+        value={ this.isAllSelected } />;
     },
-    renderCell: ({ row, column, store, $index }) => {
-      if (!store) return;
-      return (
-        <el-checkbox
-          modelValue={store.isSelected(row)}
-          disabled={
-            column.selectable
-              ? !column.selectable.call(null, row, $index)
-              : false
-          }
-          onChange={() => {
-            store.commit('rowSelectedChanged', row);
-          }}
-          onClick={event => event.stopPropagation()}
-        />
-      );
+    renderCell: function(h, { row, column, store, $index }) {
+      return <el-checkbox
+        nativeOn-click={ event => event.stopPropagation() }
+        value={ store.isSelected(row) }
+        disabled={ column.selectable ? !column.selectable.call(null, row, $index) : false }
+        on-input={ () => { store.commit('rowSelectedChanged', row); } } />;
     },
     sortable: false,
     resizable: false
   },
   index: {
-    renderHeader: ({ column }) => column.label || '#',
-    renderCell: function({ column, $index }) {
+    renderHeader: function(h, { column }) {
+      return column.label || '#';
+    },
+    renderCell: function(h, { $index, column }) {
       let i = $index + 1;
       const index = column.index;
 
@@ -83,28 +67,28 @@ const cellForced = {
       } else if (typeof index === 'function') {
         i = index($index);
       }
-      return <div>{i}</div>;
+
+      return <div>{ i }</div>;
     },
-    sortable: false,
-    resizable: false
+    sortable: false
   },
   expand: {
-    renderHeader: ({ column }) => column.label || '',
-    renderCell: ({ row, store }) => {
-      if (!store) return;
+    renderHeader: function(h, { column }) {
+      return column.label || '';
+    },
+    renderCell: function(h, { row, store }) {
       const classes = ['el-table__expand-icon'];
-      if (store.states.expandRows.value.indexOf(row) > -1) {
+      if (store.states.expandRows.indexOf(row) > -1) {
         classes.push('el-table__expand-icon--expanded');
       }
       const callback = function(e) {
         e.stopPropagation();
         store.toggleRowExpansion(row);
       };
-      return (
-        <div class={classes} onClick={callback}>
-          <i class='el-icon el-icon-arrow-right' />
-        </div>
-      );
+      return (<div class={ classes }
+        on-click={callback}>
+        <i class='el-icon el-icon-arrow-right'></i>
+      </div>);
     },
     sortable: false,
     resizable: false,
@@ -197,7 +181,7 @@ export default {
 
       // 存在formatter，构建相应render函数
       if (this.column.formatter) {
-        this.column.render = scope => {
+        this.column.render = (h, scope) => {
           const { row, column, $index } = scope;
           if (isEmpty(column)) return;
           const property = column.property;
@@ -214,7 +198,7 @@ export default {
 
       // 不存在render，构建包含默认文字的render函数
       if (!this.column.render) {
-        this.column.render = scope => {
+        this.column.render = (h, scope) => {
           let value = scope.row[scope.column.property];
           if (isEmpty(value)) {
             value = this.mergeConfig.cellEmptyText;

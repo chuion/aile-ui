@@ -1,0 +1,13 @@
+.demo-table {
+    width: 100%;
+    height: 280px;
+    .el-table__header, .el-table__body {
+        margin: 0
+    }
+    tr:nth-child(2n) {
+        background-color: #fff;
+    }
+    th, td {
+        border: inherit;
+    }
+}

@@ -12,8 +12,8 @@ export default {
       default: function() {}
     },
     cellEmptyText: {
-      type: Object,
-      default: () => ({})
+      type: String,
+      default: ''
     }
   },
   render: (h, ctx) => ctx.props.render(h, ctx.props.scope) || (<span className='aile-table-item__placeholder'>{ctx.props.cellEmptyText}</span>)
