@@ -66,7 +66,7 @@ export default {
 }
 
 .aile-link.is-ellipsis::v-deep span.el-link--inner {
-  max-width: var(--inputMaxWidth);
+  /* max-width: var(--inputMaxWidth); */
   height: auto;
   display: inline-block;
   line-height: 1;

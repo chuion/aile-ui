@@ -1,4 +1,4 @@
-## Form 表单
+# Form 表单
 
 由输入框、选择器、单选框、多选框等控件组成，用以收集、校验、提交数据
 
@@ -7,7 +7,7 @@
 强烈建议配合AileUI其他组件一起使用，解决诸如 `Select` 组件远程请求回来的数据需要自行实现双向数据绑定的问题。
 :::
 
-### 典型表单
+## 典型表单
 
 包括各种表单项，比如输入框、选择器、开关、单选框、多选框等。
 
@@ -122,6 +122,7 @@
             )
           },
           {
+            label: '',
             render: h => (
               <div>
                 <el-button type="primary" onClick={this.onSubmit}>立即创建</el-button>
@@ -149,7 +150,7 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 即：当一个 form 元素中只有一个输入框时，在该输入框中按下回车应提交该表单。如果希望阻止这一默认行为，可以在 `<el-form>` 标签上添加 `@submit.native.prevent`。
 :::
 
-### 行内表单
+## 行内表单
 
 当垂直方向空间受限且表单较简单时，可以在一行内放置表单。
 
@@ -208,6 +209,7 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
             )
           },
           {
+            label: '',
             render: h => (
               <el-button type="primary" onClick={this.onSubmit}>查询</el-button>
             )
@@ -225,7 +227,7 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 ```
 :::
 
-### 对齐方式
+## 对齐方式
 
 根据具体目标和制约因素，选择最佳的标签对齐方式。
 
@@ -243,17 +245,7 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
   :model="formLabelAlign" 
   :columns="columns"
 />
-<!-- <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-  <el-form-item label="名称">
-    <el-input v-model="formLabelAlign.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域">
-    <el-input v-model="formLabelAlign.region"></el-input>
-  </el-form-item>
-  <el-form-item label="活动形式">
-    <el-input v-model="formLabelAlign.type"></el-input>
-  </el-form-item>
-</el-form> -->
+
 <script>
   export default {
     data() {
@@ -298,60 +290,23 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 ```
 :::
 
-### 表单验证
+## 表单验证
 
 在防止用户犯错的前提下，尽可能让用户更早地发现并纠正错误。
 
 :::demo Form 组件提供了表单验证的功能，只需要通过 `rules` 属性传入约定的验证规则，并将 Form-Item 的 `prop` 属性设置为需校验的字段名即可。校验规则参见 [async-validator](https://github.com/yiminghe/async-validator)
 ```html
-<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="活动名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域" prop="region">
-    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="活动时间" required>
-    <el-col :span="11">
-      <el-form-item prop="date1">
-        <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-      </el-form-item>
-    </el-col>
-    <el-col class="line" :span="2">-</el-col>
-    <el-col :span="11">
-      <el-form-item prop="date2">
-        <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-      </el-form-item>
-    </el-col>
-  </el-form-item>
-  <el-form-item label="即时配送" prop="delivery">
-    <el-switch v-model="ruleForm.delivery"></el-switch>
-  </el-form-item>
-  <el-form-item label="活动性质" prop="type">
-    <el-checkbox-group v-model="ruleForm.type">
-      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-      <el-checkbox label="地推活动" name="type"></el-checkbox>
-      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-    </el-checkbox-group>
-  </el-form-item>
-  <el-form-item label="特殊资源" prop="resource">
-    <el-radio-group v-model="ruleForm.resource">
-      <el-radio label="线上品牌商赞助"></el-radio>
-      <el-radio label="线下场地免费"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item label="活动形式" prop="desc">
-    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-    <el-button @click="resetForm('ruleForm')">重置</el-button>
-  </el-form-item>
-</el-form>
+<div class="demo-form">
+  <aile-form 
+    :model="ruleForm" 
+    :columns="columns"
+    :rules="rules" 
+    ref="ruleForm" 
+    label-width="100px" 
+    class="demo-ruleForm" 
+  />
+</div>
+
 <script>
   export default {
     data() {
@@ -392,8 +347,103 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
         }
       };
     },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'name',
+            label: '活动名称',
+            render: (h, form) => (
+              <aile-input v-model={form.name} />
+            )
+          },
+          {
+            prop: 'region',
+            label: '活动区域',
+            render: (h, form) => (
+              <aile-select 
+                v-model={form.region} 
+                config={{
+                  data: [
+                    {
+                      label: '区域一',
+                      value: 'shanghai'
+                    },
+                    {
+                      label: '区域二',
+                      value: 'beijing'
+                    }
+                  ],
+                  label: 'label',
+                  value: 'value'
+                }}
+              />
+            )
+          },
+          {
+            label: '活动时间',
+            render: (h, form) => (
+              <el-row>
+                <el-col span={11}>
+                  <el-date-picker type="date" placeholder="选择日期" v-model={form.date1} style="width: 100%;"></el-date-picker>
+                </el-col>
+                <el-col class="line" span={2}>-</el-col>
+                <el-col span={11}>
+                  <el-time-picker placeholder="选择时间" v-model={form.date2} style="width: 100%;"></el-time-picker>
+                </el-col>
+              </el-row>
+            )
+          },
+          {
+            prop: 'delivery',
+            label: '即时配送',
+            render: (h, form) => (
+              <el-switch v-model={form.delivery}></el-switch>
+            )
+          },
+          {
+            prop: 'type',
+            label: '活动性质',
+            render: (h, form) => (
+              <el-checkbox-group v-model={form.type}>
+                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+                <el-checkbox label="地推活动" name="type"></el-checkbox>
+                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+              </el-checkbox-group>
+            )
+          },
+          {
+            prop: 'resource',
+            label: '特殊资源',
+            render: (h, form) => (
+              <el-radio-group v-model={form.resource}>
+                <el-radio label="线上品牌商赞助"></el-radio>
+                <el-radio label="线下场地免费"></el-radio>
+              </el-radio-group>
+            )
+          },
+          {
+            prop: 'desc',
+            label: '活动形式',
+            render: (h, form) => (
+              <aile-input type="textarea" v-model={form.desc}></aile-input>
+            )
+          },
+          {
+            label: '',
+            render: h => (
+              <div>
+                <el-button type="primary" onClick={() => this.onSubmit('ruleForm')}>立即创建</el-button>
+                <el-button onClick={() => this.resetForm('ruleForm')}>重置</el-button>
+              </div>
+            )
+          }
+        ]
+      }
+    },
     methods: {
-      submitForm(formName) {
+      onSubmit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
@@ -412,27 +462,24 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 ```
 :::
 
-### 自定义校验规则
+## 自定义校验规则
 
 这个例子中展示了如何使用自定义验证规则来完成密码的二次验证。
 
 :::demo 本例还使用`status-icon`属性为输入框添加了表示校验结果的反馈图标。
 ```html
-<el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="密码" prop="pass">
-    <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-  </el-form-item>
-  <el-form-item label="确认密码" prop="checkPass">
-    <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-  </el-form-item>
-  <el-form-item label="年龄" prop="age">
-    <el-input v-model.number="ruleForm.age"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-    <el-button @click="resetForm('ruleForm')">重置</el-button>
-  </el-form-item>
-</el-form>
+<div class="demo-form">
+  <aile-form 
+    :model="ruleForm" 
+    :columns="columns"
+    status-icon 
+    :rules="rules" 
+    ref="ruleForm" 
+    label-width="100px" 
+    class="demo-ruleForm" 
+  />
+</div>
+
 <script>
   export default {
     data() {
@@ -490,6 +537,50 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
         }
       };
     },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'pass',
+            label: '密码',
+            render: (h, form) => (
+              <aile-input 
+                type='password'
+                v-model={form.pass}
+                autocomplete='off'
+              />
+            )
+          },
+          {
+            prop: 'checkPass',
+            label: '确认密码',
+            render: (h, form) => (
+              <aile-input 
+                type='password'
+                v-model={form.checkPass}
+                autocomplete='off'
+              />
+            )
+          },
+          {
+            prop: 'age',
+            label: '年龄',
+            render: (h, form) => (
+              <aile-input v-model_number={form.age} />
+            )
+          },
+          {
+            label: '',
+            render: h => (
+              <div>
+                <el-button type="primary" onClick={() => this.submitForm('ruleForm')}>提交</el-button>
+                <el-button onClick={() => this.resetForm('ruleForm')}>重置</el-button>
+              </div>
+            )
+          }
+        ]
+      }
+    },
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -511,41 +602,27 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 :::
 
 :::tip
-自定义校验 callback 必须被调用。 更多高级用法可参考 [async-validator](https://github.com/yiminghe/async-validator)。
+1. 自定义校验 callback 必须被调用。 更多高级用法可参考 [async-validator](https://github.com/yiminghe/async-validator)。
+2. 除了在 Form 组件上一次性传递所有的验证规则外还可以在单个的表单域上传递属性的验证规则
 :::
 
-### 动态增减表单项
+## 动态增减表单项
 
-:::demo 除了在 Form 组件上一次性传递所有的验证规则外还可以在单个的表单域上传递属性的验证规则
+AileForm 可以通过配置 `config.columns.items` 实现快速创建数组表单项。
+
+:::demo 
 ```html
-<el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-  <el-form-item
-    prop="email"
-    label="邮箱"
-    :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-    ]"
-  >
-    <el-input v-model="dynamicValidateForm.email"></el-input>
-  </el-form-item>
-  <el-form-item
-    v-for="(domain, index) in dynamicValidateForm.domains"
-    :label="'域名' + index"
-    :key="domain.key"
-    :prop="'domains.' + index + '.value'"
-    :rules="{
-      required: true, message: '域名不能为空', trigger: 'blur'
-    }"
-  >
-    <el-input v-model="domain.value"></el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
-    <el-button @click="addDomain">新增域名</el-button>
-    <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
-  </el-form-item>
-</el-form>
+<div class="demo-form">
+  <aile-form 
+    :model="dynamicValidateForm" 
+    :columns="columns"
+    ref="dynamicValidateForm" 
+    label-width="100px" 
+    label-position="right"
+    class="demo-dynamic"
+  />
+</div>
+
 <script>
   export default {
     data() {
@@ -557,6 +634,46 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
           email: ''
         }
       };
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'email',
+            label: '邮箱',
+            rules: [
+              { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+              { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+            ],
+            render: (h, form) => (
+              <aile-input v-model={form.email} />
+            )
+          },
+          {
+            prop: 'domains',
+            label: '域名',
+            items: () => [
+              {
+                prop: 'value',
+                renderLabel: (h, form, root, scope) => <span>域名{scope.itemIndex}</span>,
+                rules: { required: true, message: '域名不能为空', trigger: 'blur' },
+                render: (h, form) => (
+                  <aile-input v-model={form.value} />
+                )
+              }
+            ]
+          },
+          {
+            label: '',
+            render: h => (
+              <div>
+                <el-button type='primary' onClick={() => this.submitForm('dynamicValidateForm')}>提交</el-button>
+                <el-button onClick={() => this.resetForm('dynamicValidateForm')}>重置</el-button>
+              </div>
+            )
+          }
+        ]
+      }
     },
     methods: {
       submitForm(formName) {
@@ -590,26 +707,20 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 ```
 :::
 
-### 数字类型验证
+## 数字类型验证
 
-:::demo 数字类型的验证需要在 `v-model` 处加上 `.number` 的修饰符，这是 `Vue` 自身提供的用于将绑定值转化为 `number` 类型的修饰符。
+:::demo 数字类型的验证需要在 `v-model` 处加上 `.number` 的修饰符，这是 `Vue` 自身提供的用于将绑定值转化为 `number` 类型的修饰符。**在Vue中使用JSX语法时，修饰符采用下 `_number` 的方式**
 ```html
-<el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item
-    label="年龄"
-    prop="age"
-    :rules="[
-      { required: true, message: '年龄不能为空'},
-      { type: 'number', message: '年龄必须为数字值'}
-    ]"
-  >
-    <el-input type="age" v-model.number="numberValidateForm.age" autocomplete="off"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
-    <el-button @click="resetForm('numberValidateForm')">重置</el-button>
-  </el-form-item>
-</el-form>
+<div class="demo-form">
+  <aile-form 
+    :model="numberValidateForm"
+    :columns="columns"
+    ref="numberValidateForm"
+    label-width="100px"
+    class="demo-ruleForm"
+  />
+</div>
+
 <script>
   export default {
     data() {
@@ -618,6 +729,36 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
           age: ''
         }
       };
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'age',
+            label: '年龄',
+            rules: [
+              { required: true, message: '年龄不能为空'},
+              { type: 'number', message: '年龄必须为数字值'}
+            ],
+            render: (h, form) => (
+              <aile-input 
+                type="age" 
+                v-model_number={form.age}
+                autocomplete="off" 
+              />
+            )
+          },
+          {
+            label: '',
+            render: h => (
+              <div>
+                <el-button type='primary' onClick={() => this.submitForm('numberValidateForm')}>提交</el-button>
+                <el-button onClick={() => this.resetForm('numberValidateForm')}>重置</el-button>
+              </div>
+            )
+          }
+        ]
+      }
     },
     methods: {
       submitForm(formName) {
@@ -643,49 +784,97 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 嵌套在 `el-form-item` 中的 `el-form-item` 标签宽度默认为零，不会继承 `el-form` 的 `label-width`。如果需要可以为其单独设置 `label-width` 属性。
 :::
 
-### 表单内组件尺寸控制
+## 嵌套表单
+
+AileForm 可以通过配置 `config.columns.children` 实现表单的嵌套。
+
+:::demo
+```html
+<div class="demo-form">
+  <aile-form 
+    ref="form" 
+    :model="nestForm"
+    :columns="columns" 
+    label-width="80px" 
+    size="mini"
+  />
+</div>
+
+<script>
+  export default {
+    data() {
+      return {
+        nestForm: {
+          time: {
+            label: '',
+            value: {
+              year: '',
+              month: ''
+            }
+          }
+        }
+      };
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'time',
+            label: '时间',
+            children: [
+              {
+                prop: 'label',
+                label: '标签',
+                render: (h, form) => (
+                  <aile-input v-model={form.label} />
+                )
+              },
+              {
+                prop: 'value',
+                label: '信息',
+                children: [
+                  {
+                    prop: 'year',
+                    label: '年',
+                    render: (h, form) => (
+                      <aile-input v-model={form.year} />
+                    )
+                  },
+                  {
+                    prop: 'month',
+                    label: '月',
+                    render: (h, form) => (
+                      <aile-input v-model={form.month} />
+                    )
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  };
+</script>
+```
+:::
+
+
+## 表单内组件尺寸控制
 
 通过设置 Form 上的 `size` 属性可以使该表单内所有可调节大小的组件继承该尺寸。Form-Item 也具有该属性。
 
 :::demo 如果希望某个表单项或某个表单组件的尺寸不同于 Form 上的`size`属性，直接为这个表单项或表单组件设置自己的`size`即可。
 ```html
-<el-form ref="form" :model="sizeForm" label-width="80px" size="mini">
-  <el-form-item label="活动名称">
-    <el-input v-model="sizeForm.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域">
-    <el-select v-model="sizeForm.region" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="活动时间">
-    <el-col :span="11">
-      <el-date-picker type="date" placeholder="选择日期" v-model="sizeForm.date1" style="width: 100%;"></el-date-picker>
-    </el-col>
-    <el-col class="line" :span="2">-</el-col>
-    <el-col :span="11">
-      <el-time-picker placeholder="选择时间" v-model="sizeForm.date2" style="width: 100%;"></el-time-picker>
-    </el-col>
-  </el-form-item>
-  <el-form-item label="活动性质">
-    <el-checkbox-group v-model="sizeForm.type">
-      <el-checkbox-button label="美食/餐厅线上活动" name="type"></el-checkbox-button>
-      <el-checkbox-button label="地推活动" name="type"></el-checkbox-button>
-      <el-checkbox-button label="线下主题活动" name="type"></el-checkbox-button>
-    </el-checkbox-group>
-  </el-form-item>
-  <el-form-item label="特殊资源">
-    <el-radio-group v-model="sizeForm.resource" size="medium">
-      <el-radio border label="线上品牌商赞助"></el-radio>
-      <el-radio border label="线下场地免费"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item size="large">
-    <el-button type="primary" @click="onSubmit">立即创建</el-button>
-    <el-button>取消</el-button>
-  </el-form-item>
-</el-form>
+<div class="demo-form">
+  <aile-form 
+    ref="form" 
+    :model="sizeForm"
+    :columns="columns" 
+    label-width="80px" 
+    size="mini"
+  />
+</div>
 
 <script>
   export default {
@@ -696,12 +885,92 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
           region: '',
           date1: '',
           date2: '',
-          delivery: false,
           type: [],
-          resource: '',
-          desc: ''
+          resource: ''
         }
       };
+    },
+    computed: {
+      columns() {
+        return [
+          {
+            prop: 'name',
+            label: '活动名称',
+            render: (h, form) => (
+              <aile-input v-model={form.name} />
+            )
+          },
+          {
+            prop: 'region',
+            label: '活动区域',
+            render: (h, form) => (
+              <aile-select 
+                v-model={form.region} 
+                config={{
+                  data: [
+                    {
+                      label: '区域一',
+                      value: 'shanghai'
+                    },
+                    {
+                      label: '区域二',
+                      value: 'beijing'
+                    }
+                  ],
+                  label: 'label',
+                  value: 'value'
+                }}
+              />
+            )
+          },
+          {
+            label: '活动时间',
+            render: (h, form) => (
+              <el-row>
+                <el-col span={11}>
+                  <el-date-picker type="date" placeholder="选择日期" v-model={form.date1} style="width: 100%;"></el-date-picker>
+                </el-col>
+                <el-col class="line" span={2}>-</el-col>
+                <el-col span={11}>
+                  <el-time-picker placeholder="选择时间" v-model={form.date2} style="width: 100%;"></el-time-picker>
+                </el-col>
+              </el-row>
+            )
+          },
+          {
+            prop: 'type',
+            label: '活动性质',
+            render: (h, form) => (
+              <el-checkbox-group v-model={form.type}>
+                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+                <el-checkbox label="地推活动" name="type"></el-checkbox>
+                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+              </el-checkbox-group>
+            )
+          },
+          {
+            prop: 'resource',
+            label: '特殊资源',
+            render: (h, form) => (
+              <el-radio-group v-model={form.resource} size='medium'>
+                <el-radio border label="线上品牌商赞助"></el-radio>
+                <el-radio border label="线下场地免费"></el-radio>
+              </el-radio-group>
+            )
+          },
+          {
+            label: '',
+            size: 'large',
+            render: h => (
+              <div>
+                <el-button type="primary" onClick={this.onSubmit}>立即创建</el-button>
+                <el-button>取消</el-button>
+              </div>
+            )
+          }
+        ]
+      }
     },
     methods: {
       onSubmit() {
@@ -713,66 +982,68 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 ```
 :::
 
-### Form Attributes
+## 配置项
 
-| 参数      | 说明          | 类型      | 可选值                           | 默认值  |
-|---------- |-------------- |---------- |--------------------------------  |-------- |
-| model   | 表单数据对象 | object      |                  —                |  — |
-| rules    | 表单验证规则 | object | — | — |
-| inline    | 行内表单模式 | boolean | — | false |
-| label-position | 表单域标签的位置，如果值为 left 或者 right 时，则需要设置 `label-width` | string |  right/left/top            | right |
-| label-width | 表单域标签的宽度，例如 '50px'。作为 Form 直接子元素的 form-item 会继承该值。支持 `auto`。 | string | — | — |
-| label-suffix | 表单域标签的后缀 | string | — | — |
-| hide-required-asterisk | 是否隐藏必填字段的标签旁边的红色星号 | boolean | — | false |
-| show-message  | 是否显示校验错误信息 | boolean | — | true |
-| inline-message  | 是否以行内形式展示校验信息 | boolean | — | false |
-| status-icon  | 是否在输入框中显示校验结果反馈图标 | boolean | — | false |
-| validate-on-rule-change  | 是否在 `rules` 属性改变后立即触发一次验证 | boolean | — | true |
-| size  | 用于控制该表单内组件的尺寸 | string | medium / small / mini | — |
-| disabled | 是否禁用该表单内的所有组件。若设置为 true，则表单内组件上的 disabled 属性不再生效 | boolean | — | false |
+### 插件配置
 
-### Form Methods
+在 `main.js` 中通过插件方式引入 AileUI 时（使用方式：[插件安装](/components/#快速开始)），可对全局的 `AileForm` 配置如下属性：
 
-| 方法名      | 说明          | 参数
-|---------- |-------------- | --------------
-| validate | 对整个表单进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise | Function(callback: Function(boolean, object))
-| validateField | 对部分表单字段进行校验的方法 | Function(props: array \| string, callback: Function(errorMessage: string))
-| resetFields | 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果 | —
-| clearValidate | 移除表单项的校验结果。传入待移除的表单项的 prop 属性或者 prop 组成的数组，如不传则移除整个表单的校验结果 | Function(props: array \| string)
+|   参数   | 数据类型 | 默认值 |                                           说明                                           |
+| :------: | :------: | :----: | :--------------------------------------------------------------------------------------: |
+|  config  |  Object  |   {}   |                             [Config 配置项](#config-配置项)                              |
+|   form   |  Object  |   {}   |             [ElForm Props](https://element.eleme.io/#/zh-CN/component/form)              |
+| formItem |  Object  |   {}   | [ElFormItem Props](https://element.eleme.io/#/zh-CN/component/form#form-item-attributes) |
 
-### Form Events
-| 事件名称 | 说明    | 回调参数  |
-|--------- |-------- |---------- |
-| validate | 任一表单项被校验后触发 | 被校验的表单项 prop 值，校验是否通过，错误消息（如果存在） |
+### config 配置项
 
-### Form-Item Attributes
+|   参数    | 数据类型 | 默认值 |        说明        |
+| :-------: | :------: | :----: | :----------------: |
+| emptyText |  String  |  '-'   |     空白占位符     |
+|  layout   |  Object  |  null  | ElLayout Row Props |
 
-| 参数      | 说明          | 类型      | 可选值                           | 默认值  |
-|---------- |-------------- |---------- |--------------------------------  |-------- |
-| prop    | 表单域 model 字段，在使用 validate、resetFields 方法的情况下，该属性是必填的 | string    | 传入 Form 组件的 `model` 中的字段 | — |
-| label | 标签文本 | string | — | — |
-| label-width | 表单域标签的的宽度，例如 '50px'。支持 `auto`。 | string |       —       | — |
-| required | 是否必填，如不设置，则会根据校验规则自动生成 | boolean | — | false |
-| rules    | 表单验证规则 | object | — | — |
-| error    | 表单域验证错误信息, 设置该值会使表单验证状态变为`error`，并显示该错误信息 | string | — | — |
-| show-message  | 是否显示校验错误信息 | boolean | — | true |
-| inline-message  | 以行内形式展示校验信息 | boolean | — | false |
-| size  | 用于控制该表单域下组件的尺寸 | string | medium / small / mini | - |
+### Form Attributes 表单属性
 
-### Form-Item Slot
-| name | 说明 |
-|------|--------|
-| — | Form Item 的内容 |
-| label | 标签文本的内容 |
+仅展示必填项和新增项，其余参数见 [Element Doc Form #Form Attributes](https://element.eleme.io/#/zh-CN/component/form)
 
-### Form-Item Scoped Slot
-|  name  |   说明  |
-|--------|--------|
-|  error | 自定义表单校验信息的显示方式，参数为 { error } |
+|   参数   | 数据类型 | 是否必须 | 默认值 | 可选值 |                                           说明                                           |
+| :------: | :------: | :------: | :----: | :----: | :--------------------------------------------------------------------------------------: |
+|  model   |  Object  |    是    |   -    |   -    |                                表单数据(使用方式同ElForm)                                |
+| columns  |  Array   |    是    |   -    |   -    |                             [表单列配置项](#column-列配置项)                             |
+|  config  |  Array   |    是    |   -    |   -    |                             [Config 配置项](#config-配置项)                              |
+|   form   |  Array   |    是    |   -    |   -    |             [ElForm Props](https://element.eleme.io/#/zh-CN/component/form)              |
+| formItem |  Array   |    是    |   -    |   -    | [ElFormItem Props](https://element.eleme.io/#/zh-CN/component/form#form-item-attributes) |
 
-### Form-Item Methods
 
-| 方法名      | 说明          | 参数
-|---------- |-------------- | --------------
-| resetField | 对该表单项进行重置，将其值重置为初始值并移除校验结果 | -
-| clearValidate | 移除该表单项的校验结果 | -
+### Form Methods 表单方法
+
+支持全部 `el-form` 方法，详见 [Element Doc Form #Form Methods](https://element.eleme.io/#/zh-CN/component/form)
+
+### Form Events 表单事件
+
+支持全部 `el-form` 方法，详见 [Element Doc Form #Form Events](https://element.eleme.io/#/zh-CN/component/form)
+
+### Form-Item Methods 表单列方法
+
+暂不支持
+
+### Column 列配置项
+
+仅展示必填项和新增项，其余参数见 [Element Doc Form #Form-column Attributes](https://element.eleme.io/#/zh-CN/component/form)
+
+|     参数      |                数据类型                | 是否必须 |                                            说明                                             |
+| :-----------: | :------------------------------------: | :------: | :-----------------------------------------------------------------------------------------: |
+|     prop      |                 String                 |    否    |                           设置表单列的别名(非必须，但是建议设置)                            |
+|     label     |                 String                 |    否    |                         设置表单列的显示标签(非必须，但是建议设置)                          |
+|    render     |    Function(h, form, root) => VNode    |    否    |                                自定义渲染内容,可选返回VNode                                 |
+|   formatter   |     Function(form, root) => string     |    否    |                               自定义渲染内容，可选返回字符串                                |
+|   children    |                 Array                  |    否    |          当数据项类型为[object]时使用,返回column数组,与render/formatter/items互斥           |
+|     items     | Function(form, root) => [column, ...]  |    否    | 当数据项类型为[array]时使用,可动态增删子节点,返回column数组,与render/formatter/children互斥 |
+|  buttonText   |                 String                 |    否    |                               设置数组表单-添加按钮的文字内容                               |
+|  buttonClass  |                 String                 |    否    |                               设置数组表单-添加按钮的图标类名                               |
+| defaultValue  |                   -                    |    否    |          当上一级数据项类型为[array]，且传递了[items]属性时使用,可设置数据项初始值          |
+|     show      |    Function(form, root) => boolean     |    否    |                                   是否渲染该列，默认渲染                                    |
+|    layout     |                 Object                 |    否    |                    设置布局模式，可传入[el-row]和[el-col]支持的所有属性                     |
+|  renderLabel  |     Function(h, form, root)/VNode      |    否    |                                       自定义标签内容                                        |
+|  renderError  | Function(h, form, root, {error})/VNode |    否    |                                自定义表单校验信息的显示方式                                 |
+|  labelWidth   |                 String                 |    否    |                     设置当前表单域标签的宽度，例如 '50px'，支持 auto。                      |
+| labelPosition |                 String                 |    否    |                   设置当前表单域标签的位置，可选值：right/center/left/top                   |

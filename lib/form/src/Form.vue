@@ -47,6 +47,7 @@ import {
   DefaultFormAttrs,
   DefaultFormItemAttrs
 } from './config';
+import { mergeAttrs } from '../../../utils';
 
 export default {
   name: 'AileForm',
@@ -95,20 +96,10 @@ export default {
       };
     },
     mergeFormAttrs() {
-      return {
-        ...DefaultFormAttrs,
-        ...this.$aileForm.form,
-        ...this.$attrs,
-        ...this.form
-      };
+      return mergeAttrs(DefaultFormAttrs, this.$aileForm.form, this.$attrs, this.form);
     },
     mergeFormItemAttrs() {
-      return {
-        ...DefaultFormItemAttrs,
-        ...this.$aileForm.formItem,
-        ...this.$attrs,
-        ...this.formItem
-      };
+      return mergeAttrs(DefaultFormItemAttrs, this.$aileForm.formItem, this.formItem);
     },
     filteredColumns() {
       return this.columns.filter(

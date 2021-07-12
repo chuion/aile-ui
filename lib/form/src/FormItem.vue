@@ -57,7 +57,7 @@
               :column="col"
               :form="form[column.prop]"
               :root="root"
-              :parent-full-prop="propPath"
+              :parent-prop-path="propPath"
               :item-index="itemIndex"
               :merge-config="mergeConfig"
               :merge-form-attrs="mergeFormAttrs"
@@ -73,7 +73,7 @@
           :column="col"
           :form="form[column.prop]"
           :root="root"
-          :parent-full-prop="propPath"
+          :parent-prop-path="propPath"
           :item-index="itemIndex"
           :merge-config="mergeConfig"
           :merge-form-attrs="mergeFormAttrs"
@@ -110,7 +110,7 @@
                   :column="col"
                   :form="value"
                   :root="root"
-                  :parent-full-prop="getParentPropForArray(index)"
+                  :parent-prop-path="getParentPropForArray(index)"
                   :item-index="index"
                   :merge-config="mergeConfig"
                   :merge-form-attrs="mergeFormAttrs"
@@ -127,7 +127,7 @@
                 :column="col"
                 :form="value"
                 :root="root"
-                :parent-full-prop="getParentPropForArray(index)"
+                :parent-prop-path="getParentPropForArray(index)"
                 :item-index="index"
                 :merge-config="mergeConfig"
                 :merge-form-attrs="mergeFormAttrs"
@@ -190,6 +190,7 @@
 </template>
 
 <script>
+import { mergeAttrs } from '../../../utils';
 /* eslint-disable vue/no-mutating-props */
 import Render from './Render';
 import { getPropByPath } from './utils';
@@ -236,11 +237,7 @@ export default {
   },
   computed: {
     mergeAttrs() {
-      const res = {
-        ...this.mergeFormItemAttrs,
-        ...this.column,
-        prop: this.propPath
-      };
+      const res = mergeAttrs(this.mergeFormItemAttrs, this.column, { prop: this.propPath });
       ['render', 'children', 'items', 'layout'].forEach(key => {
         delete res[key];
       });
@@ -425,7 +422,7 @@ export default {
 <style scoped>
 .aile-form-item__object {
   border: 1px solid #eee;
-  background-color: #f4f4f5;
+  /* background-color: #f4f4f5; */
   border-radius: 4px;
   padding: 24px 20px;
   box-sizing: border-box;
