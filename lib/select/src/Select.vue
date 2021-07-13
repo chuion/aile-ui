@@ -207,7 +207,7 @@ export default {
         // 执行原始远程执行方法，默认为空函数执行
         await this.remoteMethod();
       }
-      if (this.$attrs.onInited) {
+      if (this.$listeners.inited) {
         this.$emit('inited', this.options);
       }
     },
@@ -409,8 +409,8 @@ export default {
     },
     // 清理tooltip Dom元素
     cleanTooltip() {
-      const body = document.getElementsByTagName('body')[0];
-      const tooltips = document.getElementsByClassName('el-tooltip__popper');
+      const body = window.document.getElementsByTagName('body')[0];
+      const tooltips = window.document.getElementsByClassName('el-tooltip__popper');
       const length = tooltips.length;
       for (let i = length - 1; i >= 0; i--) {
         body.removeChild(tooltips[i]);

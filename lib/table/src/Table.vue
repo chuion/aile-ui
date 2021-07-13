@@ -11,7 +11,7 @@
         ref="elTable"
         v-bind="mergeTableAttrs"
         :data="data"
-        :span-method="mergeConfig.merge ? mergeMethod : mergeConfig.spanMethod"
+        :span-method="mergeConfig.merge ? mergeMethod : mergeTableAttrs.spanMethod"
         v-on="$listeners"
       >
         <template v-for="(item, index) in columns">
@@ -40,6 +40,7 @@
         ref="elPagination"
         v-bind="mergePaginationAttrs"
         v-on="$listeners"
+        @current-change="onPaginationCurrentChange"
       >
         <slot name="pagination" />
       </el-pagination>
@@ -134,8 +135,7 @@ export default {
         DefaultPaginationAttrs, // 默认属性
         (this.$aileTooltip.pagination || {}), // 全局属性
         this.$attrs,
-        (this.pagination || {}), // 组件属性
-        { onCurrentChange: this.onPaginationCurrentChange }
+        (this.pagination || {}) // 组件属性
       );
     },
 

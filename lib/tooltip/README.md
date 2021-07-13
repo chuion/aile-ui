@@ -31,10 +31,11 @@ yarn add aile-ui
 
 ### Theme 主题对象配置
 
-| 参数  | 数据类型 |  默认值   | 可选值 |                               说明                                |
-| :---: | :------: | :-------: | :----: | :---------------------------------------------------------------: |
-| name  |  string  | undefined |   —    |                    主题名称，通过`effect`调用                     |
-| style |  object  | undefined |   —    | 主题样式，将作为行内样式绑定（支持所有的CSS属性，使用小驼峰命名） |
+|    参数    |            数据类型            |  默认值   | 可选值 |                               说明                                |
+| :--------: | :----------------------------: | :-------: | :----: | :---------------------------------------------------------------: |
+|    name    |             string             | undefined |   —    |                    主题名称，通过`effect`调用                     |
+| bodyStyle  |             object             | undefined |   —    | 主题样式，将作为行内样式绑定（支持所有的CSS属性，使用小驼峰命名） |
+| arrowStyle | {backgroundColor, borderColor} | undefined |   —    |                     箭头样式，只支持设置颜色                      |
 
 ### Attributes/Props 属性
 
@@ -54,22 +55,22 @@ Vue.use(ElementUI);
 
 // 全量引入
 import AileUI from 'aile-ui';
-Vue.use(AileUI, {
+Vue.use(AileUI,{
   tooltip: {
     attrs: {
       placement: 'top', 
-      showAfter: 1000, 
-      effect: 'kitty',
-    }
+      openDelay: 200
+    },
     themes: [
       {
         name: 'kitty',
         style: {
-          padding: '5px',
-          background: '#eee',
-          borderColor: 'red',
-          color: 'skyblue',
-          fontSize: '14px'
+          padding: '10px',
+          background: '#DF0E60',
+          borderColor: '#000',
+          color: '#FFF',
+          fontSize: '14px',
+          fontWeight: 'bolder'
         }
       }
     ]

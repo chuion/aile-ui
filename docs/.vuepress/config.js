@@ -1,6 +1,7 @@
 const path = require("path");
 
 module.exports = {
+  base: '/aile-ui/',
   plugins: ["demo-container"],
   alias: {
     "aile-ui": path.resolve(__dirname, "../../"),

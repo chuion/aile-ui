@@ -55,6 +55,17 @@ export function parse2CamelCase(name) {
     .join('');
 }
 
+export function parse2KebabCase(name) {
+  const upperCaseRegex = /([A-Z][a-z]+)/gu;
+  return name
+    .replace('_', '-')
+    .split(upperCaseRegex)
+    .filter(a => a)
+    .map(item => item.toLowerCase())
+    .join('-')
+    .replace(/--+/gu, '-');
+}
+
 export function mergeAttrs(...args) {
   const res = {};
   args.forEach(source => {

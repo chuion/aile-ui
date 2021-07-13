@@ -58,7 +58,7 @@ export default {
     // 绑定表单值
     model: {
       type: Object,
-      required: true,
+      // required: true,
       default: () => ({})
     },
 

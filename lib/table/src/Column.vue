@@ -74,7 +74,7 @@ const cellForced = {
   },
   expand: {
     renderHeader: function(h, { column }) {
-      return column.label || '';
+      return <span>{column.label || ''}</span>;
     },
     renderCell: function(h, { row, store }) {
       const classes = ['el-table__expand-icon'];

@@ -336,7 +336,7 @@ export default {
 
       // 不存在render函数，但是存在formatter函数，则构造相应render函数
       if (this.column.formatter) {
-        this.column.render = (form, root) => {
+        this.column.render = (h, form, root) => {
           let value = this.column.formatter(form, root);
           if (!value && value !== 0) {
             value = this.mergeConfig.emptyText;
@@ -347,7 +347,7 @@ export default {
       }
 
       // 不存在render函数和formatter函数，则构造默认render函数
-      this.column.render = form => {
+      this.column.render = (h, form) => {
         if (this.column.prop) {
           let value = (this.$attrs.value && this.$attrs.value[this.column.prop]) || (form && form[this.column.prop]);
           if (!value && value !== 0) {
