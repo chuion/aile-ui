@@ -232,16 +232,16 @@ export default {
 
 ### config 配置项
 
-|    参数     |      数据类型       | 默认值 |         可选值         |         说明          |
-| :---------: | :-----------------: | :----: | :--------------------: | :-------------------: |
-|   shadow    |       string        | always | hover / always / never |   设置阴影显示时机    |
-|    width    |       string        |  100%  |           -            |         宽度          |
-|   height    |       string        |  100%  |           -            |         高度          |
-|  minHeight  |       string        |  auto  |           -            |       最小高度        |
-| headerClass | string/array/object |   ''   |           -            |   卡片 HEADER 类名    |
-| headerStyle |       object        |   {}   |           -            | 卡片 HEADER 行内样式  |
-|  bodyClass  | string/array/object |   ''   |           -            |   卡片 CONTENT 类名   |
-|  bodyStyle  |       string        |   ''   |           -            | 卡片 CONTENT 行内样式 |
+|    参数     |      数据类型       |  默认值  |         可选值         |         说明          |
+| :---------: | :-----------------: | :------: | :--------------------: | :-------------------: |
+|   shadow    |       string        | 'always' | hover / always / never |   设置阴影显示时机    |
+|    width    |       string        |   100%   |           -            |         宽度          |
+|   height    |       string        |   100%   |           -            |         高度          |
+|  minHeight  |       string        |  'auto'  |           -            |       最小高度        |
+| headerClass | string/array/object |    ''    |           -            |   卡片 HEADER 类名    |
+| headerStyle |       object        |    {}    |           -            | 卡片 HEADER 行内样式  |
+|  bodyClass  | string/array/object |    ''    |           -            |   卡片 CONTENT 类名   |
+|  bodyStyle  |       string        |    ''    |           -            | 卡片 CONTENT 行内样式 |
 
 ### Attributes/Props 属性
 

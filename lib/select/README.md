@@ -28,32 +28,32 @@ yarn add aile-ui
 |    参数    | 数据类型 |                   说明                   |
 | :--------: | :------: | :--------------------------------------: |
 | **attrs**  |  Object  | 全局属性配置，支持 `ElSelect` 的所有属性 |
-| **config** |  Object  |    支持全局设置 AileSelect config 属性     |
+| **config** |  Object  |   支持全局设置 AileSelect config 属性    |
 
 #### config 配置项
 
-|       参数       |            数据类型            |   默认值   |       可选值        |                                                 说明                                                  |
-| :--------------: | :----------------------------: | :--------: | :-----------------: | :---------------------------------------------------------------------------------------------------: |
-|       data       | Array[String] / Array[Obuject] |     []     |          -          |                           静态无需请求时的备选列表（与 remoteMethod 互斥）                            |
-|     isClear      |            Boolean             |   false    |     true/false      |                                           是否清空选项列表                                            |
-|      label       |        String/Function         |     —      |          —          |                             设置 el-option 的 label,不传则使用遍历项本身                              |
-|      value       |        String/Function         |     —      |          —          |                             设置 el-option 的 value,不传则使用遍历项本身                              |
-|     disabled     |        String/Function         |     —      |          —          |                                 判断是否禁用的字段名，默认为 disabled                                 |
-|   showTooltip    |        Boolean/Function        |   false    |          —          |                                   设置el-option是否需要显示tooltip                                    |
-| tooltipComponent |             String             |   false    |          —          |     设置tooltip采用的组件名称, 默认采用 AileTooltip，如果是按需加载，则需手动配置为 'el-tooltip'      |
-|   remoteMethod   |            Function            |     —      |          —          | 请求 API，传入后组件 remote、filterable 将置 true，remote-method 方法将使用该请求 API（与 data 互斥） |
-|     nonEmpty     |            Boolean             |   false    |     true/false      |                                         请求参数是否不得为空                                          |
-|    scrollable    |            Boolean             |    true    |     true/false      |                                      是否需要无限滚动加载可选项                                       |
-|   onceRequest    |            Boolean             |   false    |     true/false      |                                          只初始请求一次数据                                           |
-|    queryField    |             String             |     —      |          —          |                                          请求时的动态字段名                                           |
-|    pageField     |             String             | page_index |          —          |                                            分页页码参数名                                             |
-|    sizeField     |             String             | page_size  |          —          |                                      分页每页显示条目个数参数名                                       |
-|     pageSize     |             Number             |     20     |          —          |                                         分页每页显示条目个数                                          |
-|  requestParams   |             Object             |     —      |          —          |                                           请求时的静态参数                                            |
-|  respDataField   |             String             |    data    |          -          |                                   设置请求返回结果的数据项字段名称                                    |
-|  respTotalField  |             String             |   total    |          -          |                                   设置请求返回结果的总数项字段名称                                    |
-|  respFormatter   |            Function            |     —      |          —          |                                  请求成功后的回调函数，用于组装数据                                   |
-| showEachLoading  |            Boolean             |   false    |     true/false      |                    所有请求均展示loading效果，默认为false，仅展示初次加载的loading                    |
+|       参数       |            数据类型            |   默认值   |   可选值   |                                                 说明                                                  |
+| :--------------: | :----------------------------: | :--------: | :--------: | :---------------------------------------------------------------------------------------------------: |
+|       data       | Array[String] / Array[Obuject] |     []     |     -      |                           静态无需请求时的备选列表（与 remoteMethod 互斥）                            |
+|     isClear      |            Boolean             |   false    | true/false |                                           是否清空选项列表                                            |
+|      label       |        String/Function         |  'label'   |     —      |                             设置 el-option 的 label,不传则使用遍历项本身                              |
+|      value       |        String/Function         |  'value'   |     —      |                             设置 el-option 的 value,不传则使用遍历项本身                              |
+|     disabled     |        String/Function         |     —      |     —      |                                 判断是否禁用的字段名，默认为 disabled                                 |
+|   showTooltip    |        Boolean/Function        |   false    |     —      |                                   设置el-option是否需要显示tooltip                                    |
+| tooltipComponent |             String             |   false    |     —      |     设置tooltip采用的组件名称, 默认采用 AileTooltip，如果是按需加载，则需手动配置为 'el-tooltip'      |
+|   remoteMethod   |            Function            |     —      |     —      | 请求 API，传入后组件 remote、filterable 将置 true，remote-method 方法将使用该请求 API（与 data 互斥） |
+|     nonEmpty     |            Boolean             |   false    | true/false |                                         请求参数是否不得为空                                          |
+|    scrollable    |            Boolean             |   false    | true/false |                                      是否需要无限滚动加载可选项                                       |
+|   onceRequest    |            Boolean             |   false    | true/false |                                          只初始请求一次数据                                           |
+|    queryField    |             String             | 'keyword'  |     —      |                                          请求时的动态字段名                                           |
+|    pageField     |             String             | page_index |     —      |                                            分页页码参数名                                             |
+|    sizeField     |             String             | page_size  |     —      |                                      分页每页显示条目个数参数名                                       |
+|     pageSize     |             Number             |     20     |     —      |                                         分页每页显示条目个数                                          |
+|  requestParams   |             Object             |     —      |     —      |                                           请求时的静态参数                                            |
+|  respDataField   |             String             |    data    |     -      |                                   设置请求返回结果的数据项字段名称                                    |
+|  respTotalField  |             String             |   total    |     -      |                                   设置请求返回结果的总数项字段名称                                    |
+|  respFormatter   |            Function            |     —      |     —      |                                  请求成功后的回调函数，用于组装数据                                   |
+| showEachLoading  |            Boolean             |   false    | true/false |                    所有请求均展示loading效果，默认为false，仅展示初次加载的loading                    |
 
 ### Attributes/Props 属性
 

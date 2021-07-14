@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="showDialog"
-    v-bind="mergeAttrs"
+    v-bind="mergeDialogAttrs"
     :custom-class="calcCustomClass"
     @closed="handleClosed"
     v-on="$listeners"
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mergeClass } from '../../../utils';
+import { mergeAttrs, mergeClass } from '../../../utils';
 import { DefaultConfig, DefaultDialogAttrs } from './config';
 
 export default {
@@ -67,12 +67,12 @@ export default {
         ...this.config
       };
     },
-    mergeAttrs() {
-      return {
-        ...DefaultDialogAttrs,
-        ...this.$aileDialog.attrs,
-        ...this.$attrs
-      };
+    mergeDialogAttrs() {
+      return mergeAttrs(
+        DefaultDialogAttrs,
+        this.$aileDialog.attrs,
+        this.$attrs
+      );
     },
     calcCustomClass() {
       return mergeClass(
@@ -93,8 +93,8 @@ export default {
     async handleCancel() {
       if (this.$listeners && this.$listeners.cancel) {
         await this.$emit('cancel', this.done);
-      } else if (this.mergeAttrs['before-close']) {
-        this.mergeAttrs['before-close'](this.done);
+      } else if (this.mergeDialogAttrs.beforeClose) {
+        this.mergeDialogAttrs.beforeClose(this.done);
       } else {
         this.done();
       }

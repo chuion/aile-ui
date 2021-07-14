@@ -2271,13 +2271,13 @@ export default {
 
 ### Config 配置项
 
-|        参数         | 数据类型 | 默认值 |      可选值      |                    说明                    |
-| :-----------------: | :------: | :----: | :--------------: | :----------------------------------------: |
-|    cellEmptyText    |  String  |  '-'   |        -         |      表格单元数据为空时显示的文本内容      |
-| paginationMarginTop |  Number  |   0    |        -         |     设置分页器与表格的间距，单位是'px'     |
-|    tablePadding     |  Number  |   0    |        -         |   Table 的 Padding 值，计算表格高度会用    |
-|     heightMode      |  String  | height | height/maxHeight |              自适应高度的选择              |
-|        merge        |  Array   |   -    |        -         | 自动合并，值为需要合并的column中prop的数组 |
+|        参数         | 数据类型 |   默认值    |      可选值      |                    说明                    |
+| :-----------------: | :------: | :---------: | :--------------: | :----------------------------------------: |
+|    cellEmptyText    |  String  |     '-'     |        -         |      表格单元数据为空时显示的文本内容      |
+| paginationMarginTop |  Number  |      0      |        -         |     设置分页器与表格的间距，单位是'px'     |
+|    tablePadding     |  Number  |      0      |        -         |   Table 的 Padding 值，计算表格高度会用    |
+|     heightMode      |  String  | 'maxHeight' | height/maxHeight |              自适应高度的选择              |
+|        merge        |  Array   |      -      |        -         | 自动合并，值为需要合并的column中prop的数组 |
 
 ### Table Attributes 表格属性
 

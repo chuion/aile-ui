@@ -28,38 +28,38 @@ yarn add aile-ui
 
 ### Config 配置项
 
-|    参数     |      数据类型       | 默认值 |         可选值         |         说明          |
-| :---------: | :-----------------: | :----: | :--------------------: | :-------------------: |
-|   shadow    |       string        | hover  | hover / always / never |   设置阴影显示时机    |
-|    width    |       string        |  100%  |           -            |         宽度          |
-|   height    |       string        |  100%  |           -            |         高度          |
-|  minHeight  |       string        |  auto  |           -            |       最小高度        |
-| headerClass | string/array/object |   ''   |           -            |   卡片 HEADER 类名    |
-| headerStyle |       object        |   {}   |           -            | 卡片 HEADER 行内样式  |
-|  bodyClass  | string/array/object |   ''   |           -            |   卡片 CONTENT 类名   |
-|  bodyStyle  |       string        |   ''   |           -            | 卡片 CONTENT 行内样式 |
+|    参数     |      数据类型       |  默认值  |         可选值         |         说明          |
+| :---------: | :-----------------: | :------: | :--------------------: | :-------------------: |
+|   shadow    |       string        | 'always' | hover / always / never |   设置阴影显示时机    |
+|    width    |       string        |   100%   |           -            |         宽度          |
+|   height    |       string        |   100%   |           -            |         高度          |
+|  minHeight  |       string        |  'auto'  |           -            |       最小高度        |
+| headerClass | string/array/object |    ''    |           -            |   卡片 HEADER 类名    |
+| headerStyle |       object        |    {}    |           -            | 卡片 HEADER 行内样式  |
+|  bodyClass  | string/array/object |    ''    |           -            |   卡片 CONTENT 类名   |
+|  bodyStyle  |       string        |    ''    |           -            | 卡片 CONTENT 行内样式 |
 
 ### Attributes/Props 属性
 
-|    参数     |   数据类型   | 默认值 |                            说明                            |
-| :---------: | :----------: | :----: | :--------------------------------------------------------: |
-| **config**  |    Object    |   {}   |              [Config 配置项](#Config-配置项)               |
-|    title    | string/array |   -    |                        设置卡片标题                        |
-|  lazyLoad   |   boolean    | false  | 当 title 为数组时，lazyLoad 如果为 true，则不设置活跃标题  |
-|  isEmpty  |   boolean    | false  | isEmpty 为 true 时，显示`<slot name="empty"></slot>`内容 |
-|   loading   |   boolean    | false  |     loading 为 true 时，卡片正文部分 v-loading="true"      |
-| activeTitle |    string    |   -    |  当 title 为数组时，设置卡片活跃标题，值改变时会切换标题   |
+|    参数     |   数据类型   | 默认值 |                           说明                            |
+| :---------: | :----------: | :----: | :-------------------------------------------------------: |
+| **config**  |    Object    |   {}   |              [Config 配置项](#Config-配置项)              |
+|    title    | string/array |   -    |                       设置卡片标题                        |
+|  lazyLoad   |   boolean    | false  | 当 title 为数组时，lazyLoad 如果为 true，则不设置活跃标题 |
+|   isEmpty   |   boolean    | false  | isEmpty 为 true 时，显示`<slot name="empty"></slot>`内容  |
+|   loading   |   boolean    | false  |     loading 为 true 时，卡片正文部分 v-loading="true"     |
+| activeTitle |    string    |   -    |  当 title 为数组时，设置卡片活跃标题，值改变时会切换标题  |
 
 > Tips：Config配置项可通过 Prop 的方式直接传入 AileCard 组件，**优先级高于在config中配置**
 > 另外，`headerClass` `headerStyle` `bodyClass` `bodyStyle` 如果采用 Prop 的方式传入，会和 config 中的对应参数进行合并
 
 ### Slot 插槽
 
-| name  |                说明                 |
-| :---: | :---------------------------------: |
-|   —   |            卡片正文内容             |
-| title |           卡片左侧主标题            |
-|  sub  |           卡片右侧副标题            |
+| name  |               说明                |
+| :---: | :-------------------------------: |
+|   —   |           卡片正文内容            |
+| title |          卡片左侧主标题           |
+|  sub  |          卡片右侧副标题           |
 | empty | 卡片 isEmpty 为 true 时展示的内容 |
 
 ### Events 事件
