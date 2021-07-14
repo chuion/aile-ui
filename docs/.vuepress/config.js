@@ -20,6 +20,7 @@ module.exports = {
     ],
   ],
   themeConfig: {
+    logo: '/logo_notext.png',
     nav: [
       { text: "主页", link: "/" },
       {

@@ -18,7 +18,7 @@
     ref="form" 
     :model="form" 
     :columns="columns"
-    abel-width="80px"
+    label-width="80px"
   />
 </div>
 
