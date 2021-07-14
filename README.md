@@ -31,6 +31,10 @@
 
 每种组件均在原有 `ElementUI` 的基础上进行了功能增强，例如 `Form` 和 `Table` 组件实现了配置化开发，可通过书写JSX语法传入 `column` 属性完成配置，而 `Select` 和 `Autocomplete` 组件则实现了无限滚动加载的功能，更多功能可点击上方列表阅读相应 `README.md` 文档
 
+## 使用文档/Demo
+
+点击访问：[AileUI](https://chuion.github.io/aile-ui/)
+
 ## Install
 
 通过 `npm` 或者 `yarn` 安装项目
