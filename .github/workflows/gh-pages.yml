@@ -1,10 +1,10 @@
 name: CI
 
-# 在release分支发生push事件时触发。
+# 在main分支发生push事件时触发。
 on: 
   push:
     branches:
-      - release
+      - main
 
 jobs: # 工作流
   build:
