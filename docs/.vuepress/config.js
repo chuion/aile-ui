@@ -24,7 +24,7 @@ module.exports = {
       { text: "主页", link: "/" },
       {
         text: "组件",
-        link: "/aile-ui/components/",
+        link: "/components/",
       },
       {
         text: "Github",
@@ -33,7 +33,7 @@ module.exports = {
       },
     ],
     sidebar: {
-      "/aile-ui/components/": [
+      "/components/": [
         "",
         "input",
         "avatar",
