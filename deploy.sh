@@ -4,22 +4,24 @@
 set -e
 
 # 生成静态文件
-npm run docs:build
+npm run doc:build
 
 # 进入生成的文件夹
 cd docs/.vuepress/dist
 
-# 如果是发布到自定义域名
-# echo 'www.example.com' > CNAME
-
+if [ -z "$GITHUB_TOKEN" ]; then
+  msg='deploy'
+  githubUrl=git@github.com:chuion/aile-ui.git
+else
+  msg='来自github actions的自动部署'
+  githubUrl=https://chuion:${GITHUB_TOKEN}@github.com/chuion/aile-ui.git
+  git config --global user.name "chuion"
+  git config --global user.email "mr.chuion@gmail.com"
+fi
 git init
 git add -A
-git commit -m 'deploy'
-
-# 如果发布到 https://<USERNAME>.github.io
-# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
-
-# 如果发布到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:chuion/aile-ui.git main:gh-pages
+git commit -m "${msg}"
+git push -f $githubUrl master:gh-pages # 推送到github gh-pages分支
 
 cd -
+rm -rf docs/.vuepress/dist
